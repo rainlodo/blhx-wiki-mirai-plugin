@@ -9,10 +9,18 @@ data class EquipAttrData(
     var name: String= "",
     @SerialName("type")
     var type: String= "",
-    @SerialName("camp")
-    var camp: String= "",
+    @SerialName("tag")
+    var tag: String= "",
+    @SerialName("level")
+    var level: Int = 0,
+    @SerialName("tno")
+    var tno: Int = -1,
+    @SerialName("unicorn")
+    var unicorn: Boolean = false,
     @SerialName("pic")
     var pic: String= "",
     @SerialName("attr")
-    var attr: String= ""
+    var attr: String= "",
+    @SerialName("use")
+    var use: String= ""
 )

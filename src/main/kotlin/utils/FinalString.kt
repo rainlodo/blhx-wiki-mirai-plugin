@@ -130,6 +130,7 @@ val ALIAS_MAP = mapOf<String, String>(
     "扶桑META" to "扶桑·META",
     "黑扶桑" to "扶桑·META",
     "崩姐" to "宾夕法尼亚",
+    "几把兔" to "新泽西",
 
     // 航母
     "奥古斯特" to "奥古斯特·冯·帕塞瓦尔",
@@ -169,6 +170,7 @@ val ALIAS_MAP = mapOf<String, String>(
     "双联114" to "双联装114mm高平两用炮Mark_IV",
     "凯旋炮" to "138.6mm单装炮Mle1929",
     "金凯旋" to "138.6mm单装炮Mle1929",
+    "空想炮" to "138.6mm单装炮Mle1929",
     "紫凯旋" to "138.6mm单装炮Mle1929T2",
     "76炮" to "76mm火炮T3",
     "金秋月" to "双联100mm98式高射炮T3",

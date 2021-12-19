@@ -167,30 +167,42 @@ object ParserUtils {
 
     private fun parseEquipAttr(doc: Document) : EquipAttrData {
 
+        val levelMap = mapOf<String, Int>(
+            "text-align:center;font-size:1.2em;background:#dbdcdf" to 1,
+            "text-align:center;font-size:1.2em;background:#1bb7eb" to 2,
+            "text-align:center;font-size:1.2em;background:#ae90ef" to 3,
+            "text-align:center;font-size:1.2em;background:#f9f593" to 4,
+            "text-align:center;font-size:1.2em;background:linear-gradient(135deg,#59AE6A,#48AE96,#60D9EC,#65A5D5,#9491E0,#C382A4)" to 5
+        )
+
         val equip = EquipAttrData()
 
-        equip.camp = doc.select("li[class='active']").last().text()
 
         val ul = doc.select("ul[class='equip']")[0]
 
         val liList = ul.children()
         equip.name = liList[0].text()
-        equip.type = liList[1].text()
+        equip.type = liList[1].select("div")[0].text()
+        equip.tag = liList[1].select("div")[1].text()
+        equip.tno = liList[1].select("b").last().text()[1].digitToInt()
         equip.pic = liList[1].select("img")[0].attr("src")
 
+        equip.level = levelMap.get(liList[0].attr("style"))!!
         for (i in 2 until liList.size-1) {
             var tab = 0
             val node = liList[i]
             equip.attr += getAttrText(node, 0)
         }
-
+        equip.attr += "适用舰种"
+        equip.use = liList.last().select("td[class='appShipType']").text()
         return equip
     }
 
     private fun getAttrText(node: Element, tab: Int) : String {
         var text = ""
         return if (node.tagName() == "table") {
-            getTabs(tab) + node.text() + "\n"
+            getTabs(tab) + node.select("tr")[0].child(0).text() +
+                ":" + node.select("tr")[0].child(1).text() + "\n"
         }
         else if (node.tagName() == "li") {
             getAttrText(node.child(0), tab)

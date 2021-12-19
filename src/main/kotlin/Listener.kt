@@ -14,8 +14,8 @@ import net.mamoe.mirai.message.data.Image
 import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
 import net.mamoe.mirai.utils.MiraiExperimentalApi
-import org.iris.wiki.final.CommandString
-import org.iris.wiki.final.CommandString.wiki
+
+import org.iris.wiki.config.CommandString
 import org.iris.wiki.utils.*
 import java.util.*
 
@@ -77,7 +77,7 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
             }
             val result = ParserUtils.parse(http.get(SEARCH_URL + commandList[1]), commandList[2])
 
-            val message = MessageBuildUtils.build(group, result, commandList[1])
+            val message = MessageBuildUtils.build(group, result, commandList.toList())
             group.sendMessage(message)
             if (commandList[1] == "美因茨" && commandList[2] == "皮肤") {
                 val src = ImageUtil.getImage(JOKER_URL).toByteArray().toExternalResource()

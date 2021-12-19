@@ -7,12 +7,17 @@ import net.mamoe.mirai.message.data.MessageChainBuilder
 import net.mamoe.mirai.message.data.PlainText
 import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
+import org.iris.wiki.config.CommonConfig
 import org.iris.wiki.data.*
+import org.iris.wiki.paint.component.EquipAttrComponent
+import java.io.File
 import java.net.URLEncoder
+import javax.imageio.ImageIO
+import kotlin.io.path.Path
 
 object MessageBuildUtils {
 
-    suspend fun build(group: Group, data: Any?, url: String) : Message {
+    suspend fun build(group: Group, data: Any?, commandList: List<String>) : Message {
         println(data)
         if (data is String) {
             return PlainText(data)
@@ -30,12 +35,12 @@ object MessageBuildUtils {
             return buildEquipMessage(group, data)
         }
         else if (data is EquipAttrData) {
-            return buildEquipAttrMessage(group, data)
+            return buildEquipAttrMessage(group, data, commandList)
         }
         else if (data is SearchData) {
-            return buildSearchMessage(group, data, url)
+            return buildSearchMessage(group, data, commandList[1])
         }
-        return PlainText(MESSAGE_PARSE_ERROR + SEARCH_URL + URLEncoder.encode(url))
+        return PlainText(MESSAGE_PARSE_ERROR + SEARCH_URL + URLEncoder.encode(commandList[1]))
     }
 
     private suspend fun buildBoatMessage(group: Group, data: BoatData) : Message {
@@ -109,18 +114,20 @@ object MessageBuildUtils {
         return builder.build()
     }
 
-    private suspend fun buildEquipAttrMessage(group: Group, data: EquipAttrData) : Message {
-        val builder = MessageChainBuilder()
-        builder.add(data.name)
-        val src = ImageUtil.getImage(data.pic).toByteArray().toExternalResource()
+    private suspend fun buildEquipAttrMessage(group: Group, data: EquipAttrData, commandList: List<String>) : Message {
+
+        val path = "${CommonConfig.equip_attr_path}/${data.name}T${data.tno}.png"
+        val file = File(path)
+        if (!file.exists()) {
+            val equipAttrComponent = EquipAttrComponent(data)
+            equipAttrComponent.init()
+            val image = equipAttrComponent.draw()
+            ImageIO.write(image, "png", file)
+        }
+        val src = file.toExternalResource()
         val imageId: String = src.uploadAsImage(group).imageId
-        builder.add(Image(imageId))
 
-        builder.add(data.camp)
-        builder.add(data.type + "\n")
-        builder.add(data.attr)
-
-        return builder.build()
+        return Image(imageId)
     }
 
     private suspend fun buildSearchMessage(group: Group, data: SearchData, url: String) : Message {
