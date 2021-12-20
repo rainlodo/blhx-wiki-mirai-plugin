@@ -1,15 +1,13 @@
 package org.iris.wiki.utils
 
-import net.mamoe.mirai.message.data.Audio
 import net.sourceforge.pinyin4j.PinyinHelper
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat
-import org.iris.wiki.Listener
 import org.iris.wiki.config.CommandString
 import org.iris.wiki.data.*
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.jsoup.nodes.Element
+
 
 
 object ParserUtils {
@@ -52,20 +50,6 @@ object ParserUtils {
 
     }
 
-    // 解析舰船基本信息
-    private fun parseBoatCommon(doc: Document) : BoatData {
-
-
-        return BoatData()
-    }
-    private fun parseBoatAttr(doc: Document) : BoatAttrData {
-        val boat = BoatAttrData()
-
-
-
-        return boat
-    }
-
     // 解析舰船技能
     private fun parseBoatSkill(doc: Document) : SkillListData {
         val skillList = arrayListOf<SkillData>()
@@ -86,17 +70,6 @@ object ParserUtils {
         return SkillListData(skillList)
     }
 
-    // 解析舰船皮肤
-    private fun parseBoatDress(doc: Document) : ImagesData {
-        val images = arrayListOf<String>()
-
-        val table = doc.select("div[class='Contentbox2']")
-        val imgs = table.select("img")
-        for (i in 1 until imgs.size) {
-            images.add(imgs[i].attr("src"))
-        }
-        return ImagesData(images)
-    }
 
     // 解析舰船改造需求
     private fun parseBoatUpadta(doc: Document) : String {
@@ -108,28 +81,6 @@ object ParserUtils {
         return BOAT_UPDATE + tables[1].select("tr").last().text()
     }
 
-    // 舰船语音
-    private fun parseBoatVoice(doc: Document, commandList: List<String>) : AudioData? {
-//        val trList = doc.select("tr[data-key=\"${CommandString.voice_map[commandList[2]]}\"")
-//        if (trList.isEmpty()) return null
-//        val linkList = trList.select("a")
-//        if (linkList.isEmpty()) return null
-
-        val table = doc.select("table[class='table-ShipWordsTable']")
-        val trList = table.select("tr")
-        val linkList = arrayListOf<Element>()
-        trList.forEach{ it ->
-            if (it.attr("data-key") == CommandString.voice_map[commandList[2]]) {
-                it.select("a").forEach { iit->
-                    linkList.add(iit)
-                }
-            }
-        }
-        if (linkList.isEmpty()) {
-            return null
-        }
-        return AudioData(linkList[(0 until linkList.size).random()].attr("href"))
-    }
 
 
     private fun parseEquip(doc: Document, commandList: List<String>) : Data? {
@@ -140,39 +91,6 @@ object ParserUtils {
         }
     }
 
-    private fun parseEquipCommon(doc: Document) : EquipData {
-
-        val equip = EquipData()
-
-        equip.camp = doc.select("li[class='active']").last().text()
-
-        val ul = doc.select("ul[class='equip']")[0]
-        val liList = ul.children()
-        equip.name = liList[0].text()
-        equip.type = liList[1].text()
-        equip.pic = liList[1].select("img")[0].attr("src")
-
-        val table = doc.select("table[class='table table-bordered']")[0]
-        val tdList = table.select("td")
-        equip.from = tdList[0].text()
-        equip.piece = tdList[2].text()
-
-        val route : ArrayList<String> = arrayListOf()
-        val routePic : ArrayList<String> = arrayListOf()
-        for (img in tdList[1].select("img")) {
-            route.add(img.attr("alt").dropLast(4))
-            routePic.add(img.attr("src"))
-        }
-        equip.route = route
-        equip.routePic = routePic
-
-        return equip
-    }
-
-    // 装备通用属性
-    private fun parseEquipAttr(doc: Document) : EquipAttrData {
-        return EquipAttrData()
-    }
 
     // 装备一图榜解析
     private fun parseEquipTop(doc: Document): ImagesData {
@@ -183,15 +101,6 @@ object ParserUtils {
     fun parseBoatTop(doc: Document) : ImagesData {
         return ImagesData(arrayListOf("装备一图榜"))
     }
-
-    private fun parseSearch(doc: Document) : SearchData {
-        val result : ArrayList<String> = arrayListOf()
-
-
-
-        return SearchData(result)
-    }
-
 
     fun wordToPinyin(text : String) : String {
         val format = HanyuPinyinOutputFormat()

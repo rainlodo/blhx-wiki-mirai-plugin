@@ -1,6 +1,5 @@
 package org.iris.wiki.paint.component
 
-import kotlinx.coroutines.NonCancellable.start
 import org.iris.wiki.paint.PaintUtils
 import org.iris.wiki.paint.PaintUtils.getStrHeight
 import org.iris.wiki.paint.PaintUtils.getStrWidth

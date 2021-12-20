@@ -7,7 +7,6 @@ import net.mamoe.mirai.message.data.Image
 import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
-import org.iris.wiki.config.CommandString.equip
 import org.iris.wiki.config.CommonConfig
 import org.iris.wiki.paint.component.EquipAttrComponent
 import org.jsoup.nodes.Document
