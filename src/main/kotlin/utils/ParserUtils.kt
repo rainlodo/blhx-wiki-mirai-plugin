@@ -1,5 +1,7 @@
 package org.iris.wiki.utils
 
+import net.mamoe.mirai.message.data.Audio
+import org.iris.wiki.config.CommandString
 import org.iris.wiki.data.*
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -8,7 +10,7 @@ import org.jsoup.nodes.Element
 
 object ParserUtils {
 
-    fun parse(data: String, detail: String?) : Any? {
+    fun parse(data: String, commandList: List<String>) : Any? {
         val doc = Jsoup.parse(data)
 
         if (doc.select("h1[id='firstHeading']").text() == "搜索结果") {
@@ -18,8 +20,8 @@ object ParserUtils {
         val linkTitle = doc.select("a[title='首页']")
         val type = linkTitle.next().attr("title")
         return when(type) {
-            "舰娘图鉴" -> parseBoat(doc, detail)
-            in arrayOf("鱼雷", "防空炮", "舰炮", "设备", "舰载机") -> parseEquip(doc, detail)
+            "舰娘图鉴" -> parseBoat(doc, commandList)
+            in arrayOf("鱼雷", "防空炮", "舰炮", "设备", "舰载机") -> parseEquip(doc, commandList)
             "装备分析" -> {
                 return if (linkTitle.next().next().text().equals("装备一图榜")) {
                     parseEquipTop(doc)
@@ -32,10 +34,11 @@ object ParserUtils {
     }
 
     // 舰船页面解析
-    private fun parseBoat(doc: Document, detail: String?) : Any {
-        return when (detail) {
+    private fun parseBoat(doc: Document, commandList: List<String>) : Any {
+        return when (commandList[2]) {
             COMMON -> parseBoatCommon(doc)
-            BOAT_SKILL -> parseBoatSkill(doc)
+            in CommandString.attribute -> parseBoatCommon(doc)
+//            BOAT_SKILL -> parseBoatSkill(doc)
             BOAT_UPDATE -> parseBoatUpadta(doc)
             BOAT_DRESS -> {
                 val result = parseBoatDress(doc)
@@ -43,6 +46,15 @@ object ParserUtils {
                     return ImagesData(arrayListOf(NO_DRESS_URL))
                 }
                 return result
+            }
+            in CommandString.voice_map -> {
+                val result = parseBoatVoice(doc, commandList)
+                if (result == null) {
+                    return "该舰娘没有此类别语音哦~"
+                }
+                else {
+                    return result
+                }
             }
             else -> MESSAGE_ERROR
         }
@@ -128,10 +140,34 @@ object ParserUtils {
         return BOAT_UPDATE + tables[1].select("tr").last().text()
     }
 
-    private fun parseEquip(doc: Document, detail: String?) : Any {
-        return when (detail) {
-            COMMON -> parseEquipCommon(doc)
-            ATRRIBUTE -> parseEquipAttr(doc)
+    // 舰船语音
+    private fun parseBoatVoice(doc: Document, commandList: List<String>) : AudioData? {
+//        val trList = doc.select("tr[data-key=\"${CommandString.voice_map[commandList[2]]}\"")
+//        if (trList.isEmpty()) return null
+//        val linkList = trList.select("a")
+//        if (linkList.isEmpty()) return null
+
+        val table = doc.select("table[class='table-ShipWordsTable']")
+        val trList = table.select("tr")
+        val linkList = arrayListOf<Element>()
+        trList.forEach{ it ->
+            if (it.attr("data-key") == CommandString.voice_map[commandList[2]]) {
+                it.select("a").forEach { iit->
+                    linkList.add(iit)
+                }
+            }
+        }
+        if (linkList.isEmpty()) {
+            return null
+        }
+        return AudioData(linkList[(0 until linkList.size).random()].attr("href"))
+    }
+
+
+    private fun parseEquip(doc: Document, commandList: List<String>) : Any {
+        return when (commandList[2]) {
+            in CommandString.from -> parseEquipCommon(doc)
+            in CommandString.attribute -> parseEquipAttr(doc)
             else -> MESSAGE_ERROR
         }
     }
@@ -165,6 +201,7 @@ object ParserUtils {
         return equip
     }
 
+    // 装备通用属性
     private fun parseEquipAttr(doc: Document) : EquipAttrData {
 
         val levelMap = mapOf<String, Int>(

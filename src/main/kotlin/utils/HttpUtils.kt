@@ -1,12 +1,15 @@
 package org.iris.wiki.utils
 
+import io.ktor.client.utils.EmptyContent.headers
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.iris.wiki.utils.ImageUtil.Companion.getImage
+import java.io.ByteArrayOutputStream
 import java.time.Duration
 
-class HttpUtils {
+object HttpUtils {
 
     private val cookie: String = ""
 
@@ -56,5 +59,34 @@ class HttpUtils {
 //        }
 //        return js.data!!.decode()
 //    }
+
+    fun getByteArray(url: String) : ByteArrayOutputStream? {
+        try{
+
+            val request = Request.Builder().url(url)
+                .header("cookie", cookie)
+                .header("Content-Type", "application/json; charset=utf-8")
+                .header("user-agent", ua.random())
+                .get().build()
+            val infoStream = ByteArrayOutputStream()
+            val response = client.newCall(request).execute();
+
+            val `in` = response.body?.byteStream()
+            val buffer = ByteArray(2048)
+            var len = 0
+            val data = ""
+            if (`in` != null) {
+                while (`in`.read(buffer).also { len = it } > 0) {
+                    infoStream.write(buffer, 0, len)
+                }
+            }
+            infoStream.write((Math.random() * 100).toInt() + 1)
+            infoStream.close()
+            return infoStream
+        }
+        catch (e: Exception) {
+            return null
+        }
+    }
 
 }

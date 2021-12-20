@@ -11,7 +11,7 @@ import kotlin.io.path.Path
 
 object PaintUtils {
 
-    val PATH_EQUIP_ICON = "E:\\Data\\out\\icon\\equip\\"
+    val PATH_EQUIP_ICON = "D:\\document\\out\\icon\\equip\\"
 
     val MAP_EQUIP_USE = listOf(
         "驱逐",	"轻巡", 	"重巡", 	"超巡", "战巡",

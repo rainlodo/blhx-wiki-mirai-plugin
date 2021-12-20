@@ -16,8 +16,10 @@ import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
 import net.mamoe.mirai.utils.MiraiExperimentalApi
 
 import org.iris.wiki.config.CommandString
+import org.iris.wiki.config.CommonConfig
 import org.iris.wiki.utils.*
 import java.util.*
+import kotlin.io.path.Path
 
 @OptIn(ConsoleExperimentalApi::class)
 internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
@@ -33,7 +35,7 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
                 .toTypedArray()
             if (commandList[0] in CommandString.wiki) {
                 when (commandList.size) {
-                    2 -> wiki(commandList + COMMON, group)
+                    2 -> wiki(commandList + CommandString.attribute[0], group)
                     3 -> wiki(commandList, group)
                     else -> group.sendMessage(MESSAGE_ERROR)
                 }
@@ -44,7 +46,7 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
         globalEventChannel().subscribeAlways<FriendMessageEvent> {
 
             if (message.contentToString() == "123") {
-                sender.sendMessage("123")
+                sender.sendMessage(Path(CommonConfig.ttf).toAbsolutePath().toString())
             }
 
         }
@@ -71,17 +73,18 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
             group.sendMessage(Image(imageId))
         }
         else {
-            val http = HttpUtils()
+
             if (commandList[1] in ALIAS_MAP) {
                 commandList[1] = ALIAS_MAP[commandList[1]].toString()
             }
-            val result = ParserUtils.parse(http.get(SEARCH_URL + commandList[1]), commandList[2])
+            val result = ParserUtils.parse(HttpUtils.get(SEARCH_URL + commandList[1]), commandList.toList())
 
             val message = MessageBuildUtils.build(group, result, commandList.toList())
             group.sendMessage(message)
             if (commandList[1] == "美因茨" && commandList[2] == "皮肤") {
                 val src = ImageUtil.getImage(JOKER_URL).toByteArray().toExternalResource()
                 val imageId: String = src.uploadAsImage(group).imageId
+                src.close()
                 group.sendMessage(Image(imageId))
             }
         }

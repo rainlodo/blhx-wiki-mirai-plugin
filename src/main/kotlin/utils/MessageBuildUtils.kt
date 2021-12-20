@@ -28,11 +28,14 @@ object MessageBuildUtils {
         else if (data is SkillListData) {
             return buildBoatSkillMessage(group, data)
         }
+        else if (data is AudioData) {
+            return buildAudioMessage(group, data)
+        }
         else if (data is ImagesData) {
             return buildImagesMessage(group, data)
         }
         else if (data is EquipData) {
-            return buildEquipMessage(group, data)
+            return buildEquipFromMessage(group, data)
         }
         else if (data is EquipAttrData) {
             return buildEquipAttrMessage(group, data, commandList)
@@ -79,6 +82,24 @@ object MessageBuildUtils {
         return builder.build()
     }
 
+    private suspend fun buildAudioMessage(group: Group, data: AudioData) : Message {
+        if (data.url.startsWith("http")) {
+            val src = HttpUtils.getByteArray(data.url)?.toByteArray()?.toExternalResource()
+            if (src != null) {
+                val audio = group.uploadAudio(src)
+                src.close()
+                return audio
+            }
+            return PlainText("语音下载失败QAQ")
+        }
+        else {
+            val src = Path(data.url).toFile().toExternalResource()
+            val audio = group.uploadAudio(src)
+            src.close()
+            return audio
+        }
+    }
+
     private suspend fun buildImagesMessage(group: Group, data: ImagesData) : Message {
         val builder = MessageChainBuilder()
         for (url in data.images) {
@@ -90,7 +111,7 @@ object MessageBuildUtils {
         return builder.build()
     }
 
-    private suspend fun buildEquipMessage(group: Group, data: EquipData) : Message {
+    private suspend fun buildEquipFromMessage(group: Group, data: EquipData) : Message {
         val builder = MessageChainBuilder()
         builder.add(data.name)
         val src = ImageUtil.getImage(data.pic).toByteArray().toExternalResource()
@@ -126,7 +147,7 @@ object MessageBuildUtils {
         }
         val src = file.toExternalResource()
         val imageId: String = src.uploadAsImage(group).imageId
-
+        src.close()
         return Image(imageId)
     }
 
