@@ -25,6 +25,9 @@ object MessageBuildUtils {
         else if (data is BoatData) {
             return buildBoatMessage(group, data)
         }
+        else if (data is BoatAttrData) {
+            return PlainText("QAQ")
+        }
         else if (data is SkillListData) {
             return buildBoatSkillMessage(group, data)
         }

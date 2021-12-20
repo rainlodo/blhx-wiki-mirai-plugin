@@ -41,6 +41,7 @@ object ParserUtils {
     private fun parseBoat(doc: Document, commandList: List<String>) : Any {
         return when (commandList[2]) {
             COMMON -> parseBoatCommon(doc)
+            in CommandString.test -> parseBoatAttr(doc)
             in CommandString.attribute -> parseBoatCommon(doc)
 //            BOAT_SKILL -> parseBoatSkill(doc)
             BOAT_UPDATE -> parseBoatUpadta(doc)
@@ -104,7 +105,7 @@ object ParserUtils {
         val boat = BoatAttrData()
 
         val tableGeneral = doc.select("table[class='wikitable sv-general']")
-        val trList = tableGeneral[0].select("tr")
+        var trList = tableGeneral[0].select("tr")
 
         // 第一行为舰船名称
         boat.name = trList[0].text()
@@ -125,12 +126,41 @@ object ParserUtils {
         if (trList[6].select("td")[0].text().equals("其他途径")) {
             boat.other = trList[6].select("td")[1].text()
         }
-
+        boat.canUpgrade = doc.select("span[id='改造详情']").isNotEmpty()
 
         boat.pic = doc
             .select("div[class='tab_con active']")[0]
             .select("img")[0]
             .attr("src")
+
+        val tableAttr = doc.select("table[class='wikitable sv-performance']")
+        trList = tableAttr[0].child(0).children()
+        val tdList = arrayListOf<Element>()
+        for (i in 3..8) {
+            tdList.addAll(trList[i].children())
+        }
+        for (i in 0 until tdList.size) {
+            if (tdList[i].children().isNotEmpty()) {
+                when (tdList[i].text()) {
+                    "耐久" -> boat.naijiu = tdList[i+1].text()
+                    "装甲" -> boat.zhuangjia = tdList[i+1].text()
+                    "装填" -> boat.zhuangtian = tdList[i+1].text()
+                    "炮击" -> boat.paoji = tdList[i+1].text()
+                    "雷击" -> boat.leiji = tdList[i+1].text()
+                    "机动" -> boat.jidong = tdList[i+1].text()
+                    "防空" -> boat.fangkong = tdList[i+1].text()
+                    "航空" -> boat.hangkong = tdList[i+1].text()
+                    "命中" -> boat.mingzhong = tdList[i+1].text()
+                    "反潜" -> boat.fanqian = tdList[i+1].text()
+                    "幸运" -> boat.xingyun = tdList[i+1].text()
+                    "消耗" -> boat.xiaohao = tdList[i+1].text()
+                    "航速" -> boat.hangsu = tdList[i+1].text()
+                    "氧气" -> boat.yangqi = tdList[i+1].text()
+                    "弹药量" -> boat.danyao = tdList[i+1].text()
+                }
+            }
+        }
+
 
         return boat
     }

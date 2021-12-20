@@ -89,7 +89,7 @@ class EquipAttrComponent(
         val attrList = data.attr.split('\n')
 
         for (it in attrList) {
-            println(it)
+
             var strs = it.split(":")
             if (strs.size == 1) {
                strs = listOf(strs[0], " ")
@@ -122,7 +122,7 @@ class EquipAttrComponent(
                 g2.drawImage(label.draw(), tab * count, y, null)
                 y += label.getComponentHeight()
             }
-            println(strs[0] + ":" + strs[1])
+
             y += 4
         }
 
