@@ -1,6 +1,10 @@
 package org.iris.wiki.utils
 
 import net.mamoe.mirai.message.data.Audio
+import net.sourceforge.pinyin4j.PinyinHelper
+import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType
+import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat
+import org.iris.wiki.Listener
 import org.iris.wiki.config.CommandString
 import org.iris.wiki.data.*
 import org.jsoup.Jsoup
@@ -96,7 +100,40 @@ object ParserUtils {
 
         return boat
     }
+    private fun parseBoatAttr(doc: Document) : BoatAttrData {
+        val boat = BoatAttrData()
 
+        val tableGeneral = doc.select("table[class='wikitable sv-general']")
+        val trList = tableGeneral[0].select("tr")
+
+        // 第一行为舰船名称
+        boat.name = trList[0].text()
+
+        // 第二行第5列中含有舰船类型
+        boat.type = trList[1].select("td")[4].text()
+
+        boat.level = trList[2].select("span[id='PNrarity']")[0].text()
+
+        boat.camp = trList[2].select("td")[3].text()
+
+        boat.time = trList[3].select("td")[1].text()
+
+        boat.normal = trList[4].select("td")[1].text()
+
+        boat.active = trList[5].select("td")[1].text()
+
+        if (trList[6].select("td")[0].text().equals("其他途径")) {
+            boat.other = trList[6].select("td")[1].text()
+        }
+
+
+        boat.pic = doc
+            .select("div[class='tab_con active']")[0]
+            .select("img")[0]
+            .attr("src")
+
+        return boat
+    }
 
     // 解析舰船技能
     private fun parseBoatSkill(doc: Document) : SkillListData {
@@ -285,5 +322,26 @@ object ParserUtils {
         }
 
         return SearchData(result)
+    }
+
+
+    fun wordToPinyin(text : String) : String {
+        val format = HanyuPinyinOutputFormat()
+        format.caseType = HanyuPinyinCaseType.LOWERCASE
+        var res = ""
+        text.forEach {
+            if (codeType(it) == 1)
+                res += PinyinHelper.toHanyuPinyinStringArray(it, format)[0][0]
+            else
+                res += it
+        }
+        return res
+    }
+
+    fun codeType(ch: Char): Int {
+        return if (ch in '\u4e00'..'\u9fa5') 1 //中文字符
+        else if (ch in '\u0030'..'\u0039') 2//数字字符
+        else if ((ch in '\u0041'..'\u005A') or (ch in '\u0061'..'\u007A')) 3//英文字符
+        else 0
     }
 }

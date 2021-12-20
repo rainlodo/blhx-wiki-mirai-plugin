@@ -22,6 +22,7 @@ import okio.utf8Size
 
 import org.iris.wiki.config.CommandString
 import org.iris.wiki.config.CommonConfig
+import org.iris.wiki.data.ImagesData
 import org.iris.wiki.utils.*
 import java.util.*
 import kotlin.io.path.Path
@@ -63,9 +64,6 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
 
         globalEventChannel().subscribeAlways<FriendMessageEvent> {
 
-            if (message.contentToString() == "123") {
-                sender.sendMessage(Path(CommonConfig.ttf).toAbsolutePath().toString())
-            }
 
         }
 
@@ -88,20 +86,27 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
         if (commandList[1] in arrayOf("舰船一图榜", "一图榜", "pve一图榜")) {
             val src =
                 ImageUtil.getImage("https://patchwiki.biligame.com/images/blhx/8/84/oyb0mzeadmus8vscl7is4veyr9ywyyy.png")
-                    .toByteArray().toExternalResource()
             val imageId: String = src.uploadAsImage(group).imageId
+            src.close()
             group.sendMessage(Image(imageId))
         } else {
 
             if (commandList[1] in ALIAS_MAP) {
                 commandList[1] = ALIAS_MAP[commandList[1]].toString()
             }
-            val result = ParserUtils.parse(HttpUtils.get(SEARCH_URL + commandList[1]), commandList.toList())
+
+
+            var result = ParserUtils.parse(HttpUtils.get(SEARCH_URL + commandList[1]), commandList.toList())
+            // 禁止搜索yls
+            if (ParserUtils.wordToPinyin(commandList[1]) == "yls") {
+                result = ImagesData(listOf("data/image/emoji/wiki_iris.jpg"))
+            }
 
             val message = MessageBuildUtils.build(group, result, commandList.toList())
+
             group.sendMessage(message)
             if (commandList[1] == "美因茨" && commandList[2] == "皮肤") {
-                val src = ImageUtil.getImage(JOKER_URL).toByteArray().toExternalResource()
+                val src = ImageUtil.getImage(JOKER_URL)
                 val imageId: String = src.uploadAsImage(group).imageId
                 src.close()
                 group.sendMessage(Image(imageId))
@@ -113,26 +118,10 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
     // 不爬
     suspend fun noPa(text: String, group: Group, sender: Member) {
         if (text.length == 4) {
-            val format = HanyuPinyinOutputFormat()
-            format.caseType = HanyuPinyinCaseType.LOWERCASE
-            var res = ""
-            text.forEach {
-                if (codeType(it) == 1)
-                    res += PinyinHelper.toHanyuPinyinStringArray(it, format)[0][0]
-                else
-                    res += it
-            }
-
+            val res = ParserUtils.wordToPinyin(text)
             if (res == "ylsp") {
                 group.sendMessage(PlainText("不爬，") + At(sender) + PlainText("爬"))
             }
         }
-    }
-
-    fun codeType(ch: Char): Int {
-        return if (ch in '\u4e00'..'\u9fa5') 1 //中文字符
-        else if (ch in '\u0030'..'\u0039') 2//数字字符
-        else if ((ch in '\u0041'..'\u005A') or (ch in '\u0061'..'\u007A')) 3//英文字符
-        else 0
     }
 }

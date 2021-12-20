@@ -1,5 +1,7 @@
 package org.iris.wiki.utils
 
+import net.mamoe.mirai.utils.ExternalResource
+import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 import okhttp3.Headers
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -33,7 +35,7 @@ class ImageUtil {
         /**
          * 将图片链接读取到内存转换成ByteArrayOutputStream，方便操作
          */
-        fun getImage(imageUri: String): ByteArrayOutputStream {
+        fun getImage(imageUri: String): ExternalResource {
 
             if (imageUri.startsWith("http")) {
 //                try{
@@ -63,10 +65,10 @@ class ImageUtil {
 //                    isChange = true
 //                    return getImage(imageUri)
 //                }
-                return imageToBytes(ImageIO.read(URL(imageUri)), "png")
+                return imageToBytes(ImageIO.read(URL(imageUri)), "png").toByteArray().toExternalResource()
             }
             else {
-                return imageToBytes(ImageIO.read(Path(imageUri).toFile()), "png")
+                return Path(imageUri).toFile().toExternalResource()
             }
         }
 

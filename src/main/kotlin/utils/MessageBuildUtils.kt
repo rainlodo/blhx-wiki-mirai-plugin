@@ -47,7 +47,7 @@ object MessageBuildUtils {
     }
 
     private suspend fun buildBoatMessage(group: Group, data: BoatData) : Message {
-        val src = ImageUtil.getImage(data.pic).toByteArray().toExternalResource()
+        val src = ImageUtil.getImage(data.pic)
         val imageId: String = src.uploadAsImage(group).imageId
         val builder = MessageChainBuilder()
         builder.add(data.name + "\n")
@@ -74,7 +74,7 @@ object MessageBuildUtils {
     private suspend fun buildBoatSkillMessage(group: Group, data: SkillListData) : Message {
         val builder = MessageChainBuilder()
         for (skill in data.list) {
-            val src = ImageUtil.getImage(skill.pic).toByteArray().toExternalResource()
+            val src = ImageUtil.getImage(skill.pic)
             val imageId: String = src.uploadAsImage(group).imageId
             builder.add(Image(imageId))
             builder.add("${skill.name}:${skill.detail}")
@@ -103,7 +103,8 @@ object MessageBuildUtils {
     private suspend fun buildImagesMessage(group: Group, data: ImagesData) : Message {
         val builder = MessageChainBuilder()
         for (url in data.images) {
-            val src = ImageUtil.getImage(url).toByteArray().toExternalResource()
+
+            val src = ImageUtil.getImage(url)
             val imageId: String = src.uploadAsImage(group).imageId
             builder.add(Image(imageId))
         }
@@ -114,7 +115,7 @@ object MessageBuildUtils {
     private suspend fun buildEquipFromMessage(group: Group, data: EquipData) : Message {
         val builder = MessageChainBuilder()
         builder.add(data.name)
-        val src = ImageUtil.getImage(data.pic).toByteArray().toExternalResource()
+        val src = ImageUtil.getImage(data.pic)
         val imageId: String = src.uploadAsImage(group).imageId
         builder.add(Image(imageId))
 
@@ -127,7 +128,7 @@ object MessageBuildUtils {
             builder.add("研发路线：\n")
             for (i in 0 until data.route.size) {
                 builder.add("${data.route[i]}${if (i == data.route.size-1) "" else "->"}")
-                val src = ImageUtil.getImage(data.routePic[i]).toByteArray().toExternalResource()
+                val src = ImageUtil.getImage(data.routePic[i])
                 val imageId: String = src.uploadAsImage(group).imageId
                 builder.add(Image(imageId))
             }
