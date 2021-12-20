@@ -17,7 +17,6 @@ val BOAT_SKILL = "技能"
 val MESSAGE_HELP = "指令格式如下：\n" +
     ".wiki [舰船]/[装备]/装备一图榜/PVE一图榜\n" +
     ".wiki [舰船] 皮肤/改造/技能\n" +
-    ".wiki [装备] 属性\n" +
     "装备名中的空格用_代替~"
 
 val MESSAGE_ERROR = "输入指令有误~\n" +

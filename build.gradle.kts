@@ -17,4 +17,5 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation("org.jsoup:jsoup:1.10.3")
+    implementation("com.belerweb:pinyin4j:2.5.0")
 }

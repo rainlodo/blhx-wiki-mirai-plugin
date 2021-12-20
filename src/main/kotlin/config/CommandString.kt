@@ -2,7 +2,7 @@ package org.iris.wiki.config
 
 object CommandString {
 
-    val wiki = listOf("wiki", ".wiki", "/wiki")
+    val wiki = listOf("wiki", ".wiki", "/wiki", "yls")
 
 //    val common = listOf("基本信息", "基本")
     val attribute = listOf("属性", "基本信息", "基本")
