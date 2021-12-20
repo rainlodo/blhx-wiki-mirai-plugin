@@ -14,11 +14,11 @@ import org.jsoup.nodes.Element
 
 object ParserUtils {
 
-    fun parse(data: String, commandList: List<String>) : Any? {
+    fun parse(data: String, commandList: List<String>) : Data? {
         val doc = Jsoup.parse(data)
 
         if (doc.select("h1[id='firstHeading']").text() == "搜索结果") {
-            return parseSearch(doc)
+            return SearchData().parse(doc, commandList)
         }
 
         val linkTitle = doc.select("a[title='首页']")
@@ -38,128 +38,29 @@ object ParserUtils {
     }
 
     // 舰船页面解析
-    private fun parseBoat(doc: Document, commandList: List<String>) : Any {
+    private fun parseBoat(doc: Document, commandList: List<String>) : Data {
         return when (commandList[2]) {
-            COMMON -> parseBoatCommon(doc)
-            in CommandString.test -> parseBoatAttr(doc)
-            in CommandString.attribute -> parseBoatCommon(doc)
+            COMMON -> BoatData().parse(doc, commandList)
+            in CommandString.test -> BoatAttrData().parse(doc, commandList)
+            in CommandString.attribute -> BoatData().parse(doc, commandList)
 //            BOAT_SKILL -> parseBoatSkill(doc)
-            BOAT_UPDATE -> parseBoatUpadta(doc)
-            BOAT_DRESS -> {
-                val result = parseBoatDress(doc)
-                if (result.images.isEmpty()) {
-                    return ImagesData(arrayListOf(NO_DRESS_URL))
-                }
-                return result
-            }
-            in CommandString.voice_map -> {
-                val result = parseBoatVoice(doc, commandList)
-                if (result == null) {
-                    return "该舰娘没有此类别语音哦~"
-                }
-                else {
-                    return result
-                }
-            }
-            else -> MESSAGE_ERROR
+//            BOAT_UPDATE -> parseBoatUpadta(doc)
+            in CommandString.dress -> ImagesData().parse(doc, commandList)
+            in CommandString.voice_map -> AudioData().parse(doc, commandList)
+            else -> TextData(MESSAGE_ERROR)
         }
 
     }
 
     // 解析舰船基本信息
     private fun parseBoatCommon(doc: Document) : BoatData {
-        val boat = BoatData()
-
-        val tableGeneral = doc.select("table[class='wikitable sv-general']") //wikitable sv-category
-        val trList = tableGeneral[0].select("tr")
-
-        // 第一行为舰船名称
-        boat.name = trList[0].text()
-
-        // 第二行第5列中含有舰船类型
-        boat.type = trList[1].select("td")[4].text()
-
-        boat.level = trList[2].select("span[id='PNrarity']")[0].text()
-
-        boat.camp = trList[2].select("td")[3].text()
-
-        boat.time = trList[3].select("td")[1].text()
-
-        boat.normal = trList[4].select("td")[1].text()
-
-        boat.active = trList[5].select("td")[1].text()
-
-        if (trList[6].select("td")[0].text().equals("其他途径")) {
-            boat.other = trList[6].select("td")[1].text()
-        }
 
 
-        boat.pic = doc
-            .select("div[class='tab_con active']")[0]
-            .select("img")[0]
-            .attr("src")
-
-        return boat
+        return BoatData()
     }
     private fun parseBoatAttr(doc: Document) : BoatAttrData {
         val boat = BoatAttrData()
 
-        val tableGeneral = doc.select("table[class='wikitable sv-general']")
-        var trList = tableGeneral[0].select("tr")
-
-        // 第一行为舰船名称
-        boat.name = trList[0].text()
-
-        // 第二行第5列中含有舰船类型
-        boat.type = trList[1].select("td")[4].text()
-
-        boat.level = trList[2].select("span[id='PNrarity']")[0].text()
-
-        boat.camp = trList[2].select("td")[3].text()
-
-        boat.time = trList[3].select("td")[1].text()
-
-        boat.normal = trList[4].select("td")[1].text()
-
-        boat.active = trList[5].select("td")[1].text()
-
-        if (trList[6].select("td")[0].text().equals("其他途径")) {
-            boat.other = trList[6].select("td")[1].text()
-        }
-        boat.canUpgrade = doc.select("span[id='改造详情']").isNotEmpty()
-
-        boat.pic = doc
-            .select("div[class='tab_con active']")[0]
-            .select("img")[0]
-            .attr("src")
-
-        val tableAttr = doc.select("table[class='wikitable sv-performance']")
-        trList = tableAttr[0].child(0).children()
-        val tdList = arrayListOf<Element>()
-        for (i in 3..8) {
-            tdList.addAll(trList[i].children())
-        }
-        for (i in 0 until tdList.size) {
-            if (tdList[i].children().isNotEmpty()) {
-                when (tdList[i].text()) {
-                    "耐久" -> boat.naijiu = tdList[i+1].text()
-                    "装甲" -> boat.zhuangjia = tdList[i+1].text()
-                    "装填" -> boat.zhuangtian = tdList[i+1].text()
-                    "炮击" -> boat.paoji = tdList[i+1].text()
-                    "雷击" -> boat.leiji = tdList[i+1].text()
-                    "机动" -> boat.jidong = tdList[i+1].text()
-                    "防空" -> boat.fangkong = tdList[i+1].text()
-                    "航空" -> boat.hangkong = tdList[i+1].text()
-                    "命中" -> boat.mingzhong = tdList[i+1].text()
-                    "反潜" -> boat.fanqian = tdList[i+1].text()
-                    "幸运" -> boat.xingyun = tdList[i+1].text()
-                    "消耗" -> boat.xiaohao = tdList[i+1].text()
-                    "航速" -> boat.hangsu = tdList[i+1].text()
-                    "氧气" -> boat.yangqi = tdList[i+1].text()
-                    "弹药量" -> boat.danyao = tdList[i+1].text()
-                }
-            }
-        }
 
 
         return boat
@@ -231,11 +132,11 @@ object ParserUtils {
     }
 
 
-    private fun parseEquip(doc: Document, commandList: List<String>) : Any {
+    private fun parseEquip(doc: Document, commandList: List<String>) : Data? {
         return when (commandList[2]) {
-            in CommandString.from -> parseEquipCommon(doc)
-            in CommandString.attribute -> parseEquipAttr(doc)
-            else -> MESSAGE_ERROR
+            in CommandString.from -> EquipData().parse(doc, commandList)
+            in CommandString.attribute -> EquipAttrData().parse(doc, commandList)
+            else -> TextData(MESSAGE_ERROR)
         }
     }
 
@@ -270,67 +171,7 @@ object ParserUtils {
 
     // 装备通用属性
     private fun parseEquipAttr(doc: Document) : EquipAttrData {
-
-        val levelMap = mapOf<String, Int>(
-            "text-align:center;font-size:1.2em;background:#dbdcdf" to 1,
-            "text-align:center;font-size:1.2em;background:#1bb7eb" to 2,
-            "text-align:center;font-size:1.2em;background:#ae90ef" to 3,
-            "text-align:center;font-size:1.2em;background:#f9f593" to 4,
-            "text-align:center;font-size:1.2em;background:linear-gradient(135deg,#59AE6A,#48AE96,#60D9EC,#65A5D5,#9491E0,#C382A4)" to 5
-        )
-
-        val equip = EquipAttrData()
-
-
-        val ul = doc.select("ul[class='equip']")[0]
-
-        val liList = ul.children()
-        equip.name = liList[0].text()
-        equip.type = liList[1].select("div")[0].text()
-        equip.tag = liList[1].select("div")[1].text()
-        equip.tno = liList[1].select("b").last().text()[1].digitToInt()
-        equip.pic = liList[1].select("img")[0].attr("src")
-
-        equip.level = levelMap.get(liList[0].attr("style"))!!
-        for (i in 2 until liList.size-1) {
-            var tab = 0
-            val node = liList[i]
-            equip.attr += getAttrText(node, 0)
-        }
-        equip.attr += "适用舰种"
-        equip.use = liList.last().select("td[class='appShipType']").text()
-        return equip
-    }
-
-    private fun getAttrText(node: Element, tab: Int) : String {
-        var text = ""
-        return if (node.tagName() == "table") {
-            getTabs(tab) + node.select("tr")[0].child(0).text() +
-                ":" + node.select("tr")[0].child(1).text() + "\n"
-        }
-        else if (node.tagName() == "li") {
-            getAttrText(node.child(0), tab)
-        }
-        else if (node.tagName() == "ul") {
-            for (n in node.children()) {
-                text += getAttrText(n, tab + 1)
-            }
-            text
-        }
-        else {
-            for (n in node.children()) {
-                text += getAttrText(n, tab)
-            }
-            text
-        }
-    }
-
-    private fun getTabs(count: Int) : String {
-        var result = ""
-        for (i in 1..count) {
-            result += "\t"
-        }
-        return result
+        return EquipAttrData()
     }
 
     // 装备一图榜解析
@@ -346,10 +187,7 @@ object ParserUtils {
     private fun parseSearch(doc: Document) : SearchData {
         val result : ArrayList<String> = arrayListOf()
 
-        val divList = doc.select("div[class='searchresults']")[0].select("div[class='mw-search-result-heading']")
-        for (div in divList) {
-            result.add(div.child(0).attr("title"))
-        }
+
 
         return SearchData(result)
     }

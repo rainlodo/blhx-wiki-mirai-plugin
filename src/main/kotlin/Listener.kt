@@ -43,8 +43,8 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
                         .toTypedArray()
                     if (ParserUtils.wordToPinyin(commandList[0]) in CommandString.wiki) {
                         when (commandList.size) {
-                            2 -> wiki(commandList + CommandString.attribute[0], group)
-                            3 -> wiki(commandList, group)
+                            2 -> wiki(commandList + CommandString.attribute[0], sender)
+                            3 -> wiki(commandList, sender)
                             else -> group.sendMessage(MESSAGE_ERROR)
                         }
                     }
@@ -58,7 +58,7 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
 
             // 戳了戳小加加
             if (this.target == bot && this.subject is Group) {
-                wiki(arrayOf("wiki", "小加加", "摸摸"), this.subject as Group)
+                wiki(arrayOf("wiki", "小加加", "摸摸"), this.from as Member)
             }
         }
 
@@ -82,13 +82,13 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
     }
 
 
-    suspend fun wiki(commandList: Array<String>, group: Group) {
+    suspend fun wiki(commandList: Array<String>, sender: Member) {
         if (commandList[1] in arrayOf("舰船一图榜", "一图榜", "pve一图榜")) {
             val src =
                 ImageUtil.getImage("https://patchwiki.biligame.com/images/blhx/8/84/oyb0mzeadmus8vscl7is4veyr9ywyyy.png")
-            val imageId: String = src.uploadAsImage(group).imageId
+            val imageId: String = src.uploadAsImage(sender.group).imageId
             src.close()
-            group.sendMessage(Image(imageId))
+            sender.group.sendMessage(Image(imageId))
         } else {
 
             if (commandList[1] in ALIAS_MAP) {
@@ -99,18 +99,12 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
             var result = ParserUtils.parse(HttpUtils.get(SEARCH_URL + commandList[1]), commandList.toList())
             // 禁止搜索yls
             if (ParserUtils.wordToPinyin(commandList[1]) == "yls") {
-                result = ImagesData(listOf("data/image/emoji/wiki_iris.jpg"))
+                result = ImagesData(arrayListOf("data/image/emoji/wiki_iris.jpg"))
             }
 
-            val message = MessageBuildUtils.build(group, result, commandList.toList())
+            val message = MessageBuildUtils.build(sender, result, commandList.toList())
 
-            group.sendMessage(message)
-            if (commandList[1] == "美因茨" && commandList[2] == "皮肤") {
-                val src = ImageUtil.getImage(JOKER_URL)
-                val imageId: String = src.uploadAsImage(group).imageId
-                src.close()
-                group.sendMessage(Image(imageId))
-            }
+            sender.group.sendMessage(message)
         }
     }
 
@@ -120,7 +114,8 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
         if (text.length < 30) {
             val res = ParserUtils.wordToPinyin(text)
             val index = res.indexOf("yls")
-            if (text.indexOf("爬") > index + 2 || text.indexOf("爪巴") > index + 2 ) {
+            if (text.indexOf("爬") > index + 2 || text.indexOf("爪巴") > index + 2 ||
+                text.indexOf("pa") > index + 2) {
                 group.sendMessage(PlainText("不爬，") + At(sender) + PlainText("爬"))
             }
         }

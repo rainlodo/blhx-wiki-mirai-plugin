@@ -38,33 +38,6 @@ class ImageUtil {
         fun getImage(imageUri: String): ExternalResource {
 
             if (imageUri.startsWith("http")) {
-//                try{
-    //                val request = if (isChange){
-    //                    Request.Builder().url(imageUri.replace("i.pximg.net","i.pixiv.cat")).headers(headers.build()).get().build()
-    //                }else{
-    //                    Request.Builder().url(imageUri).get().build()
-    //                }
-//                    val request = Request.Builder().url(imageUri).get().build()
-//                    val infoStream = ByteArrayOutputStream()
-//                    val response: Response = client.build().newCall(request).execute();
-//
-//                    val `in` = response.body?.byteStream()
-//                    val buffer = ByteArray(2048)
-//                    var len = 0
-//                    val data = ""
-//                    if (`in` != null) {
-//                        while (`in`.read(buffer).also { len = it } > 0) {
-//                            infoStream.write(buffer, 0, len)
-//                        }
-//                    }
-//                    infoStream.write((Math.random() * 100).toInt() + 1)
-//                    infoStream.close()
-//                    isChange = false
-//                    return infoStream
-//                }catch (e:Exception){
-//                    isChange = true
-//                    return getImage(imageUri)
-//                }
                 return imageToBytes(ImageIO.read(URL(imageUri)), "png").toByteArray().toExternalResource()
             }
             else {
