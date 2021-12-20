@@ -41,7 +41,7 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
                         .split(Regex("[ ]+"))
                         .dropLastWhile { it.isEmpty() }
                         .toTypedArray()
-                    if (commandList[0] in CommandString.wiki) {
+                    if (ParserUtils.wordToPinyin(commandList[0]) in CommandString.wiki) {
                         when (commandList.size) {
                             2 -> wiki(commandList + CommandString.attribute[0], group)
                             3 -> wiki(commandList, group)
@@ -117,9 +117,10 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
 
     // 不爬
     suspend fun noPa(text: String, group: Group, sender: Member) {
-        if (text.length == 4) {
+        if (text.length < 30) {
             val res = ParserUtils.wordToPinyin(text)
-            if (res == "ylsp") {
+            val index = res.indexOf("yls")
+            if (text.indexOf("爬") > index + 2 || text.indexOf("爪巴") > index + 2 ) {
                 group.sendMessage(PlainText("不爬，") + At(sender) + PlainText("爬"))
             }
         }
