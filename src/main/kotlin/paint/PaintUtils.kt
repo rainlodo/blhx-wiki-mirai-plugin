@@ -1,17 +1,23 @@
 package org.iris.wiki.paint
 
 import org.iris.wiki.config.CommonConfig
-import org.iris.wiki.data.EquipAttrData
 import java.awt.*
-import java.awt.image.BufferedImage
-import java.io.File
-import javax.imageio.ImageIO
 import kotlin.io.path.Path
 
-
+/**
+ *
+ */
 object PaintUtils {
 
-    val PATH_EQUIP_ICON = "E:\\Data\\out\\icon\\equip\\"
+    val font: Font = Font.createFont(Font.TRUETYPE_FONT, Path(CommonConfig.ttf).toFile())
+
+
+    private const val PATH_BASE = "data/image"
+    const val PATH_EQUIP_ICON = "$PATH_BASE/icon/equip/"
+    const val PATH_SHIP_ICON = "$PATH_BASE/icon/ship/"
+    const val PATH_RARITY_ICON = "$PATH_BASE/icon/rarity"
+    const val PATH_SHIP_FOLDER = "D:/document/out/ship"
+    const val PATH_CAMP_ICON = "$PATH_BASE/icon/camp"
 
     val MAP_EQUIP_USE = listOf(
         "驱逐",	"轻巡", 	"重巡", 	"超巡", "战巡",
@@ -19,7 +25,16 @@ object PaintUtils {
         "重炮",	"潜艇",	"维修",	"运输"
     )
 
-    val font = Font.createFont(Font.TRUETYPE_FONT, Path(CommonConfig.ttf).toFile())
+    val MAP_SHIP_RARITY = mapOf<String, Int>(
+        "海上传奇" to 5,
+        "超稀有" to 4,
+        "精锐" to 3,
+        "稀有" to 2,
+        "普通" to 1,
+        "最高方案" to 24,
+        "决战方案" to 25
+    )
+
 
 
     fun hex2Color(hex: String): Color {

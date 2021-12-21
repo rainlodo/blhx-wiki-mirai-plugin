@@ -4,11 +4,16 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import net.mamoe.mirai.contact.Member
 import net.mamoe.mirai.message.data.Message
+import net.mamoe.mirai.message.data.PlainText
+import org.iris.wiki.config.CommonConfig
+import org.iris.wiki.paint.component.ShipAttrComponent
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
+import java.io.File
+import javax.imageio.ImageIO
 
 @Serializable
-data class BoatAttrData(
+data class ShipAttrData(
     @SerialName("名称")
     var name: String = "",
     @SerialName("类型")
@@ -67,6 +72,9 @@ data class BoatAttrData(
     var danyao : String = "",
     @SerialName("消耗")
     var xiaohao : String = "",
+
+    @SerialName("技能")
+    var skill : ArrayList<SkillData> = arrayListOf()
 ) : Data() {
 
     override fun parse(doc: Document, commandList: List<String>) : Data {
@@ -83,6 +91,12 @@ data class BoatAttrData(
         level = trList[2].select("span[id='PNrarity']")[0].text()
 
         camp = trList[2].select("td")[3].text()
+
+        if (camp in listOf("白鹰", "白鹰", "皇家", "重樱",
+                "铁血", "东煌", "哔哩哔哩", "撒丁帝国", "北方联合",
+                "自由鸢尾", "维希教廷")) {
+
+        }
 
         time = trList[3].select("td")[1].text()
 
@@ -127,11 +141,40 @@ data class BoatAttrData(
                 }
             }
         }
+
+        val table = doc.select("table[class='wikitable sv-skill']")
+        trList = table.select("tr")
+        for (i in 1 until trList.size) {
+            if (trList[i].attr("style") != "display:none") {
+                val tdList = trList[i].select("td")
+                skill.add(
+                    SkillData(
+                        tdList[0].text(),
+                        tdList[0].select("img").attr("src"),
+                        tdList[1].text()
+                    )
+                )
+            }
+        }
+
         return super.parse(doc, commandList)
     }
 
     override suspend fun toMessage(sender: Member): Message {
-        return super.toMessage(sender)
+
+        val path = "${CommonConfig.ship_output_path}/${name}.png"
+        val file = File(path)
+//        if (!file.exists()) {
+            val shipAttrComponent = ShipAttrComponent(this)
+            shipAttrComponent.init()
+            val image = shipAttrComponent.draw()
+            ImageIO.write(image, "png", file)
+//        }
+//        val src = file.toExternalResource()
+//        val imageId: String = src.uploadAsImage(sender.group).imageId
+//        src.close()
+
+        return PlainText("test")
     }
     
 }

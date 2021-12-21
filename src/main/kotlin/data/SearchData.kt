@@ -26,20 +26,20 @@ data class SearchData(
 
     override suspend fun toMessage(sender: Member): Message {
         val builder = MessageChainBuilder()
-
+        val out : ArrayList<String> = arrayListOf()
         for (res in result) {
             if (res.contains(commandList[1])) {
-                result.add(res)
+                out.add(res)
             }
         }
 
 
-        if (result.isEmpty()) {
+        if (out.isEmpty()) {
             builder.add(MESSAGE_NO_RESULT)
         }
         else {
             builder.add(MESSAGE_SEARCH)
-            for (res in result) {
+            for (res in out) {
                 builder.add("\n$res")
             }
         }

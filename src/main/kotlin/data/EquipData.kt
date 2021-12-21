@@ -57,7 +57,7 @@ data class EquipData(
     override suspend fun toMessage(sender: Member): Message {
         val builder = MessageChainBuilder()
         builder.add(name)
-        val src = ImageUtil.getImage(pic)
+        val src = ImageUtil.getImageAsExResource(pic)
         val imageId: String = src.uploadAsImage(sender.group).imageId
         builder.add(Image(imageId))
 
@@ -70,7 +70,7 @@ data class EquipData(
             builder.add("研发路线：\n")
             for (i in 0 until route.size) {
                 builder.add("${route[i]}${if (i == route.size-1) "" else "->"}")
-                val src = ImageUtil.getImage(routePic[i])
+                val src = ImageUtil.getImageAsExResource(routePic[i])
                 val imageId: String = src.uploadAsImage(sender.group).imageId
                 builder.add(Image(imageId))
             }

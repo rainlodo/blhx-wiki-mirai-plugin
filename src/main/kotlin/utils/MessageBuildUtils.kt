@@ -2,11 +2,7 @@ package org.iris.wiki.utils
 
 
 import net.mamoe.mirai.contact.Member
-import net.mamoe.mirai.message.data.Image
-import net.mamoe.mirai.message.data.Message
-import net.mamoe.mirai.message.data.MessageChainBuilder
-import net.mamoe.mirai.message.data.PlainText
-import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
+import net.mamoe.mirai.message.data.*
 import org.iris.wiki.data.*
 import java.net.URLEncoder
 
@@ -14,26 +10,21 @@ import java.net.URLEncoder
 object MessageBuildUtils {
 
     suspend fun build(sender: Member, data: Data?, commandList: List<String>) : Message {
+
+        // 只有解析失败会返回null，此时存在页面但不能解析
         if (data == null) {
             return PlainText(MESSAGE_PARSE_ERROR + SEARCH_URL + URLEncoder.encode(commandList[1]))
         }
         println(data)
 
-        return data.toMessage(sender)
-
-    }
-
-
-    private suspend fun buildBoatSkillMessage(sender : Member, data: SkillListData) : Message {
-        val builder = MessageChainBuilder()
-        for (skill in data.list) {
-            val src = ImageUtil.getImage(skill.pic)
-            val imageId: String = src.uploadAsImage(sender.group).imageId
-            builder.add(Image(imageId))
-            builder.add("${skill.name}:${skill.detail}")
+        // 生成message
+        return if (data.at) {
+            At(sender) + data.toMessage(sender)
+        } else {
+            data.toMessage(sender)
         }
-        return builder.build()
     }
+
 
 
 }

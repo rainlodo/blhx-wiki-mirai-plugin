@@ -12,12 +12,20 @@ import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import kotlin.io.path.Path
 
+/**
+ * 音频信息
+ *
+ * @param url 音频的地址或是路径
+ */
 @Serializable
 data class AudioData(
     @SerialName("url")
     var url : String? = null
 ) : Data() {
 
+    /**
+     * 从舰娘页面中随机获取对应种类的舰娘语音
+     */
     override fun parse(doc: Document, commandList: List<String>) : Data {
 
 

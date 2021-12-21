@@ -1,11 +1,9 @@
 package org.iris.wiki.utils
 
-import io.ktor.client.utils.EmptyContent.headers
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
-import org.iris.wiki.utils.ImageUtil.Companion.getImage
 import java.io.ByteArrayOutputStream
 import java.time.Duration
 

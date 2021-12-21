@@ -7,6 +7,7 @@ import net.mamoe.mirai.message.data.Image
 import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.message.data.MessageChainBuilder
 import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
+import org.iris.wiki.config.CommonConfig
 import org.iris.wiki.utils.ImageUtil
 import org.jsoup.nodes.Document
 
@@ -24,10 +25,10 @@ data class ImagesData (
             images.add(imgs[i].attr("src"))
         }
         if (images.isEmpty()) {
-            images.add("data/image/emoji/meiyinci.jpg")
+            images.add("${CommonConfig.emoji_path}/meiyinci.jpg")
         }
         if (commandList[1] == "美因茨") {
-            images.add("data/image/emoji/joker_is_me.jpeg")
+            images.add("${CommonConfig.emoji_path}/joker_is_me.jpeg")
         }
         return super.parse(doc, commandList)
     }
@@ -36,8 +37,9 @@ data class ImagesData (
         val builder = MessageChainBuilder()
         for (url in images) {
 
-            val src = ImageUtil.getImage(url)
+            val src = ImageUtil.getImageAsExResource(url)
             val imageId: String = src.uploadAsImage(sender.group).imageId
+            src.close()
             builder.add(Image(imageId))
         }
 

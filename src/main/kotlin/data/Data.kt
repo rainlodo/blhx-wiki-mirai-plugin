@@ -11,6 +11,10 @@ open class Data {
     lateinit var commandList: List<String>
 
     /**
+     * 是否@发送消息的用户
+     */
+    var at: Boolean = false
+    /**
      * 从网页中爬取所需的信息
      *
      * @param dac 网页
@@ -30,4 +34,9 @@ open class Data {
         return PlainText(MESSAGE_HELP)
     }
 
+
+    fun activateAt() : Data {
+        this.at = true
+        return this
+    }
 }

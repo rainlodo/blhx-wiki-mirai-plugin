@@ -35,13 +35,23 @@ class ImageUtil {
         /**
          * 将图片链接读取到内存转换成ByteArrayOutputStream，方便操作
          */
-        fun getImage(imageUri: String): ExternalResource {
+        fun getImageAsExResource(imageUri: String): ExternalResource {
 
             if (imageUri.startsWith("http")) {
                 return imageToBytes(ImageIO.read(URL(imageUri)), "png").toByteArray().toExternalResource()
             }
             else {
                 return Path(imageUri).toFile().toExternalResource()
+            }
+        }
+
+
+        fun getImage(imageUri: String) : BufferedImage {
+            if (imageUri.startsWith("http")) {
+                return ImageIO.read(URL(imageUri))
+            }
+            else {
+                return ImageIO.read(Path(imageUri).toFile())
             }
         }
 

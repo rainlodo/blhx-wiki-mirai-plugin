@@ -68,7 +68,7 @@ class EquipAttrComponent(
         g2.drawImage(pic, 512, y - 201, 32, 45, null)
 
         // type
-        if (data.type in listOf("设备", "货物"))
+        if (data.type in listOf("设备", "货物", "唯一设备"))
             g2.color = Color.BLUE
         else
             g2.color = Color.RED

@@ -41,7 +41,7 @@ class TextComponent(
         if (text == "") {
             return null
         }
-        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_GASP)
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON)
         g2.font = this.font.deriveFont(size)
         g2.color = color
         var x = paddingLeft

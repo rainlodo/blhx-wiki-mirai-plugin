@@ -103,7 +103,7 @@ data class EquipAttrData(
 
 
     override suspend fun toMessage(sender: Member): Message {
-        val path = "${CommonConfig.equip_attr_path}/${name}T${tno}.png"
+        val path = "${CommonConfig.equip_output_path}/${name}T${tno}.png"
         val file = File(path)
         if (!file.exists()) {
             val equipAttrComponent = EquipAttrComponent(this)

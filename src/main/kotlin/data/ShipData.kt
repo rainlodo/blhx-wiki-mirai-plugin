@@ -12,7 +12,7 @@ import org.iris.wiki.utils.ImageUtil
 import org.jsoup.nodes.Document
 
 @Serializable
-data class BoatData(
+data class ShipData(
     @SerialName("名称")
     var name: String = "",
     @SerialName("类型")
@@ -78,7 +78,7 @@ data class BoatData(
 
 
     override suspend fun toMessage(sender: Member): Message {
-        val src = ImageUtil.getImage(pic)
+        val src = ImageUtil.getImageAsExResource(pic)
         val imageId: String = src.uploadAsImage(sender.group).imageId
         val builder = MessageChainBuilder()
         builder.add(name + "\n")

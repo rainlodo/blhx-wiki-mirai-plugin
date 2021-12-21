@@ -10,22 +10,13 @@ import net.mamoe.mirai.event.events.*
 import net.mamoe.mirai.event.globalEventChannel
 import net.mamoe.mirai.message.data.At
 import net.mamoe.mirai.message.data.Image
-import net.mamoe.mirai.message.data.Image.Key.queryUrl
 import net.mamoe.mirai.message.data.PlainText
-import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
 import net.mamoe.mirai.utils.MiraiExperimentalApi
-import net.sourceforge.pinyin4j.PinyinHelper
-import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType
-import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat
-import okio.utf8Size
 
 import org.iris.wiki.config.CommandString
-import org.iris.wiki.config.CommonConfig
-import org.iris.wiki.data.ImagesData
 import org.iris.wiki.utils.*
 import java.util.*
-import kotlin.io.path.Path
 
 @OptIn(ConsoleExperimentalApi::class)
 internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
@@ -64,7 +55,6 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
 
         globalEventChannel().subscribeAlways<FriendMessageEvent> {
 
-
         }
 
         globalEventChannel().subscribeAlways<NewFriendRequestEvent> {
@@ -85,7 +75,7 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
     suspend fun wiki(commandList: Array<String>, sender: Member) {
         if (commandList[1] in arrayOf("舰船一图榜", "一图榜", "pve一图榜")) {
             val src =
-                ImageUtil.getImage("https://patchwiki.biligame.com/images/blhx/8/84/oyb0mzeadmus8vscl7is4veyr9ywyyy.png")
+                ImageUtil.getImageAsExResource("https://patchwiki.biligame.com/images/blhx/8/84/oyb0mzeadmus8vscl7is4veyr9ywyyy.png")
             val imageId: String = src.uploadAsImage(sender.group).imageId
             src.close()
             sender.group.sendMessage(Image(imageId))
@@ -96,11 +86,11 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
             }
 
 
-            var result = ParserUtils.parse(HttpUtils.get(SEARCH_URL + commandList[1]), commandList.toList())
-            // 禁止搜索yls
-            if (ParserUtils.wordToPinyin(commandList[1]) == "yls") {
-                result = ImagesData(arrayListOf("data/image/emoji/wiki_iris.jpg"))
+            var result = Checker.check(commandList, sender)
+            if (result == null) {
+                result = ParserUtils.parse(HttpUtils.get(SEARCH_URL + commandList[1]), commandList.toList())
             }
+
 
             val message = MessageBuildUtils.build(sender, result, commandList.toList())
 
@@ -114,9 +104,11 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
         if (text.length < 30) {
             val res = ParserUtils.wordToPinyin(text)
             val index = res.indexOf("yls")
-            if (text.indexOf("爬") > index + 2 || text.indexOf("爪巴") > index + 2 ||
-                text.indexOf("pa") > index + 2) {
-                group.sendMessage(PlainText("不爬，") + At(sender) + PlainText("爬"))
+            if (index >= 0) {
+                if (text.indexOf("爬") > index + 2 || text.indexOf("爪巴") > index + 2 ||
+                    text.indexOf("pa") > index + 2) {
+                    group.sendMessage(PlainText("不爬，") + At(sender) + PlainText("爬"))
+                }
             }
         }
     }

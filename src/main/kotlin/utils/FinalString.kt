@@ -38,7 +38,6 @@ val ALIAS_MAP = mapOf<String, String>(
     // 舰船别名
     // 驱逐舰
     "小加加" to "萨拉托加",
-    "锉宝" to "萨拉托加",
     "彩布里" to "特装型布里MKIII",
     "金布里" to "试作型布里MKII",
     "poi" to "夕立",

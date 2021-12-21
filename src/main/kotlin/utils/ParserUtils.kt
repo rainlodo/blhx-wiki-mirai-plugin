@@ -22,7 +22,7 @@ object ParserUtils {
         val linkTitle = doc.select("a[title='首页']")
         val type = linkTitle.next().attr("title")
         return when(type) {
-            "舰娘图鉴" -> parseBoat(doc, commandList)
+            "舰娘图鉴" -> parseShip(doc, commandList)
             in arrayOf("鱼雷", "防空炮", "舰炮", "设备", "舰载机") -> parseEquip(doc, commandList)
             "装备分析" -> {
                 return if (linkTitle.next().next().text().equals("装备一图榜")) {
@@ -36,13 +36,12 @@ object ParserUtils {
     }
 
     // 舰船页面解析
-    private fun parseBoat(doc: Document, commandList: List<String>) : Data {
+    private fun parseShip(doc: Document, commandList: List<String>) : Data {
         return when (commandList[2]) {
-            COMMON -> BoatData().parse(doc, commandList)
-            in CommandString.test -> BoatAttrData().parse(doc, commandList)
-            in CommandString.attribute -> BoatData().parse(doc, commandList)
-//            BOAT_SKILL -> parseBoatSkill(doc)
-//            BOAT_UPDATE -> parseBoatUpadta(doc)
+            COMMON -> ShipData().parse(doc, commandList)
+            in CommandString.test -> ShipAttrData().parse(doc, commandList)
+            in CommandString.attribute -> ShipData().parse(doc, commandList)
+//            BOAT_UPDATE -> parseShipUpadta(doc)
             in CommandString.dress -> ImagesData().parse(doc, commandList)
             in CommandString.voice_map -> AudioData().parse(doc, commandList)
             else -> TextData(MESSAGE_ERROR)
@@ -50,29 +49,10 @@ object ParserUtils {
 
     }
 
-    // 解析舰船技能
-    private fun parseBoatSkill(doc: Document) : SkillListData {
-        val skillList = arrayListOf<SkillData>()
-        val table = doc.select("table[class='wikitable sv-skill']")
-        val trList = table.select("tr")
-        for (i in 1 until trList.size) {
-            if (trList[i].attr("style") != "display:none") {
-                val tdList = trList[i].select("td")
-                skillList.add(
-                    SkillData(
-                        tdList[0].text(),
-                        tdList[0].select("img").attr("src"),
-                        tdList[1].text()
-                    )
-                )
-            }
-        }
-        return SkillListData(skillList)
-    }
 
 
     // 解析舰船改造需求
-    private fun parseBoatUpadta(doc: Document) : String {
+    private fun parseShipUpadta(doc: Document) : String {
         val span = doc.select("span[id='改造详情']")
         if (span.isEmpty()) {
             return BOAT_NO_UPDATA
@@ -98,7 +78,7 @@ object ParserUtils {
     }
 
     //
-    fun parseBoatTop(doc: Document) : ImagesData {
+    fun parseShipTop(doc: Document) : ImagesData {
         return ImagesData(arrayListOf("装备一图榜"))
     }
 
