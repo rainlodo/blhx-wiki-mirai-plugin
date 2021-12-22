@@ -13,8 +13,8 @@ object PaintUtils {
 
 
     private const val PATH_BASE = "data/image"
-    const val PATH_EQUIP_ICON = "$PATH_BASE/icon/equip/"
-    const val PATH_SHIP_ICON = "$PATH_BASE/icon/ship/"
+    const val PATH_EQUIP_ICON = "$PATH_BASE/icon/equip"
+    const val PATH_SHIP_ICON = "$PATH_BASE/icon/ship"
     const val PATH_RARITY_ICON = "$PATH_BASE/icon/rarity"
     const val PATH_SHIP_FOLDER = "D:/document/out/ship"
     const val PATH_CAMP_ICON = "$PATH_BASE/icon/camp"

@@ -2,6 +2,7 @@ package org.iris.wiki.paint.component
 
 import org.iris.wiki.data.ShipAttrData
 import org.iris.wiki.paint.PaintUtils
+import org.iris.wiki.utils.ImageUtil
 import java.awt.Color
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
@@ -53,10 +54,17 @@ class ShipAttrComponent(
         }
 
         background("${PaintUtils.PATH_RARITY_ICON}/bg_${rarity}.png")
-        drawCommon()
+
 
 
         var pic : BufferedImage
+
+
+
+        // 立绘
+//        pic = ImageIO.read(Path("${PaintUtils.PATH_SHIP_FOLDER}/22.png").toFile())
+        pic = ImageUtil.getImage(data.pic)
+        g2.drawImage(pic, 50, 0, 525, 788, null)
 
         // 阵营图标绘制
         var file = Path("${PaintUtils.PATH_CAMP_ICON}/${data.camp}.png").toFile()
@@ -69,18 +77,26 @@ class ShipAttrComponent(
         }
         g2.drawImage(pic, 0, 0, 160, 160, null)
 
+        // 舰娘名称框绘制
+        pic = ImageIO.read(Path("${PaintUtils.PATH_SHIP_ICON}/title.png").toFile())
+        g2.drawImage(pic, 150, 5, null)
+        pic = ImageIO.read(Path("${PaintUtils.PATH_SHIP_ICON}/${data.type}.png").toFile())
+        g2.drawImage(pic, 194 - 30, 30, 60, 60, null)
 
-        pic = ImageIO.read(Path("${PaintUtils.PATH_SHIP_FOLDER}/22.png").toFile())
-        val scale = pic.height / (height - 50).toFloat()
-        val w = (pic.width / scale).toInt()
-        g2.drawImage(pic, 330 - w / 2, 100, w, height - 50, null)
+        // 舰娘名字和代号
+        val nameComponent = TextComponent(data.name, 20F)
+        nameComponent.init()
+        g2.drawImage(nameComponent.draw(), 340 - nameComponent.getComponentWidth() / 2, 40, null)
 
+        val nikenameComponent = TextComponent(data.code, 12F)
+        nikenameComponent.init()
+        g2.drawImage(nikenameComponent.draw(), 340 - nikenameComponent.getComponentWidth() / 2, 71, null)
 
-
+        drawBox()
         return super.draw()
     }
 
-    private fun drawCommon() {
+    private fun drawBox() {
 
         val colorIcon = Color(0,0, 0, 127)
         val colorAttr = Color(50,50, 50, 127)

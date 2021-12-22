@@ -107,7 +107,7 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
             if (index >= 0) {
                 if (text.indexOf("爬") > index + 2 || text.indexOf("爪巴") > index + 2 ||
                     text.indexOf("pa") > index + 2) {
-                    group.sendMessage(PlainText("不爬，") + At(sender) + PlainText("爬"))
+                    group.sendMessage(PlainText("不爬，").plus(At(sender)).plus(PlainText("爬")))
                 }
             }
         }

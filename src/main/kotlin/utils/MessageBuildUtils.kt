@@ -19,7 +19,7 @@ object MessageBuildUtils {
 
         // 生成message
         return if (data.at) {
-            At(sender) + data.toMessage(sender)
+            At(sender).plus(data.toMessage(sender))
         } else {
             data.toMessage(sender)
         }

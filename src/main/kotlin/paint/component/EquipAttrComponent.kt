@@ -64,7 +64,7 @@ class EquipAttrComponent(
         g2.drawImage(pic, (width-pic.width) / 2, y - 180, null)
 
         // tno
-        pic = ImageIO.read(Path("${PaintUtils.PATH_EQUIP_ICON}T${data.tno}.png").toFile())
+        pic = ImageIO.read(Path("${PaintUtils.PATH_EQUIP_ICON}/T${data.tno}.png").toFile())
         g2.drawImage(pic, 512, y - 201, 32, 45, null)
 
         // type
@@ -127,7 +127,7 @@ class EquipAttrComponent(
         }
 
 
-        g2.drawImage(ImageIO.read(Path("${PaintUtils.PATH_EQUIP_ICON}use.png").toFile()),
+        g2.drawImage(ImageIO.read(Path("${PaintUtils.PATH_EQUIP_ICON}/use.png").toFile()),
                     tab, y, null)
         y += 8
 
@@ -136,7 +136,7 @@ class EquipAttrComponent(
         for (i in 0 until PaintUtils.MAP_EQUIP_USE.size) {
             if (data.use.contains(PaintUtils.MAP_EQUIP_USE[i])) {
                 g2.drawImage(
-                    ImageIO.read(Path("${PaintUtils.PATH_EQUIP_ICON}use_${i + 1}.png").toFile()),
+                    ImageIO.read(Path("${PaintUtils.PATH_EQUIP_ICON}/use_${i + 1}.png").toFile()),
                     tab + 26 + count * 104, y, null
                 )
             }

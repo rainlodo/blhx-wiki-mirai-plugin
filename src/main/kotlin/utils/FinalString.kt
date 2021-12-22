@@ -53,6 +53,9 @@ val ALIAS_MAP = mapOf<String, String>(
     "新月jp" to "新月JP",
     "臭鼬" to "长波",
     "z404" to "z23",
+    "玛丽罗斯" to "玛莉萝丝",
+    "nanoda" to "雪风",
+    "狗群主老婆" to "天后",
 
     // 轻巡
     "屑雅图" to "西雅图",
@@ -92,7 +95,6 @@ val ALIAS_MAP = mapOf<String, String>(
     "路易" to "路易九世",
     "安宝" to "安克雷奇",
     "爆地魔" to "巴尔的摩",
-    "爆地魔" to "巴尔的摩",
     "大狗" to "爱宕",
     "吃手手" to "欧根亲王",
     "欧根" to "欧根亲王",
@@ -105,6 +107,7 @@ val ALIAS_MAP = mapOf<String, String>(
     "μ爆地魔" to "巴尔的摩(μ兵装)",
     "波特彩" to "波特兰",
     "57" to "吾妻",
+    "艾吉尔" to "埃吉尔",
 
     // 战列
     "黑格奈森瑙" to "格奈森瑙·META",
@@ -146,8 +149,10 @@ val ALIAS_MAP = mapOf<String, String>(
     "黑苍龙" to "苍龙·META",
     "苍龙meta" to "苍龙·META",
     "方舟" to "皇家方舟",
+    "狱友" to "皇家方舟",
     "黑飞鹰" to "飞鹰·META",
     "飞鹰meta" to "飞鹰·META",
+    "妹妹" to "独角兽",
 
     // 其他
     "举炮炮" to "阿贝克隆比",

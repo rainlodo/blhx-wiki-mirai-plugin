@@ -3,8 +3,11 @@ package org.iris.wiki.data
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import net.mamoe.mirai.contact.Member
+import net.mamoe.mirai.message.data.Image
 import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.message.data.PlainText
+import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
+import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
 import org.iris.wiki.config.CommonConfig
 import org.iris.wiki.paint.component.ShipAttrComponent
 import org.jsoup.nodes.Document
@@ -16,6 +19,8 @@ import javax.imageio.ImageIO
 data class ShipAttrData(
     @SerialName("名称")
     var name: String = "",
+    @SerialName("代号")
+    var code: String = "",
     @SerialName("类型")
     var type: String = "",
     @SerialName("稀有度")
@@ -83,7 +88,7 @@ data class ShipAttrData(
         var trList = tableGeneral[0].select("tr")
 
         // 第一行为舰船名称
-        name = trList[0].text()
+        val nameList = trList[0].select("b")
 
         // 第二行第5列中含有舰船类型
         type = trList[1].select("td")[4].text()
@@ -91,12 +96,6 @@ data class ShipAttrData(
         level = trList[2].select("span[id='PNrarity']")[0].text()
 
         camp = trList[2].select("td")[3].text()
-
-        if (camp in listOf("白鹰", "白鹰", "皇家", "重樱",
-                "铁血", "东煌", "哔哩哔哩", "撒丁帝国", "北方联合",
-                "自由鸢尾", "维希教廷")) {
-
-        }
 
         time = trList[3].select("td")[1].text()
 
@@ -108,12 +107,38 @@ data class ShipAttrData(
             other = trList[6].select("td")[1].text()
         }
         canUpgrade = doc.select("span[id='改造详情']").isNotEmpty()
+        if (canUpgrade) {
+            type = doc.select("span[id='改造详情']")[0].parent()
+                .nextElementSibling()
+                .child(0)
+                .select("a")
+                .attr("title")
+        }
+        var index = 0
+        // 当舰娘为以下阵营时(不是μ船)，名字前会有对应的量级，应该去掉
+        if (camp in listOf("白鹰", "白鹰", "皇家", "重樱",
+                "铁血", "东煌", "哔哩哔哩", "撒丁帝国", "北方联合",
+                "自由鸢尾", "维希教廷") && !nameList[0].text().contains("μ")) {
+            index++
+        }
+        name += nameList[index].text()
+        if (canUpgrade) name += ".改"
+        index++
+        if (index < nameList.size - 2) {
+            name += nameList[index].text().replace("·META", "")
+            index++
+        }
+        code = nameList[index].text()
 
-        pic = doc
-            .select("div[class='tab_con active']")[0]
-            .select("img")[0]
-            .attr("src")
-
+        val picList = doc
+            .select("div[class='Contentbox2']")[0]
+            .select("img")
+        if (canUpgrade) {
+            pic = picList[picList.size - 2].attr("src")
+        }
+        else {
+            pic = picList[0].attr("src")
+        }
         val tableAttr = doc.select("table[class='wikitable sv-performance']")
         trList = tableAttr[0].child(0).children()
         val tdList = arrayListOf<Element>()
@@ -164,17 +189,17 @@ data class ShipAttrData(
 
         val path = "${CommonConfig.ship_output_path}/${name}.png"
         val file = File(path)
-//        if (!file.exists()) {
+        if (!file.exists()) {
             val shipAttrComponent = ShipAttrComponent(this)
             shipAttrComponent.init()
             val image = shipAttrComponent.draw()
             ImageIO.write(image, "png", file)
-//        }
-//        val src = file.toExternalResource()
-//        val imageId: String = src.uploadAsImage(sender.group).imageId
-//        src.close()
+        }
+        val src = file.toExternalResource()
+        val imageId: String = src.uploadAsImage(sender.group).imageId
+        src.close()
 
-        return PlainText("test")
+        return Image(imageId)
     }
     
 }
