@@ -7,4 +7,5 @@ object CommonConfig {
     const val equip_output_path = "data/image/equip"
     const val ship_output_path = "data/image/ship"
     const val emoji_path = "data/image/emoji"
+    const val json_string = "data/json"
 }

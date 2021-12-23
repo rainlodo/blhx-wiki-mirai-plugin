@@ -32,18 +32,44 @@ object Checker {
             if (commandList.size > 2) {
                 command += commandList[2]
             }
-            var type = DrawUtils.DrawType.Light
-            if (command.contains("重池") || command.contains("重型")) {
-                type = DrawUtils.DrawType.Heavy
-            }
-            else if (command.contains("特池") || command.contains("特型")) {
-                type = DrawUtils.DrawType.Special
-            }
-            return DrawData().draw(type)
+            return draw(command.replace("大建", "").replace("属性", ""))
         }
         else {
             return null
         }
+    }
+
+    fun draw(command : String) : Data {
+        println(command)
+        var type = DrawUtils.DrawType.Light
+
+        if (command.contains("重池") || command.contains("重型")) {
+            type = DrawUtils.DrawType.Heavy
+        }
+        else if (command.contains("特池") || command.contains("特型")) {
+            type = DrawUtils.DrawType.Special
+        }
+        else if (command.contains("轻池") || command.contains("轻型")) {
+            type = DrawUtils.DrawType.Light
+        }
+        else if (command.contains("列表")) {
+            var text = "目前的建造列表有：\n轻池、重池、特池\n"
+            DrawUtils.active_ship_map.keys.forEach {
+                text += it + "\n"
+            }
+            return TextData(text)
+        }
+        else if (command in DrawUtils.active_ship_map.keys) {
+            return DrawData().drawActive(DrawUtils.active_ship_map[command]!!)
+        }
+        else if (command != "") {
+            var text = "输入参数有误，目前的建造列表有：\n轻池、重池、特池\n"
+            DrawUtils.active_ship_map.keys.forEach {
+                text += it + "\n"
+            }
+            return TextData(text)
+        }
+        return DrawData().draw(type)
     }
 
 }

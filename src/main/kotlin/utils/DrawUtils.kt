@@ -1,6 +1,12 @@
 package org.iris.wiki.utils
 
+import com.google.gson.Gson
+import com.google.gson.JsonParser
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import org.iris.wiki.config.CommonConfig
 import org.jsoup.Jsoup
+import java.io.FileReader
 
 object DrawUtils {
     
@@ -19,13 +25,39 @@ object DrawUtils {
         N
     }
 
+    @Serializable
+    data class Ship(
+        @SerialName("name")
+        var name: String,
+        @SerialName("probability")
+        var probability: Int
+    )
+
+    @Serializable
+    data class ActivePool(
+        @SerialName("name")
+        var name: String,
+        @SerialName("ur")
+        var ur : List<Ship>,
+        @SerialName("ssr")
+        var ssr : List<Ship>,
+        @SerialName("sr")
+        var sr : List<Ship>,
+        @SerialName("r")
+        var r : List<Ship>,
+    )
 
 
     val ship_icon_map = hashMapOf<String, String>()
     val ship_contain_map = hashMapOf<Pair<DrawType, Rarity>, List<String>>()
-
+    val active_ship_map = hashMapOf<String, ActivePool>()
 
     init {
+        initIcon()
+        initActivePool()
+    }
+
+    private fun initIcon() {
         // 图鉴url
         val url = "https://wiki.biligame.com/blhx/%E8%88%B0%E5%A8%98%E5%9B%BE%E9%89%B4"
         val doc = Jsoup.parse(HttpUtils.get(url))
@@ -34,8 +66,11 @@ object DrawUtils {
             val link = it.child(0).child(0).attr("src")
             ship_icon_map[it.child(0).attr("title")] = link.replace("60px", "90px")
         }
+        for (s in listOf("其他N", "其他R", "其他SR", "其他SSR")) {
+            ship_icon_map[s] = "https://patchwiki.biligame.com/images/blhx/thumb/8/85/bqph8bamx4tamsp56ojsmqjm958axt6.png/90px-%E6%9C%AA%E7%9F%A5%E8%88%B0%E5%A8%98%E5%A4%B4%E5%83%8F.png"
+        }
         ship_contain_map[Pair(DrawType.Light, Rarity.SSR)] = listOf(
-            "圣地亚哥", "蒙彼利埃", "黛朵", "确捷", "雪风", "明石", "Z46", "阿芙乐尔", "凯旋", "恶毒", "江风"
+            "圣地亚哥", "圣地亚哥", "圣地亚哥", "圣地亚哥", "圣地亚哥", "蒙彼利埃", "黛朵", "确捷", "雪风", "明石", "Z46", "阿芙乐尔", "凯旋", "恶毒", "江风"
         )
         ship_contain_map[Pair(DrawType.Light, Rarity.SR)] = listOf(
             "莫里", "马拉尼", "拉菲", "圣路易斯", "小海伦娜", "丹佛", "小克利夫兰", "比洛克西", "克利夫兰(μ兵装)", "标枪", "无敌", "欧若拉", "谢菲尔德", "格罗斯特", "小贝法", "黑太子", "吹雪", "绫波", "野分", "最上", "三隈", "Z23", "Z25", "Z35", "长春", "太原", "逸仙", "宁海", "平海", "鲁莽", "倔强", "春月", "宵月", "花月", "长波"
@@ -74,6 +109,19 @@ object DrawUtils {
         )
     }
 
+    private fun initActivePool() {
+        val fr = FileReader("${CommonConfig.json_string}/draw/active_pool.json")
+        val parser= JsonParser()
+        val jsonArray = parser.parse(fr.readText()).asJsonArray
+        val gson=Gson()
+        //将数据添加到userList中
+        for(user in jsonArray){
+            val pool = gson.fromJson(user,ActivePool::class.java)
+            active_ship_map[pool.name] = pool
+        }
+        fr.close()
+    }
+
     fun getRarity() : Rarity {
         return when ((0 until 100).random()) {
             in (0..6) -> Rarity.SSR
@@ -82,4 +130,6 @@ object DrawUtils {
             else -> Rarity.N
         }
     }
+
+
 }
