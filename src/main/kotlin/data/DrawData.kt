@@ -1,12 +1,11 @@
 package org.iris.wiki.data
 
+import net.mamoe.mirai.console.command.ConsoleCommandSender.name
 import org.iris.wiki.config.CommonConfig
 import org.iris.wiki.paint.component.DrawResultComponent
 import org.iris.wiki.utils.DrawUtils
 import org.iris.wiki.utils.DrawUtils.ship_contain_map
-import org.iris.wiki.utils.DrawUtils.ship_icon_map
 import java.io.File
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import javax.imageio.ImageIO
@@ -28,7 +27,7 @@ class DrawData {
             }
             val name = ship_contain_map[Pair(type, rarity)]!!.random()
             nameList.add(name)
-            picList.add(ship_icon_map[name]!!)
+            picList.add("${CommonConfig.head_path}/${name}.png")
         }
 
 
@@ -73,7 +72,7 @@ class DrawData {
             if (pool.ur.isNotEmpty() && rand >= 1000 - 12) {
                 rareList.add(DrawUtils.Rarity.UR)
                 nameList.add(pool.ur[0].name)
-                picList.add(ship_icon_map[pool.ur[0].name]!!)
+                picList.add("${CommonConfig.head_path}/${nameList[i]}.png")
                 feiqiu = false
             }
             else {
@@ -96,7 +95,7 @@ class DrawData {
                     else -> rareList.add(DrawUtils.Rarity.R)
                 }
                 nameList.add(map[k]!!)
-                picList.add(ship_icon_map[map[k]]!!)
+                picList.add("${CommonConfig.head_path}/${nameList[i]}.png")
             }
 
         }

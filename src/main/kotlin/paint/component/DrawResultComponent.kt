@@ -33,16 +33,18 @@ class DrawResultComponent(
         background("${PaintUtils.PATH_SHIP_ICON}/draw_bg.png")
         var x = 50
         var y = 50
+        val imageWidth = 90
+        val imageHeight = 90
         for (i in rareList.indices) {
             val image = ImageUtil.getImage(picList[i])
             val text = TextComponent(nameList[i], 20F, rarity_color_map[rareList[i]]!!)
             text.init()
             text.background(Color(0, 0, 0, 127))
             g2.color = rarity_color_map[rareList[i]]!!
-            g2.fillRect(x-3, y-3, image.width+6, image.width+6)
-            g2.drawImage(image, x, y, null)
-            g2.drawImage(text.draw(), x + (image.width - text.getComponentWidth()) / 2,
-                y + image.height + 5, null)
+            g2.fillRect(x-3, y-3, imageWidth+6, imageHeight+6)
+            g2.drawImage(image, x, y, imageWidth, imageHeight, null)
+            g2.drawImage(text.draw(), x + (imageWidth - text.getComponentWidth()) / 2,
+                y + imageHeight + 5, null)
             x += 130
             if (x > 800) {
                 x = 50 + 130

@@ -40,7 +40,6 @@ object Checker {
     }
 
     fun draw(command : String) : Data {
-        println(command)
         var type = DrawUtils.DrawType.Light
 
         if (command.contains("重池") || command.contains("重型")) {
