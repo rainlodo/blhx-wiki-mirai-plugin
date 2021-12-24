@@ -223,13 +223,16 @@ class ShipAttrComponent(
         g2.color = Color.WHITE
         g2.drawRect(boxX, boxY, labelWidth, h)
         g2.drawRect(boxX + labelWidth, boxY, boxWidth - labelWidth, h)
-
-        label = TextComponent("其他途径", 20F).init()
-        g2.drawImage(label.draw(), boxX + (labelWidth - label.getComponentWidth()) / 2,
-            (h - label.getComponentHeight()) / 2 + boxY, null)
-        from.forEach {
-            g2.drawImage(it.draw(), boxX + (boxWidth + labelWidth - it.getComponentWidth()) / 2, boxY, null)
-            boxY += it.getComponentHeight()
+        if (h != 0) {
+            label = TextComponent("其他途径", 20F).init()
+            g2.drawImage(
+                label.draw(), boxX + (labelWidth - label.getComponentWidth()) / 2,
+                (h - label.getComponentHeight()) / 2 + boxY, null
+            )
+            from.forEach {
+                g2.drawImage(it.draw(), boxX + (boxWidth + labelWidth - it.getComponentWidth()) / 2, boxY, null)
+                boxY += it.getComponentHeight()
+            }
         }
 
     }
