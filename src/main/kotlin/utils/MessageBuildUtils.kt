@@ -3,6 +3,8 @@ package org.iris.wiki.utils
 
 import net.mamoe.mirai.contact.Member
 import net.mamoe.mirai.message.data.*
+import org.iris.wiki.config.MESSAGE_PARSE_ERROR
+import org.iris.wiki.config.SEARCH_URL
 import org.iris.wiki.data.*
 import java.net.URLEncoder
 
@@ -15,7 +17,7 @@ object MessageBuildUtils {
         if (data == null) {
             return PlainText(MESSAGE_PARSE_ERROR + SEARCH_URL + URLEncoder.encode(commandList[1]))
         }
-        println(data)
+
 
         // 生成message
         return if (data.at) {

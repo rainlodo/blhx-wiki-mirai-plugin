@@ -28,7 +28,7 @@ data class ShipAttrData(
     @SerialName("阵营")
     var camp: String = "",
     @SerialName("建造时间")
-    var time: String? = null,
+    var time: String = "",
     @SerialName("pic")
     var pic: String = "",
     @SerialName("改造")
@@ -41,11 +41,6 @@ data class ShipAttrData(
     @SerialName("其他来源")
     var other: String = "",
 
-
-    @SerialName("获得科技点")
-    var tech_gain: String = "",
-    @SerialName("满级科技点")
-    var tech_full: String = "",
 
     @SerialName("耐久")
     var naijiu : String = "",

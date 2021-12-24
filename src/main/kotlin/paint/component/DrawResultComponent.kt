@@ -20,12 +20,12 @@ class DrawResultComponent(
         DrawUtils.Rarity.N to Color(219, 220, 223)
     )
 
-    override fun init() {
+    override fun init() : Component {
 
         width = 840
         height = 380
 
-        super.init()
+        return super.init()
     }
 
     override fun draw(): BufferedImage? {

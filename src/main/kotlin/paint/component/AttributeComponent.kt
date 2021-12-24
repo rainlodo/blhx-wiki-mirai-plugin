@@ -22,12 +22,12 @@ open class AttributeComponent(
     var labelComponent: TextComponent = TextComponent(label, size, labelColor)
     var valueComponent: TextComponent = TextComponent(value, size, valueColor)
 
-    override fun init() {
+    override fun init() : Component {
 
         labelComponent.init()
         if (value != "")
             valueComponent.init()
-        super.init()
+        return super.init()
     }
 
     open override fun draw(): BufferedImage? {

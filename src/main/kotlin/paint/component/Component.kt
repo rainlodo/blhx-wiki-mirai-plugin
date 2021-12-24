@@ -31,13 +31,14 @@ open class Component(
     lateinit var bi : BufferedImage
     lateinit var g2 : Graphics2D
 
-    open fun init() {
+    open fun init() : Component {
         renderingHints  = RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
         bi = BufferedImage(this.getComponentWidth(), this.getComponentHeight(), BufferedImage.TYPE_INT_ARGB)
         g2 = bi.createGraphics()
         renderingHints[RenderingHints.KEY_RENDERING] = RenderingHints.VALUE_RENDER_QUALITY
         renderingHints[RenderingHints.KEY_ANTIALIASING ] = RenderingHints.VALUE_ANTIALIAS_ON
         g2.setRenderingHints(renderingHints)
+        return this
     }
 
     /**

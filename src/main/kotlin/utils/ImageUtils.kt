@@ -51,7 +51,6 @@ class ImageUtil {
                 return ImageIO.read(URL(imageUri))
             }
             else {
-                println(imageUri)
                 return ImageIO.read(Path(imageUri).toFile())
             }
         }

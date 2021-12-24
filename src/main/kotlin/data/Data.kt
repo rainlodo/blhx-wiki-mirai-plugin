@@ -3,7 +3,7 @@ package org.iris.wiki.data
 import net.mamoe.mirai.contact.Member
 import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.message.data.PlainText
-import org.iris.wiki.utils.MESSAGE_HELP
+import org.iris.wiki.config.MESSAGE_HELP
 import org.jsoup.nodes.Document
 
 open class Data {

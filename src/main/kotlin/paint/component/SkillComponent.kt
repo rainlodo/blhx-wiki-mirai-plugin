@@ -18,13 +18,11 @@ class SkillComponent(
     lateinit var skillText: TextComponent
     lateinit var detailText: TextComponent
 
-    init {
+
+    override fun init() : Component {
         setPaddingHorizontal(3)
         setPaddingVertical(3)
-    }
 
-
-    override fun init() {
         val w = width - iconWidth - paddingLeft - paddingRight
         skillText = TextComponent(data.name, size, colorSkill, w)
         detailText = TextComponent(data.name + " " + data.detail, size, colorDetail, w)
@@ -33,7 +31,7 @@ class SkillComponent(
         skillText.init()
         detailText.init()
 
-        super.init()
+        return super.init()
     }
 
     override fun draw(): BufferedImage? {

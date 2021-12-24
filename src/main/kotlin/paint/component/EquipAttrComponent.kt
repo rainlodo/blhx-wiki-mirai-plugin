@@ -23,10 +23,10 @@ class EquipAttrComponent(
     val backgroundColor = Color(100, 100, 100,200)
     val attrBgColor = Color(0, 0, 0,127)
 
-    override fun init() {
+    override fun init() : Component {
         width = 576
         height = 5000
-        super.init()
+        return super.init()
     }
 
     override fun draw(): BufferedImage? {

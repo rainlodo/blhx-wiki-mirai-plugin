@@ -3,7 +3,7 @@ package org.iris.wiki
 import net.mamoe.mirai.contact.Member
 import org.iris.wiki.config.CommonConfig
 import org.iris.wiki.data.Data
-import org.iris.wiki.data.DrawData
+import org.iris.wiki.action.Draw
 import org.iris.wiki.data.ImagesData
 import org.iris.wiki.data.TextData
 import org.iris.wiki.utils.DrawUtils
@@ -32,7 +32,7 @@ object Checker {
             if (commandList.size > 2) {
                 command += commandList[2]
             }
-            return draw(command.replace("大建", "").replace("属性", ""))
+            return draw(command.replace("大建", ""))
         }
         else {
             return null
@@ -59,7 +59,7 @@ object Checker {
             return TextData(text)
         }
         else if (command in DrawUtils.active_ship_map.keys) {
-            return DrawData().drawActive(DrawUtils.active_ship_map[command]!!)
+            return Draw().drawActive(DrawUtils.active_ship_map[command]!!)
         }
         else if (command != "") {
             var text = "输入参数有误，目前的建造列表有：\n轻池、重池、特池\n"
@@ -68,7 +68,7 @@ object Checker {
             }
             return TextData(text)
         }
-        return DrawData().draw(type)
+        return Draw().draw(type)
     }
 
 }

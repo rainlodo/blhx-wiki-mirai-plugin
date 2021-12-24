@@ -4,6 +4,7 @@ import org.iris.wiki.data.ShipAttrData
 import org.iris.wiki.paint.PaintUtils
 import org.iris.wiki.utils.ImageUtil
 import java.awt.Color
+import java.awt.SystemColor.text
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 import kotlin.io.path.Path
@@ -18,7 +19,7 @@ class ShipAttrComponent(
     var boxY = 50
     var boxX = 680
 
-    override fun init() {
+    override fun init() : Component{
         width = 1280
         height = 720
 
@@ -31,7 +32,7 @@ class ShipAttrComponent(
         }
 
 
-        super.init()
+        return super.init()
     }
 
 
@@ -165,6 +166,69 @@ class ShipAttrComponent(
         x = boxX
         skillList.forEach {
             g2.drawImage(it.draw(), x, boxY, null)
+            boxY += it.getComponentHeight()
+        }
+
+
+        // 计算出处栏的高度
+        val from = arrayListOf<Component>()
+        if (data.normal != "") {
+            val textList = data.normal.split("、")
+            val max = if (4 > textList.size) textList.size else 4
+            var text = textList[0]
+            for (i in (1 until max)) {
+                text += "," + textList[i]
+            }
+            if (max < textList.size) text += "等"
+            from.add(TextComponent(text, 20F).init())
+        }
+        if (data.active != "") {
+            from.add(TextComponent(data.active.split(" ").last(), 20F).init())
+        }
+        if (data.other != "") {
+            data.other.replace(" ", "、").split("、").forEach{
+                if (it.contains("兑换") || it.contains("科研") ||
+                    it.contains("奖励") || it.contains("META")) {
+                    from.add(TextComponent(it, 20F).init())
+                }
+            }
+        }
+        var h = 0
+        from.forEach {
+            h += it.getComponentHeight()
+        }
+
+        // 建造时间 出处
+        if (h + boxY > 690) {
+            boxX = 50
+            boxY = 550
+        }
+
+        var label = TextComponent("建造时间", 20F).init()
+        val labelWidth = 100
+        g2.color = colorAttr
+        g2.fillRect(boxX, boxY, boxWidth, label.getComponentHeight())
+        g2.drawImage(label.draw(), boxX + (labelWidth - label.getComponentWidth()) / 2, boxY, null)
+        g2.color = Color.WHITE
+        g2.drawRect(boxX, boxY, labelWidth, label.getComponentHeight())
+        g2.drawRect(boxX + labelWidth, boxY, boxWidth - labelWidth, label.getComponentHeight())
+        val time = TextComponent(data.time, 20F).init()
+        g2.drawImage(time.draw(), boxX + (boxWidth + labelWidth - time.getComponentWidth()) / 2, boxY, null)
+
+        boxY += label.getComponentHeight()
+
+
+        g2.color = colorAttr
+        g2.fillRect(boxX, boxY, boxWidth, h)
+        g2.color = Color.WHITE
+        g2.drawRect(boxX, boxY, labelWidth, h)
+        g2.drawRect(boxX + labelWidth, boxY, boxWidth - labelWidth, h)
+
+        label = TextComponent("其他途径", 20F).init()
+        g2.drawImage(label.draw(), boxX + (labelWidth - label.getComponentWidth()) / 2,
+            (h - label.getComponentHeight()) / 2 + boxY, null)
+        from.forEach {
+            g2.drawImage(it.draw(), boxX + (boxWidth + labelWidth - it.getComponentWidth()) / 2, boxY, null)
             boxY += it.getComponentHeight()
         }
 

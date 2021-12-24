@@ -2,17 +2,36 @@ package org.iris.wiki.config
 
 object CommandString {
 
+    // 指令头
     val wiki = listOf("wiki", ".wiki", "/wiki", "yls")
+
     val test = listOf("test")
 //    val common = listOf("基本信息", "基本")
+
+    // 基本属性页面
     val attribute = listOf("属性", "基本信息", "基本")
+
+    // 舰娘皮肤
     val dress = listOf("皮肤", "换装")
+
     val update = listOf("改造", "改")
-    val from = listOf("出处", "建造", "来源")
+
+    // 舰娘获得途径
+    val from = listOf("出处", "建造", "来源", "获得途径")
+
+    // 舰娘提供的科技点
+    val tech = listOf("科技点", "科技", "舰队科技")
+
+    // 大佬们对舰娘的评价
     val evaluate = listOf("评价")
+
+    // 画师声优等信息
     val other = listOf("角色信息", "其他", "其它")
+
+    // 推荐装备
     val equip = listOf("装备", "出装", "配装")
 
+    // 舰娘语音目录
     val voice_map = mapOf<String, String>(
         "自我介绍" to "profile",
         "获取台词" to "unlock",
@@ -88,14 +107,5 @@ object CommandString {
         "大破" to "hp_warning",
         "大破语音" to "hp_warning",
     )
-    val voice_introduce = listOf("自我介绍")
-    val voice_get = listOf("获取台词")
-    val voice_hello = listOf("登录", "hello", "你好", "登录台词")
-    val voice_detail = listOf("查看详情")
-    val voice_main = listOf("主界面", "主页")
-    val voice_touch = listOf("摸摸", "戳戳", "触摸", "触摸台词")
-    val voice_touch_head = listOf("摸头", "摸摸头", "摸头台词")
-    val voice_touch_special = listOf("特触", "特殊触摸", "摸胸", "特殊触摸")
-    val voice_mission = listOf("任务", "任务提醒")
-    val voice_mission_complete = listOf("任务完成", "任务完成提醒")
+
 }

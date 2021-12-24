@@ -30,9 +30,9 @@ class TextComponent(
     private var lineCount = 0
     var font = PaintUtils.font
 
-    override fun init() {
+    override fun init() : Component {
         g.font = this.font.deriveFont(size)
-        super.init()
+        return super.init()
     }
 
 

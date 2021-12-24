@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 import net.mamoe.mirai.contact.Member
 import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.message.data.MessageChainBuilder
-import org.iris.wiki.utils.MESSAGE_NO_RESULT
-import org.iris.wiki.utils.MESSAGE_SEARCH
+import org.iris.wiki.config.MESSAGE_NO_RESULT
+import org.iris.wiki.config.MESSAGE_SEARCH
 import org.jsoup.nodes.Document
 
 @Serializable

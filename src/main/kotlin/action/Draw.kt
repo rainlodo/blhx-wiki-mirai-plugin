@@ -1,23 +1,24 @@
-package org.iris.wiki.data
+package org.iris.wiki.action
 
 import org.iris.wiki.config.CommonConfig
+import org.iris.wiki.data.BufferImagesData
+import org.iris.wiki.data.Data
 import org.iris.wiki.paint.component.DrawResultComponent
 import org.iris.wiki.utils.DrawUtils
 import org.iris.wiki.utils.DrawUtils.ship_contain_map
-import java.io.File
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import javax.imageio.ImageIO
+import org.iris.wiki.utils.ImageUtil
 
-class DrawData {
+/**
+ * 抽卡
+ */
+class Draw {
 
-    val format = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH_mm_ss")
-
+    // 普池
     fun draw(type: DrawUtils.DrawType) : Data {
         val rareList = arrayListOf<DrawUtils.Rarity>()
         val nameList = arrayListOf<String>()
         val picList = arrayListOf<String>()
-        var feiqiu = true
+        var feiqiu = true // 是否蓝天白云
         for (i in 0..9) {
             val rarity = DrawUtils.getRarity()
             rareList.add(rarity)
@@ -30,15 +31,14 @@ class DrawData {
         }
 
 
-        var path = "${CommonConfig.ship_output_path}/draw/${LocalDateTime.now().format(format)}.png"
         val component = DrawResultComponent(rareList, nameList, picList)
         component.init()
-        ImageIO.write(component.draw(), "png", File(path))
-        val list = arrayListOf(path)
-        if (feiqiu) list.add("${CommonConfig.emoji_path}/feiqiu.jpg")
-        return ImagesData(list).activateAt()
+        val list = arrayListOf(component.draw()!!)
+        if (feiqiu) list.add(ImageUtil.getImage("${CommonConfig.emoji_path}/feiqiu.jpg"))
+        return BufferImagesData(list).activateAt()
     }
 
+    // 活动池
     fun drawActive(pool: DrawUtils.ActivePool): Data {
         val map = hashMapOf<Int, String>()
         var feiqiu = true
@@ -98,12 +98,11 @@ class DrawData {
             }
 
         }
-        var path = "${CommonConfig.ship_output_path}/draw/${LocalDateTime.now().format(format)}.png"
+
         val component = DrawResultComponent(rareList, nameList, picList)
         component.init()
-        ImageIO.write(component.draw(), "png", File(path))
-        val list = arrayListOf(path)
-        if (feiqiu) list.add("${CommonConfig.emoji_path}/feiqiu.jpg")
-        return ImagesData(list).activateAt()
+        val list = arrayListOf(component.draw()!!)
+        if (feiqiu) list.add(ImageUtil.getImage("${CommonConfig.emoji_path}/feiqiu.jpg"))
+        return BufferImagesData(list).activateAt()
     }
 }

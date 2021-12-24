@@ -1,13 +1,8 @@
-package org.iris.wiki.utils
+package org.iris.wiki.config
 
 val SEARCH_URL = "https://wiki.biligame.com/blhx/index.php?search="
 
 val COMMON = "基本信息"
-val ATRRIBUTE = "属性"
-
-val BOAT_DRESS = "皮肤"
-val NO_DRESS_URL = "https://picabstract-preview-ftn.weiyun.com/ftn_pic_abs_v3/98835451921a78b88219e93fd33175b05a87f989f85f92093815dd41189fb94597f177c7157f29ea875de0be905735aa?pictype=scale&from=30113&version=3.3.3.3&uin=2270816244&fname=meiyinci.jpg&size=750"
-val JOKER_URL = "http://p3.itc.cn/images01/20201223/6cd4f77ca689453d99fbec1135293b3c.png"
 
 val BOAT_UPDATE = "改造"
 val BOAT_NO_UPDATA = "还没有改造呢~"
@@ -15,8 +10,10 @@ val BOAT_NO_UPDATA = "还没有改造呢~"
 val BOAT_SKILL = "技能"
 
 val MESSAGE_HELP = "指令格式如下：\n" +
-    ".wiki [舰船]/[装备]/装备一图榜/PVE一图榜\n" +
-    ".wiki [舰船] 皮肤/改造/技能\n" +
+    "wiki [舰船]/[装备]\n" +
+    "wiki [舰船] 皮肤/出处/评价/科技点/[语音]\n" +
+    "wiki [装备] 出处\n" +
+    "wiki 大建 轻池/特池/重池/[活动池]\n" +
     "装备名中的空格用_代替~"
 
 val MESSAGE_ERROR = "输入指令有误~\n" +
