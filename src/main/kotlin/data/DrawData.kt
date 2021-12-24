@@ -1,6 +1,5 @@
 package org.iris.wiki.data
 
-import net.mamoe.mirai.console.command.ConsoleCommandSender.name
 import org.iris.wiki.config.CommonConfig
 import org.iris.wiki.paint.component.DrawResultComponent
 import org.iris.wiki.utils.DrawUtils

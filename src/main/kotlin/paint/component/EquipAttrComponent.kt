@@ -51,7 +51,7 @@ class EquipAttrComponent(
         y += titleComponent.getComponentHeight()
 
         // pic
-        var pic = ImageIO.read(Path("${PaintUtils.PATH_EQUIP_ICON}level_${data.level}.png").toFile())
+        var pic = ImageIO.read(Path("${PaintUtils.PATH_EQUIP_ICON}/level_${data.level}.png").toFile())
         g2.drawImage(pic, (width-pic.width) / 2, y, null)
         y += pic.height + 5
 

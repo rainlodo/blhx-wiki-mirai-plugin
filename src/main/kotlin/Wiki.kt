@@ -2,17 +2,11 @@ package org.iris.wiki
 
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
-import net.mamoe.mirai.event.EventChannel
 import net.mamoe.mirai.event.GlobalEventChannel
-import net.mamoe.mirai.event.events.BotInvitedJoinGroupRequestEvent
 import net.mamoe.mirai.event.events.FriendMessageEvent
 import net.mamoe.mirai.event.events.GroupMessageEvent
-import net.mamoe.mirai.event.events.NewFriendRequestEvent
-import net.mamoe.mirai.event.globalEventChannel
-import net.mamoe.mirai.message.data.Image
-import net.mamoe.mirai.message.data.Image.Key.queryUrl
-import net.mamoe.mirai.message.data.PlainText
 import net.mamoe.mirai.utils.info
+import org.iris.wiki.config.CommonConfig
 
 /**
  * 使用 kotlin 版请把
@@ -32,20 +26,16 @@ import net.mamoe.mirai.utils.info
 object Wiki : KotlinPlugin(
     JvmPluginDescription(
         id = "org.iris.wiki",
-        name = "碧蓝航线wiki机器人",
-        version = "0.1.0"
+        name = "blhx-wiki",
+        version = "0.2.0"
     ) {
         author("iris")
-        info(
-            """
-            复读机器人
-        """.trimIndent()
-        )
         // author 和 info 可以删除.
     }
 ) {
     override fun onEnable() {
         logger.info { "Plugin loaded" }
+        CommonConfig.emoji_path
         //配置文件目录 "${dataFolder.absolutePath}/"
         val eventChannel = GlobalEventChannel.parentScope(this)
 
