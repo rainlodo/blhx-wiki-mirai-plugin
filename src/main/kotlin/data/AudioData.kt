@@ -39,7 +39,8 @@ data class AudioData(
                 }
             }
         }
-        url = linkList[(0 until linkList.size).random()].attr("href")
+        if (linkList.isNotEmpty())
+            url = linkList[(0 until linkList.size).random()].attr("href")
 
         return super.parse(doc, commandList)
     }

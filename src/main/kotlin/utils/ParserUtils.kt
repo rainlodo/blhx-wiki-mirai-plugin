@@ -50,7 +50,6 @@ object ParserUtils {
             return ShipAttrData().parse(doc, commandList)
         }
         return when (commandList[2]) {
-            in CommandString.test -> ShipAttrData().parse(doc, commandList)
             in CommandString.attribute -> ShipAttrData().parse(doc, commandList)
             in CommandString.from -> ShipData().parse(doc, commandList)
 //            BOAT_UPDATE -> parseShipUpadta(doc)
@@ -58,6 +57,7 @@ object ParserUtils {
             in CommandString.voice_map -> AudioData().parse(doc, commandList)
             in CommandString.tech -> parseShipTech(doc, commandList)
             in CommandString.evaluate -> parseShipEvaluate(doc)
+            in CommandString.equip -> ShipEquipData().parse(doc, commandList)
             else -> TextData(MESSAGE_ERROR)
         }
 
