@@ -103,6 +103,7 @@ data class EquipAttrData(
 
 
     override suspend fun toMessage(sender: Member): Message {
+        name = name.replace("\\", "_")
         val path = "${CommonConfig.equip_output_path}/${name}T${tno}.png"
         val file = File(path)
         if (!file.exists()) {

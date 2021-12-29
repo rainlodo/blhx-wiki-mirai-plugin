@@ -6,7 +6,7 @@ import net.mamoe.mirai.contact.Member
 import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.message.data.PlainText
 import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
-import org.iris.wiki.config.CommandString
+import org.iris.wiki.config.CommandConfig
 import org.iris.wiki.utils.HttpUtils
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -33,7 +33,7 @@ data class AudioData(
         val trList = table.select("tr")
         val linkList = arrayListOf<Element>()
         trList.forEach{ it ->
-            if (it.attr("data-key") == CommandString.voice_map[commandList[2]]) {
+            if (it.attr("data-key") == CommandConfig.voice_map[commandList[2]]) {
                 it.select("a").forEach { iit->
                     linkList.add(iit)
                 }

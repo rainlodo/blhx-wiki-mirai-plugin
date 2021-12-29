@@ -5,12 +5,11 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat
 import org.iris.wiki.config.BOAT_NO_UPDATA
 import org.iris.wiki.config.BOAT_UPDATE
-import org.iris.wiki.config.CommandString
+import org.iris.wiki.config.CommandConfig
 import org.iris.wiki.config.MESSAGE_ERROR
 import org.iris.wiki.data.*
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import java.awt.SystemColor.text
 
 
 object ParserUtils {
@@ -50,14 +49,14 @@ object ParserUtils {
             return ShipAttrData().parse(doc, commandList)
         }
         return when (commandList[2]) {
-            in CommandString.attribute -> ShipAttrData().parse(doc, commandList)
-            in CommandString.from -> ShipData().parse(doc, commandList)
+            in CommandConfig.attribute -> ShipAttrData().parse(doc, commandList)
+            in CommandConfig.from -> ShipData().parse(doc, commandList)
 //            BOAT_UPDATE -> parseShipUpadta(doc)
-            in CommandString.dress -> ImagesData().parse(doc, commandList)
-            in CommandString.voice_map -> AudioData().parse(doc, commandList)
-            in CommandString.tech -> parseShipTech(doc, commandList)
-            in CommandString.evaluate -> parseShipEvaluate(doc)
-            in CommandString.equip -> ShipEquipData().parse(doc, commandList)
+            in CommandConfig.dress -> ImagesData().parse(doc, commandList)
+            in CommandConfig.voice_map -> AudioData().parse(doc, commandList)
+            in CommandConfig.tech -> parseShipTech(doc, commandList)
+            in CommandConfig.evaluate -> parseShipEvaluate(doc)
+            in CommandConfig.equip -> ShipEquipData().parse(doc, commandList)
             else -> TextData(MESSAGE_ERROR)
         }
 
@@ -110,8 +109,8 @@ object ParserUtils {
             return EquipAttrData().parse(doc, commandList)
         }
         return when (commandList[2]) {
-            in CommandString.from -> EquipData().parse(doc, commandList)
-            in CommandString.attribute -> EquipAttrData().parse(doc, commandList)
+            in CommandConfig.from -> EquipData().parse(doc, commandList)
+            in CommandConfig.attribute -> EquipAttrData().parse(doc, commandList)
             else -> TextData(MESSAGE_ERROR)
         }
     }

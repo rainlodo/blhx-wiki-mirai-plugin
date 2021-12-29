@@ -6,6 +6,8 @@ import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.events.FriendMessageEvent
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.utils.info
+import org.iris.wiki.config.AliasConfig
+import org.iris.wiki.config.CommandConfig
 import org.iris.wiki.config.CommonConfig
 
 /**
@@ -34,50 +36,14 @@ object Wiki : KotlinPlugin(
     }
 ) {
     override fun onEnable() {
-        logger.info { "Plugin loaded" }
-        CommonConfig.emoji_path
-        //配置文件目录 "${dataFolder.absolutePath}/"
-        val eventChannel = GlobalEventChannel.parentScope(this)
 
+        //配置文件目录 "${dataFolder.absolutePath}/"
+
+        AliasConfig.reload()
+        CommandConfig.reload()
 
         Listener.subscribe()
 
-        eventChannel.subscribeAlways<GroupMessageEvent>{
-            //群消息
-            //复读示例
-
-//            if (message.contentToString().startsWith("复读")) {
-//                group.sendMessage(message.contentToString().replace("复读", ""))
-//            }
-//            if (message.contentToString() == "hi") {
-//                //群内发送
-//                group.sendMessage("hi")
-//                //向发送者私聊发送消息
-//                sender.sendMessage("hi")
-//                //不继续处理
-//                return@subscribeAlways
-//            }
-            //分类示例
-//            message.forEach {
-//                循环每个元素在消息里
-//                if (it is Image) {
-//                    如果消息这一部分是图片
-//                    val url = it.queryUrl()
-//                    group.sendMessage("图片，下载地址$url")
-//                }
-//                if (it is PlainText) {
-//                    如果消息这一部分是纯文本
-//                    group.sendMessage("纯文本，内容:${it.content}")
-//                }
-//            }
-        }
-        eventChannel.subscribeAlways<FriendMessageEvent>{
-            //好友信息
-//            sender.sendMessage("hi")
-            if (message.contentToString() == "path") {
-                sender.sendMessage("${dataFolder.absolutePath}/")
-            }
-        }
-
     }
+
 }

@@ -1,35 +1,54 @@
 package org.iris.wiki.config
 
-object CommandString {
+import net.mamoe.mirai.console.data.AutoSavePluginConfig
+import net.mamoe.mirai.console.data.ValueDescription
+import net.mamoe.mirai.console.data.value
+
+
+/**
+ * 命令名的配置
+ * 用户输入指令会自动转变为小写
+ * @constructor 实例化命令配置
+ * @see AutoSavePluginConfig
+ */
+object CommandConfig : AutoSavePluginConfig("CommandConfig") {
 
     // 指令头
-    val wiki = listOf("wiki", ".wiki", "/wiki", "yls")
+    @ValueDescription("wiki指令名")
+    val wiki : Array<String> by value(arrayOf("wiki", ".wiki", "/wiki", "yls"))
 
     val test = listOf("test")
-//    val common = listOf("基本信息", "基本")
 
     // 基本属性页面
-    val attribute = listOf("属性", "基本信息", "基本")
+    @ValueDescription("舰娘、装备基本属性")
+    val attribute : Array<String> by value(arrayOf("属性", "基本信息", "基本"))
 
     // 舰娘皮肤
-    val dress = listOf("皮肤", "换装")
+    @ValueDescription("舰娘皮肤")
+    val dress : Array<String> by value(arrayOf("皮肤", "换装"))
 
-    val update = listOf("改造", "改")
+    @ValueDescription("舰娘改造所需素材")
+    val update : Array<String> by value(arrayOf("改造", "改"))
 
     // 舰娘获得途径
-    val from = listOf("出处", "建造", "来源", "获得途径")
+    @ValueDescription("舰娘、装备获得途径")
+    val from : Array<String> by value(arrayOf("出处", "建造", "来源", "获得途径"))
 
     // 舰娘提供的科技点
-    val tech = listOf("科技点", "科技", "舰队科技")
+    @ValueDescription("舰娘提供的科技点")
+    val tech : Array<String> by value(arrayOf("科技点", "科技", "舰队科技"))
 
     // 大佬们对舰娘的评价
-    val evaluate = listOf("评价")
+    @ValueDescription("大佬们对舰娘的评价")
+    val evaluate : Array<String> by value(arrayOf("评价"))
 
     // 画师声优等信息
-    val other = listOf("角色信息", "其他", "其它")
+    @ValueDescription("画师声优等信息")
+    val other : Array<String> by value(arrayOf("角色信息", "其他", "其它"))
 
     // 推荐装备
-    val equip = listOf("装备", "出装", "配装")
+    @ValueDescription("推荐舰娘使用的装备")
+    val equip : Array<String> by value(arrayOf("装备", "出装", "配装"))
 
     // 舰娘语音目录
     val voice_map = mapOf<String, String>(

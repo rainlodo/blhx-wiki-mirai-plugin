@@ -13,12 +13,14 @@ import net.mamoe.mirai.message.data.Image
 import net.mamoe.mirai.message.data.PlainText
 import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
 import net.mamoe.mirai.utils.MiraiExperimentalApi
-import org.iris.wiki.config.ALIAS_MAP
-
-import org.iris.wiki.config.CommandString
+import org.iris.wiki.config.AliasConfig.ALIAS_MAP
+import org.iris.wiki.config.CommandConfig
 import org.iris.wiki.config.MESSAGE_ERROR
 import org.iris.wiki.config.SEARCH_URL
-import org.iris.wiki.utils.*
+import org.iris.wiki.utils.HttpUtils
+import org.iris.wiki.utils.ImageUtil
+import org.iris.wiki.utils.MessageBuildUtils
+import org.iris.wiki.utils.ParserUtils
 import java.util.*
 
 @OptIn(ConsoleExperimentalApi::class)
@@ -35,7 +37,7 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
                         .split(Regex("[ ]+"))
                         .dropLastWhile { it.isEmpty() }
                         .toTypedArray()
-                    if (ParserUtils.wordToPinyin(commandList[0]) in CommandString.wiki) {
+                    if (ParserUtils.wordToPinyin(commandList[0]) in CommandConfig.wiki) {
                         when (commandList.size) {
                             2 -> wiki(commandList, sender)
                             3 -> wiki(commandList, sender)
