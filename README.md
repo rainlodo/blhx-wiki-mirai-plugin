@@ -34,8 +34,13 @@
 ## 插件启用
 
 - [安装Mirai Console](https://github.com/mamoe/mirai/blob/dev/docs/UserManual.md)
+
 - 下载本项目最新的[jar包](https://gitee.com/arisaka-iris/blhx-wiki-mirai-plugin/releases)，放入Mirai-Console根目录下的plugin文件夹中
+
 - 下载[数据文件](https://www.aliyundrive.com/s/1GcQRPKo9dj)放入Mirai-Console根目录下的data文件夹中
+
+  ![](doc/data_path.png)
+
 - 启动Mirai-Console，在Mirai-Console里登录
 
 ## Bot指令
@@ -87,6 +92,48 @@ $\color{red}{在修改配置文件时应确保机器人（插件）不在运行�
 
   <img src="doc/正式名称.png" style="zoom:80%;" />
 
+- **活动卡池设置**
 
+  位于`data/blhx-wiki/config/active_pool.json`，格式如下
+  
+  ```json
+  {
+  	"name": "ssss",
+  	"ur": [],
+  	"ssr": [{
+  		"name": "宝多六花",
+  		"probability": 20
+  	}, {
+  		"name": "新条茜",
+  		"probability": 20
+  	}, {
+  		"name": "南梦芽",
+  		"probability": 20
+  	}, {
+  		"name": "飞鸟川千濑",
+  		"probability": 5
+  	}],
+  	"sr": [{
+  		"name": "奈美子",
+  		"probability": 25
+  	}, {
+  		"name": "莲SSSS",
+  		"probability": 25
+  	}],
+  	"r": []
+  }
+  ```
+  
+  最开始的`name`为卡池名称，`ur、ssr、sr、r`为各稀有度的舰娘列表，其中`name`为舰娘名称，`probability`为概率*10
+  
+  ~~目前还没加入概率校验，等之后在摸吧~~
+
+
+
+## 常见问题
+
+- **大建列表乱码**
+
+  将`data/blhx-wiki/config/active_pool.json`文件改为GBK格式即可
 
 ~~如果觉得还不错就点个star吧~~

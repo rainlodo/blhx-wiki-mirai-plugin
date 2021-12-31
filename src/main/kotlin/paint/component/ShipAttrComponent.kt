@@ -1,6 +1,6 @@
 package org.iris.wiki.paint.component
 
-import io.ktor.util.*
+
 import org.iris.wiki.config.CommonConfig
 import org.iris.wiki.data.ShipAttrData
 import org.iris.wiki.paint.PaintUtils
@@ -8,11 +8,9 @@ import org.iris.wiki.utils.ImageUtil
 import org.xml.sax.Attributes
 import org.xml.sax.helpers.DefaultHandler
 import java.awt.Color
-import java.awt.SystemColor.text
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
-import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.parsers.SAXParserFactory
 import kotlin.io.path.Path
 
