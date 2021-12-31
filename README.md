@@ -35,7 +35,7 @@
 
 - [安装Mirai Console](https://github.com/mamoe/mirai/blob/dev/docs/UserManual.md)
 - 下载本项目最新的[jar包](https://gitee.com/arisaka-iris/blhx-wiki-mirai-plugin/releases)，放入Mirai-Console根目录下的plugin文件夹中
-- 下载[数据文件](https://gitee.com/arisaka-iris/blhx-wiki-mirai-plugin/tree/master/data)放入Mirai-Console根目录下的data文件夹中
+- 下载[数据文件](https://www.aliyundrive.com/s/1GcQRPKo9dj)放入Mirai-Console根目录下的data文件夹中
 - 启动Mirai-Console，在Mirai-Console里登录
 
 ## Bot指令

@@ -1,10 +1,12 @@
 package org.iris.wiki.paint.component
 
 
+import org.iris.wiki.config.CommonConfig
 import org.iris.wiki.data.EquipAttrData
 import org.iris.wiki.paint.PaintUtils
 import java.awt.Color
 import java.awt.image.BufferedImage
+import java.io.File
 import java.net.URL
 import javax.imageio.ImageIO
 import kotlin.io.path.Path
@@ -55,13 +57,17 @@ class EquipAttrComponent(
         g2.drawImage(pic, (width-pic.width) / 2, y, null)
         y += pic.height + 5
 
+        val path = "${CommonConfig.equip_path}/${data.name.replace("/", "_")}.png"
+        if (File(path).exists()) {
+            data.pic = path
+        }
         if (data.pic.startsWith("http")) {
             pic = ImageIO.read(URL(data.pic))
         }
         else {
             pic = ImageIO.read(Path(data.pic).toFile())
         }
-        g2.drawImage(pic, (width-pic.width) / 2, y - 180, null)
+        g2.drawImage(pic, (width-128) / 2, y - 180, 128, 128,null)
 
         // tno
         pic = ImageIO.read(Path("${PaintUtils.PATH_EQUIP_ICON}/T${data.tno}.png").toFile())

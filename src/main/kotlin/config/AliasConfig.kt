@@ -146,7 +146,20 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
     val ALIAS_OTHER_MAP : Map<String, String> by value(mapOf<String, String>(
         "举炮炮" to "阿贝克隆比",
         "奸商" to "明石",
-        "牛牛" to "樫野"
+        "牛牛" to "樫野",
+        "u37" to "U-37",
+        "u47" to "U-47",
+        "u74" to "U-73",
+        "u81" to "U-81",
+        "u96" to "U-96",
+        "u101" to "U-101",
+        "u110" to "U-110",
+        "u410" to "U-410",
+        "u522" to "U-522",
+        "u556" to "U-556",
+        "u557" to "U-557",
+        "u1206" to "U-1206",
+        "霞doa" to "霞DOA"
     ))
 
     @ValueDescription("和谐名")

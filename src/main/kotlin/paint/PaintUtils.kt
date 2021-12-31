@@ -12,11 +12,10 @@ object PaintUtils {
     val font: Font = Font.createFont(Font.TRUETYPE_FONT, Path(CommonConfig.ttf).toFile())
 
 
-    const val PATH_BASE = "data/image"
+    const val PATH_BASE = "data/blhx-wiki/image"
     const val PATH_EQUIP_ICON = "$PATH_BASE/icon/equip"
     const val PATH_SHIP_ICON = "$PATH_BASE/icon/ship"
     const val PATH_RARITY_ICON = "$PATH_BASE/icon/rarity"
-    const val PATH_SHIP_FOLDER = "$PATH_BASE/ship"
     const val PATH_CAMP_ICON = "$PATH_BASE/icon/camp"
 
     val MAP_EQUIP_USE = listOf(

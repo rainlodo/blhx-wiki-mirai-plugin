@@ -1,12 +1,19 @@
 package org.iris.wiki.paint.component
 
+import io.ktor.util.*
+import org.iris.wiki.config.CommonConfig
 import org.iris.wiki.data.ShipAttrData
 import org.iris.wiki.paint.PaintUtils
 import org.iris.wiki.utils.ImageUtil
+import org.xml.sax.Attributes
+import org.xml.sax.helpers.DefaultHandler
 import java.awt.Color
 import java.awt.SystemColor.text
 import java.awt.image.BufferedImage
+import java.io.File
 import javax.imageio.ImageIO
+import javax.xml.parsers.DocumentBuilderFactory
+import javax.xml.parsers.SAXParserFactory
 import kotlin.io.path.Path
 
 class ShipAttrComponent(
@@ -63,9 +70,7 @@ class ShipAttrComponent(
 
 
         // 立绘
-//        pic = ImageIO.read(Path("${PaintUtils.PATH_SHIP_FOLDER}/22.png").toFile())
-        pic = ImageUtil.getImage(data.pic)
-        g2.drawImage(pic, 50, 0, 525, 788, null)
+        drawShip()
 
         // 阵营图标绘制
         var file = Path("${PaintUtils.PATH_CAMP_ICON}/${data.camp}.png").toFile()
@@ -237,4 +242,53 @@ class ShipAttrComponent(
 
     }
 
+    private fun drawShip() {
+        var name = data.name.split("（")[0]
+
+        if (File("${CommonConfig.ship_path}/$name.png").exists() &&
+            File("${CommonConfig.ship_label_path}/$name.xml").exists()
+        ) {
+            val documentFactory = SAXParserFactory.newInstance()
+            val documentBuilder = documentFactory.newSAXParser()
+
+            var xmin : Int = 0
+            var ymin : Int = 0
+            var xmax : Int = 0
+            var ymax : Int = 0
+
+            val handler = object : DefaultHandler() {
+                var label: String = ""
+
+                override fun startElement(uri: String?, localName: String?, qName: String?, atts: Attributes?) {
+                    label = qName!!
+                }
+
+                override fun characters(ch: CharArray?, start: Int, length: Int) {
+                    val value = String(ch!!, start, length)
+                    if (value.replace("\n", "").replace("\t", "") != "") {
+                        when(label) {
+                            "xmin" -> xmin = value.toInt()
+                            "ymin" -> ymin = value.toInt()
+                            "xmax" -> xmax = value.toInt()
+                            "ymax" -> ymax = value.toInt()
+                        }
+                    }
+                }
+            }
+
+            documentBuilder.parse("${CommonConfig.ship_label_path}/$name.xml", handler)
+
+
+            val scale = (720 - 87).toDouble() / (ymax - ymin)
+            val xmid = ((xmin + xmax) / 2 * scale).toInt()
+            ymin = (ymin * scale).toInt()
+
+            val pic = ImageUtil.getImage("${CommonConfig.ship_path}/$name.png")
+            g2.drawImage(pic, 350 - xmid, 87 - ymin,
+                (pic.width * scale).toInt(), (pic.height * scale).toInt(), null)
+        } else {
+            val pic = ImageUtil.getImage(data.pic)
+            g2.drawImage(pic, 50, 0, 525, 788, null)
+        }
+    }
 }
