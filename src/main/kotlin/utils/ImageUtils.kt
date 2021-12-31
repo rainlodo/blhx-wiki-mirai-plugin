@@ -138,7 +138,5 @@ class ImageUtil {
             return Rectangle(Dimension(des_width, des_height))
         }
 
-
-
     }
 }

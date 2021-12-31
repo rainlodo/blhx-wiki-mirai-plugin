@@ -23,7 +23,7 @@ class ShipAttrComponent(
     val skillList : ArrayList<SkillComponent> = arrayListOf()
     var boxWidth = 570
     var boxHeight = 190
-    var boxY = 50
+    var boxY = 20
     var boxX = 680
 
     override fun init() : Component{

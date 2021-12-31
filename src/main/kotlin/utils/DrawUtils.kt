@@ -98,7 +98,7 @@ object DrawUtils {
     }
 
     private fun initActivePool() {
-        val fr = FileReader("${CommonConfig.json_string}/draw/active_pool.json")
+        val fr = FileReader("${CommonConfig.json_string}/active_pool.json")
         val parser= JsonParser()
         val jsonArray = parser.parse(fr.readText()).asJsonArray
         val gson=Gson()
