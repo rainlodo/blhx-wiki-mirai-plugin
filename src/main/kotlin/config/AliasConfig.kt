@@ -90,6 +90,7 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
     val ALIAS_BB_MAP : Map<String, String> by value(mapOf<String, String>(
 
         "大帝" to "腓特烈大帝",
+        "波斯猫" to "俾斯麦",
         "大加加" to "加斯科涅",
         "北卡" to "北卡罗来纳",
         "花生" to "华盛顿",
@@ -114,7 +115,8 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "格奈meta" to "格奈森瑙·META",
         "格奈" to "格奈森瑙",
         "崩姐" to "宾夕法尼亚",
-        "几把兔" to "新泽西"
+        "几把兔" to "新泽西",
+        "胡滕" to "乌尔里希·冯·胡滕"
     ))
 
     @ValueDescription("航母别名")

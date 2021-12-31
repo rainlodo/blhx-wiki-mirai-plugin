@@ -1,14 +1,12 @@
 package org.iris.wiki
 
+import net.mamoe.mirai.console.command.CommandManager.INSTANCE.register
+import net.mamoe.mirai.console.command.CommandManager.INSTANCE.unregister
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
-import net.mamoe.mirai.event.GlobalEventChannel
-import net.mamoe.mirai.event.events.FriendMessageEvent
-import net.mamoe.mirai.event.events.GroupMessageEvent
-import net.mamoe.mirai.utils.info
+import org.iris.wiki.command.WikiConfigCommand
 import org.iris.wiki.config.AliasConfig
 import org.iris.wiki.config.CommandConfig
-import org.iris.wiki.config.CommonConfig
 
 /**
  * 使用 kotlin 版请把
@@ -41,9 +39,15 @@ object Wiki : KotlinPlugin(
 
         AliasConfig.reload()
         CommandConfig.reload()
-
+        WikiConfigCommand.register()
         Listener.subscribe()
 
+    }
+
+    override fun onDisable() {
+
+        WikiConfigCommand.unregister()
+        super.onDisable()
     }
 
 }
