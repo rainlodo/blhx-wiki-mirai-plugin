@@ -26,8 +26,6 @@ data class EquipData(
     @SerialName("route")
     var route: ArrayList<String> = arrayListOf(),
     @SerialName("route_pic")
-    var routePic: ArrayList<String> = arrayListOf(),
-    @SerialName("piece")
     var piece: String= ""
 ) : Data() {
 
@@ -43,13 +41,34 @@ data class EquipData(
 
         val table = doc.select("table[class='table table-bordered']")[0]
         val tdList = table.select("td")
-        from = tdList[0].text()
-        piece = tdList[2].text()
+        val thList = table.select("th")
 
-        for (img in tdList[1].select("img")) {
-            route.add(img.attr("alt").dropLast(4))
-            routePic.add(img.attr("src"))
+        for (i in thList.indices) {
+            when (thList[i].text().replace("\n", "")) {
+                "整装获取" -> from = tdList[i].text().replace(" ", "\n  ")
+                "设计图获取" -> piece = tdList[i].text().replace(" ", "\n  ")
+                "研发路线" -> {
+                    val html = tdList[i].html()
+                        .replace("&gt;", ">")
+                        .replace(Regex("<a[^>]+>"), "")
+                        .replace(Regex("<span[^>]+>"), "")
+                        .replace(Regex("</[^>]+>"), "")
+                    html.split(">").forEach{
+                        if (it.isNotEmpty())
+                            when(it[0]) {
+                                '<' -> {
+                                    val strs = it.split("\"")
+                                    route.add(strs[1].substring(0, strs[1].length - 4))
+                                    route.add(strs[3])
+                                }
+                                '-' -> route.add("↓↓↓↓↓↓↓\n")
+                                else -> route.add("================\n")
+                            }
+                    }
+                }
+            }
         }
+
         return super.parse(doc, commandList)
     }
 
@@ -63,16 +82,21 @@ data class EquipData(
 
         builder.add(camp)
         builder.add(type + "\n")
-        builder.add("整装获取:\n${from.ifEmpty { "无" }}\n")
-        builder.add("设计图获取:\n${piece.ifEmpty { "无" }}\n")
+        builder.add("整装获取:\n  ${from.ifEmpty { "无" }}\n")
+        builder.add("设计图获取:\n  ${piece.ifEmpty { "无" }}\n")
 
         if (route.isNotEmpty()) {
             builder.add("研发路线：\n")
-            for (i in 0 until route.size) {
-                builder.add("${route[i]}${if (i == route.size-1) "" else "->"}")
-                val src = ImageUtil.getImageAsExResource(routePic[i])
-                val imageId: String = src.uploadAsImage(sender.group).imageId
-                builder.add(Image(imageId))
+            route.forEach {
+                if (it.startsWith("http")) {
+                    val src = ImageUtil.getImageAsExResource(it)
+                    val imageId: String = src.uploadAsImage(sender.group).imageId
+                    builder.add(Image(imageId))
+                    src.close()
+                }
+                else {
+                    builder.add(it)
+                }
             }
         }
         return builder.build()

@@ -59,12 +59,12 @@ data class ShipData(
 
         time = trList[3].select("td")[1].text()
 
-        normal = trList[4].select("td")[1].text()
+        normal = trList[4].select("td")[1].text().replace(" ", "\n  ")
 
-        active = trList[5].select("td")[1].text()
+        active = trList[5].select("td")[1].text().replace(" ", "\n  ")
 
         if (trList[6].select("td")[0].text().equals("其他途径")) {
-            other = trList[6].select("td")[1].text()
+            other = trList[6].select("td")[1].text().replace(" ", "\n  ")
         }
 
 
@@ -85,12 +85,12 @@ data class ShipData(
         builder.add(level + camp + type + "\n")
         builder.add(Image(imageId))
         builder.add("建造时间：${time}\n")
-        var from = ""
+        var from = "  "
         if (normal != "") {
-            from += normal + "\n"
+            from += "$normal\n  "
         }
         if (active != "") {
-            from += active + "\n"
+            from += "$active\n  "
         }
         if (other != "") {
             from += other
