@@ -167,11 +167,15 @@ data class ShipAttrData(
         for (i in 1 until trList.size) {
             if (trList[i].attr("style") != "display:none") {
                 val tdList = trList[i].select("td")
+                var detail = tdList[1].text()
+                if (tdList[1].select("div[class='resp-tab-content']").size >= 2) {
+                    detail = tdList[1].select("div[class='resp-tab-content']")[0].text()
+                }
                 skill.add(
                     SkillData(
                         tdList[0].text(),
                         tdList[0].select("img").attr("src"),
-                        tdList[1].text()
+                        detail
                     )
                 )
             }
