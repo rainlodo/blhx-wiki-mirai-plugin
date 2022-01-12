@@ -4,6 +4,7 @@ import net.mamoe.mirai.contact.Member
 import org.iris.wiki.config.CommonConfig
 import org.iris.wiki.data.Data
 import org.iris.wiki.action.Draw
+import org.iris.wiki.action.Question
 import org.iris.wiki.data.ImagesData
 import org.iris.wiki.data.TextData
 import org.iris.wiki.utils.DrawUtils
@@ -39,6 +40,9 @@ object Checker {
         }
     }
 
+    /**
+     * 抽卡
+     */
     fun draw(command : String) : Data {
         var type = DrawUtils.DrawType.Light
 

@@ -16,6 +16,7 @@ import net.mamoe.mirai.utils.MiraiExperimentalApi
 import org.iris.wiki.config.AliasConfig.ALIAS_MAP
 import org.iris.wiki.config.CommandConfig
 import org.iris.wiki.config.MESSAGE_ERROR
+import org.iris.wiki.config.QQ_DIC
 import org.iris.wiki.config.SEARCH_URL
 import org.iris.wiki.utils.HttpUtils
 import org.iris.wiki.utils.ImageUtil
@@ -46,6 +47,7 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
                     }
 
                     noPa(it.contentToString().lowercase(), group, sender)
+                    repeat(it.contentToString().lowercase(), group, sender)
                 }
             }
         }
@@ -107,13 +109,27 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
     // 不爬
     suspend fun noPa(text: String, group: Group, sender: Member) {
         if (text.length < 30) {
-            val res = ParserUtils.wordToPinyin(text)
+            val res = ParserUtils.wordToPinyin(text.replace(" ", ""))
             val index = res.indexOf("yls")
             if (index >= 0) {
                 if (text.indexOf("爬") > index + 2 || text.indexOf("爪巴") > index + 2 ||
                     text.indexOf("pa") > index + 2) {
-                    group.sendMessage(PlainText("不爬，").plus(At(sender)).plus(PlainText("爬")))
+                    if (sender.id in QQ_DIC) {
+                        group.sendMessage(PlainText("不爬，@${QQ_DIC[sender.id]}爬"))
+                    }
+                    else {
+                        group.sendMessage(PlainText("不爬，").plus(At(sender)).plus(PlainText("爬")))
+                    }
                 }
+            }
+        }
+    }
+
+    // 复读tql
+    suspend fun repeat(text: String, group: Group, sender: Member) {
+        if (group.id == 1046477299L && sender.id == 2270816244L) {
+            if (text.startsWith(" ")) {
+                group.sendMessage(text)
             }
         }
     }

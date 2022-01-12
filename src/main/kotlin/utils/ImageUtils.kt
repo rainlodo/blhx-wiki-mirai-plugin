@@ -45,6 +45,30 @@ class ImageUtil {
             }
         }
 
+        /**
+         * 从图片中随机截取一部分
+         */
+        fun getImagePiece(imagePath: String, w : Int, h : Int): BufferedImage {
+            val image = ImageIO.read(File(imagePath))
+            while (true) {
+                var transparentCount = 0;
+                val piece = image.getSubimage(
+                    (0 until image.width-w).random(), (0 until image.height-h).random(),
+                 w, h)
+                for (i in 0 until w) {
+                    for (j in 0 until h) {
+                        val pixel = piece.getRGB(i, j);
+                        if (pixel shr 24 == 0) {
+                            transparentCount += 1
+                        }
+                    }
+                }
+
+                if (transparentCount < w * h / 2) {
+                    return piece
+                }
+            }
+        }
 
         fun getImage(imageUri: String) : BufferedImage {
             if (imageUri.startsWith("http")) {

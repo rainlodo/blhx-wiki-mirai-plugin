@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "org.iris.wiki"
-version = "0.3.0"
+version = "0.3.2"
 
 repositories {
     mavenLocal()
@@ -19,4 +19,5 @@ dependencies {
     implementation("org.jsoup:jsoup:1.10.3")
     implementation("com.belerweb:pinyin4j:2.5.0")
     implementation("com.google.code.gson:gson:2.8.5")
+
 }

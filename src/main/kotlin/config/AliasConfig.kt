@@ -570,7 +570,8 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "金防空雷达" to "高性能对空雷达T0",
         "金火控" to "高性能火控雷达T0",
         "火控" to "高性能火控雷达T0",
-        "舵机" to "高性能舵机T0"
+        "舵机" to "高性能舵机T0",
+        "深投" to "改良深弹投射器T3"
     ))
 
     val ALIAS_MAP : HashMap<String, String> = hashMapOf()
