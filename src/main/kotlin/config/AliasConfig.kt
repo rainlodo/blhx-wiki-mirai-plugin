@@ -139,7 +139,10 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "狱友" to "皇家方舟",
         "黑飞鹰" to "飞鹰·META",
         "飞鹰meta" to "飞鹰·META",
-        "妹妹" to "独角兽"
+        "妹妹" to "独角兽",
+        "780" to "齐柏林伯爵",
+        "齐柏林" to "齐柏林伯爵",
+        "390" to "小齐柏林"
     ))
 
     @ValueDescription("其他别名")
@@ -439,6 +442,7 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
     val ALIAS_AIR_GUN_MAP : Map<String, String> by value(mapOf<String, String>(
         "八联砰砰" to "八联装40mm“砰砰”炮T3",
         "四联博福斯" to "四联40mm博福斯对空机炮T3",
+        "六联博福斯" to "六联装40mm博福斯对空机炮T0",
         "staag" to "双联装40mm博福斯STAAGT0",
         "命中防空炮" to "双联装40mm博福斯STAAGT0",
         "双联博福斯" to "双联装40mm博福斯STAAGT0",

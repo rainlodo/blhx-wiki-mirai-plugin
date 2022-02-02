@@ -135,9 +135,9 @@ data class ShipAttrData(
         }
 
         val tableAttr = doc.select("table[class='wikitable sv-performance']")
-        trList = tableAttr[0].child(0).children()
+        trList = tableAttr[1].child(0).children()
         val tdList = arrayListOf<Element>()
-        for (i in 3..8) {
+        for (i in 1..6) {
             tdList.addAll(trList[i].children())
         }
         for (i in 0 until tdList.size) {

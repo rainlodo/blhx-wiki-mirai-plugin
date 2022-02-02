@@ -64,7 +64,12 @@ data class EquipAttrData(
             attr += getAttrText(node, 0)
         }
         attr += "适用舰种"
-        use = liList.last().select("td[class='appShipType']").text()
+
+        liList.last().select("td").forEach {
+            if (it.className() != "appShipType notAppShipType") {
+                use += it.text()
+            }
+        }
 
         return super.parse(doc, commandList)
 

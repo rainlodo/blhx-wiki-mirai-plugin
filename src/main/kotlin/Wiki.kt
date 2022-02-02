@@ -4,7 +4,6 @@ import net.mamoe.mirai.console.command.CommandManager.INSTANCE.unregister
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import org.iris.wiki.action.QuestionListener
-import org.iris.wiki.command.ShipQuestionCommand
 import org.iris.wiki.command.WikiConfigCommand
 //import org.iris.wiki.command.WikiConfigCommand
 import org.iris.wiki.config.AliasConfig

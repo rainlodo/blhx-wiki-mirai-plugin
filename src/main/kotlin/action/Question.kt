@@ -18,13 +18,11 @@ import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
 import net.mamoe.mirai.utils.MiraiExperimentalApi
 import org.iris.wiki.Wiki
 import org.iris.wiki.config.CommonConfig
-import org.iris.wiki.config.SubjectDelegate
 import org.iris.wiki.utils.ImageUtil
 import java.io.ByteArrayOutputStream
 import java.io.File
 import javax.imageio.ImageIO
 import kotlin.collections.HashMap
-import org.iris.wiki.config.mutex
 
 /**
  * 问题
