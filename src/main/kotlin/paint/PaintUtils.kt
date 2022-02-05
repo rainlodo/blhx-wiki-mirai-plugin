@@ -1,5 +1,6 @@
 package org.iris.wiki.paint
 
+import org.iris.wiki.Wiki.dataFolder
 import org.iris.wiki.config.CommonConfig
 import java.awt.*
 import kotlin.io.path.Path
@@ -12,11 +13,11 @@ object PaintUtils {
     val font: Font = Font.createFont(Font.TRUETYPE_FONT, Path(CommonConfig.ttf).toFile())
 
 
-    const val PATH_BASE = "data/blhx-wiki/image"
-    const val PATH_EQUIP_ICON = "$PATH_BASE/icon/equip"
-    const val PATH_SHIP_ICON = "$PATH_BASE/icon/ship"
-    const val PATH_RARITY_ICON = "$PATH_BASE/icon/rarity"
-    const val PATH_CAMP_ICON = "$PATH_BASE/icon/camp"
+    val PATH_BASE = "${dataFolder.absolutePath}/image"
+    val PATH_EQUIP_ICON = "$PATH_BASE/icon/equip"
+    val PATH_SHIP_ICON = "$PATH_BASE/icon/ship"
+    val PATH_RARITY_ICON = "$PATH_BASE/icon/rarity"
+    val PATH_CAMP_ICON = "$PATH_BASE/icon/camp"
 
     val MAP_EQUIP_USE = listOf(
         "驱逐",	"轻巡", 	"重巡", 	"超巡", "战巡",

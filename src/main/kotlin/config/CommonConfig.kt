@@ -1,18 +1,20 @@
 package org.iris.wiki.config
 
+import org.iris.wiki.Wiki.dataFolder
+
 object CommonConfig {
 
-    private const val root = "data/blhx-wiki"
+    private val root = dataFolder.absolutePath
     
-    const val ttf = "$root/思源黑体.ttf"
+    val ttf = "$root/思源黑体.ttf"
 
-    const val equip_output_path = "$root/out/equip"
-    const val ship_output_path = "$root/out/ship"
-    const val emoji_path = "$root/image/emoji"
-    const val json_string = "$root/config"
-    const val head_path = "$root/image/icon/head"
-    const val equip_path = "$root/image/equip"
+    val equip_output_path = "$root/out/equip"
+    val ship_output_path = "$root/out/ship"
+    val emoji_path = "$root/image/emoji"
+    val json_string = "$root/config"
+    val head_path = "$root/image/icon/head"
+    val equip_path = "$root/image/equip"
     
-    const val ship_path = "$root/image/ship"
-    const val ship_label_path = "$root/config/label"
+    val ship_path = "$root/image/ship"
+    val ship_label_path = "data/${root.split('\\').last()}/config/label"
 }

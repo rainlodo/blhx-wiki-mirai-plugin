@@ -273,7 +273,7 @@ class ShipAttrComponent(
                     }
                 }
             }
-
+            println("${CommonConfig.ship_label_path}/$name.xml")
             documentBuilder.parse("${CommonConfig.ship_label_path}/$name.xml", handler)
 
 
