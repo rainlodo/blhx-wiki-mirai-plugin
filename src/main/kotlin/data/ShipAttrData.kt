@@ -2,10 +2,10 @@ package org.iris.wiki.data
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import net.mamoe.mirai.console.command.ConsoleCommandSender.name
 import net.mamoe.mirai.contact.Member
 import net.mamoe.mirai.message.data.Image
 import net.mamoe.mirai.message.data.Message
-import net.mamoe.mirai.message.data.PlainText
 import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
 import org.iris.wiki.config.CommonConfig
@@ -77,6 +77,22 @@ data class ShipAttrData(
     var skill : ArrayList<SkillData> = arrayListOf()
 ) : Data() {
 
+
+    private fun getText(td: Element) : String {
+        var res = ""
+        if (td.select("span[class='tjmode1']").isNotEmpty()) {
+            res = td.select("span[class='tjmode1']").text().split("→").last()
+            if (res.startsWith("{") || res.isEmpty()) {
+                res = td.select("span[class='tjmode0']").text().split("→").last()
+            }
+        }
+        else {
+            res = td.text().split("→").last()
+        }
+        return res
+    }
+
+
     override fun parse(doc: Document, commandList: List<String>) : Data {
 
         val tableGeneral = doc.select("table[class='wikitable sv-general']")
@@ -106,8 +122,9 @@ data class ShipAttrData(
             type = doc.select("span[id='改造详情']")[0].parent()
                 .nextElementSibling()
                 .child(0)
-                .select("a")
-                .attr("title")
+                .text()
+                .split(" ")
+                .last()
         }
         var index = 0
         // 当舰娘为以下阵营时(不是μ船)，名字前会有对应的量级，应该去掉
@@ -137,31 +154,30 @@ data class ShipAttrData(
         val tableAttr = doc.select("table[class='wikitable sv-performance']")
         trList = tableAttr[1].child(0).children()
         val tdList = arrayListOf<Element>()
-        for (i in 1..6) {
+        for (i in 1..7) {
             tdList.addAll(trList[i].children())
         }
         for (i in 0 until tdList.size) {
             if (tdList[i].children().isNotEmpty()) {
                 when (tdList[i].text()) {
-                    "耐久" -> naijiu = tdList[i+1].text()
-                    "装甲" -> zhuangjia = tdList[i+1].text()
-                    "装填" -> zhuangtian = tdList[i+1].text()
-                    "炮击" -> paoji = tdList[i+1].text()
-                    "雷击" -> leiji = tdList[i+1].text()
-                    "机动" -> jidong = tdList[i+1].text()
-                    "防空" -> fangkong = tdList[i+1].text()
-                    "航空" -> hangkong = tdList[i+1].text()
-                    "命中" -> mingzhong = tdList[i+1].text()
-                    "反潜" -> fanqian = tdList[i+1].text()
-                    "幸运" -> xingyun = tdList[i+1].text()
-                    "消耗" -> xiaohao = tdList[i+1].text()
-                    "航速" -> hangsu = tdList[i+1].text()
-                    "氧气" -> yangqi = tdList[i+1].text()
-                    "弹药量" -> danyao = tdList[i+1].text()
+                    "耐久" -> naijiu = getText(tdList[i+1])
+                    "装甲" -> zhuangjia = getText(tdList[i+1])
+                    "装填" -> zhuangtian = getText(tdList[i+1])
+                    "炮击" -> paoji = getText(tdList[i+1])
+                    "雷击" -> leiji = getText(tdList[i+1])
+                    "机动" -> jidong = getText(tdList[i+1])
+                    "防空" -> fangkong = getText(tdList[i+1])
+                    "航空" -> hangkong = getText(tdList[i+1])
+                    "命中" -> mingzhong = getText(tdList[i+1])
+                    "反潜" -> fanqian = getText(tdList[i+1])
+                    "幸运" -> xingyun = getText(tdList[i+1])
+                    "消耗" -> xiaohao = getText(tdList[i+1])
+                    "航速" -> hangsu = getText(tdList[i+1])
+                    "氧气" -> yangqi = getText(tdList[i+1])
+                    "弹药量" -> danyao = getText(tdList[i+1])
                 }
             }
         }
-
         val table = doc.select("table[class='wikitable sv-skill']")
         trList = table.select("tr")
         for (i in 1 until trList.size) {

@@ -22,7 +22,7 @@ object PaintUtils {
     val MAP_EQUIP_USE = listOf(
         "驱逐",	"轻巡", 	"重巡", 	"超巡", "战巡",
         "战列",	"轻航",	"航母",	"航战", "潜母",
-        "重炮",	"潜艇",	"维修",	"运输"
+        "重炮",	"潜艇",	"维修",	"运输", "导驱"
     )
 
     val MAP_SHIP_RARITY = mapOf<String, Int>(

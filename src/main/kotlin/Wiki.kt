@@ -4,10 +4,10 @@ import net.mamoe.mirai.console.command.CommandManager.INSTANCE.unregister
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import org.iris.wiki.action.QuestionListener
-import org.iris.wiki.command.WikiConfigCommand
 //import org.iris.wiki.command.WikiConfigCommand
 import org.iris.wiki.config.AliasConfig
 import org.iris.wiki.config.CommandConfig
+import java.lang.Compiler.command
 
 /**
  * 使用 kotlin 版请把
@@ -28,7 +28,7 @@ object Wiki : KotlinPlugin(
     JvmPluginDescription(
         id = "org.iris.wiki",
         name = "blhx-wiki",
-        version = "0.3.2"
+        version = "0.3.3"
     ) {
         author("iris")
         // author 和 info 可以删除.
@@ -52,7 +52,7 @@ object Wiki : KotlinPlugin(
         Listener.stop()
         QuestionListener.stop()
 
-        WikiConfigCommand.unregister()
+//        WikiConfigCommand.unregister()
         super.onDisable()
     }
 
