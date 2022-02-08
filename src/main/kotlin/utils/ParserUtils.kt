@@ -26,7 +26,7 @@ object ParserUtils {
             // 根据副标题来判断当前页面类型 QAQ
             return when (type) {
                 "舰娘图鉴" -> parseShip(doc, commandList)
-                in arrayOf("鱼雷", "防空炮", "舰炮", "设备", "舰载机") -> parseEquip(doc, commandList)
+                in arrayOf("鱼雷", "防空炮", "舰炮", "设备", "舰载机", "导弹") -> parseEquip(doc, commandList)
                 "装备分析" -> {
                     return if (linkTitle.next().next().text().equals("装备一图榜")) {
                         parseEquipTop(doc, commandList)

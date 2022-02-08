@@ -485,7 +485,9 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "mark28" to "潜艇用Mark_28鱼雷T0",
         "彼得雷" to "潜艇用Mark_20_S鱼雷-彼得T0",
         "96雷" to "潜艇用96式纯氧鱼雷T3",
-        "菲里雷" to "潜艇用Mark_12鱼雷-菲里T0"
+        "菲里雷" to "潜艇用Mark_12鱼雷-菲里T0",
+
+        "上游1" to "上游-1"
     ))
 
     @ValueDescription("飞机")

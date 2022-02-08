@@ -154,7 +154,7 @@ class EquipAttrComponent(
             }
         }
 
-        return super.draw()?.getSubimage(0, 0, width, y + 48 + tab)
+        return super.draw()?.getSubimage(0, 0, width, y + tab)
     }
 
 
