@@ -191,7 +191,8 @@ class ShipAttrComponent(
         if (data.other != "") {
             data.other.replace(" ", "、").split("、").forEach{
                 if (it.contains("兑换") || it.contains("科研") ||
-                    it.contains("奖励") || it.contains("META")) {
+                    it.contains("奖励") || it.contains("META") ||
+                    it.contains("彩蛋")) {
                     from.add(TextComponent(it, 20F).init())
                 }
             }
