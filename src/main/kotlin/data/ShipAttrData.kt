@@ -2,7 +2,6 @@ package org.iris.wiki.data
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import net.mamoe.mirai.console.command.ConsoleCommandSender.name
 import net.mamoe.mirai.contact.Member
 import net.mamoe.mirai.message.data.Image
 import net.mamoe.mirai.message.data.Message
@@ -180,20 +179,26 @@ data class ShipAttrData(
         }
         val table = doc.select("table[class='wikitable sv-skill']")
         trList = table.select("tr")
-        for (i in 1 until trList.size) {
-            if (trList[i].attr("style") != "display:none") {
-                val tdList = trList[i].select("td")
-                var detail = tdList[1].text()
-                if (tdList[1].select("div[class='resp-tab-content']").size >= 2) {
-                    detail = tdList[1].select("div[class='resp-tab-content']")[0].text()
-                }
-                skill.add(
-                    SkillData(
-                        tdList[0].text(),
-                        tdList[0].select("img").attr("src"),
-                        detail
+
+        for (i in (if (canUpgrade) 2 else 1) until trList.size) {
+            try {
+                if (trList[i].attr("style") != "display:none" || (canUpgrade && trList[i].className() == "tjmode1")) {
+                    val tdList = trList[i].select("td")
+                    var detail = tdList[1].text()
+                    if (tdList[1].select("div[class='resp-tab-content']").size >= 2) {
+                        detail = tdList[1].select("div[class='resp-tab-content']")[0].text()
+                    }
+                    skill.add(
+                        SkillData(
+                            tdList[0].text(),
+                            tdList[0].select("img").attr("src"),
+                            detail
+                        )
                     )
-                )
+                }
+            }
+            catch (e : Exception) {
+//                println(trList[i].html())
             }
         }
 
