@@ -30,6 +30,8 @@ class ShipEquipComponent(
         g2.drawImage(title.draw(), 10, 10, null)
 
         data.equipLists.forEach { list ->
+
+            if (list.isEmpty()) return@forEach
             boxY = 40
             list.forEach {
                 g2.color = it.bgColor
