@@ -16,7 +16,7 @@ object ParserUtils {
 
     fun parse(data: String, commandList: List<String>) : Data? {
         val doc = Jsoup.parse(data)
-//        try {
+        try {
             if (doc.select("h1[id='firstHeading']").text() == "搜索结果") {
                 return SearchData().parse(doc, commandList)
             }
@@ -36,10 +36,10 @@ object ParserUtils {
                 }
                 else -> null
             }
-//        }
-//        catch (e: Exception) {
-//            return TextData("解析发生错误\n$e")
-//        }
+        }
+        catch (e: Exception) {
+            return TextData("解析发生错误\n$e")
+        }
 
     }
 

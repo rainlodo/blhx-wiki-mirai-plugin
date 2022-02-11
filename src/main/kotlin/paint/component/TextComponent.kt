@@ -48,7 +48,7 @@ class TextComponent(
         var y = paddingTop + (lineHeight / 1.4).toInt()
         val dis = width - paddingLeft - paddingRight
         text.forEach {
-            if (x > dis) {
+            if (x + g.getStrWidth(it.toString()) > dis) {
                 x = paddingLeft
                 y += lineHeight + padding
             }

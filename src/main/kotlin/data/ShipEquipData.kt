@@ -22,9 +22,11 @@ class ShipEquipData(
         arrayListOf(),
         arrayListOf(),
         arrayListOf()
-    )
+    ),
+    val specialEquipList: ArrayList<SpecialEquipData> = arrayListOf()
 ) : Data() {
 
+    /// 基本配置列表 ====================================================================
     class EquipLabelData(
         var text : String = " ",
         var pics : ArrayList<String> = arrayListOf(),
@@ -59,6 +61,34 @@ class ShipEquipData(
 
     }
 
+    /// 特殊配装===================================================================
+    data class EquipIcon(
+        val name : String,
+        val url : String
+    )
+
+    class SpecialEquipData(
+        val list : ArrayList<EquipIcon> = arrayListOf(),
+        var msg : String = "",
+        var recommender : String = ""
+    ) {
+        fun pharse(doc: Element) : SpecialEquipData {
+
+            doc.select("img").forEach {
+                list.add(EquipIcon(
+                    it.attr("alt").split(".")[0],
+                    it.attr("src")
+                ))
+            }
+
+            val tdList = doc.select("td")
+            msg = tdList.last().text()
+            recommender = tdList[tdList.size - 2].text()
+
+            return this
+        }
+    }
+
     override fun parse(doc: Document, commandList: List<String>): Data {
 
         val tables = doc.select("div[class='row zb-table']")[0].children()
@@ -66,6 +96,13 @@ class ShipEquipData(
             val trs = tables[i].select("tbody")[0].children()
             for (j in trs.indices) {
                 equipLists[i].add(EquipLabelData().pharse(trs[j]))
+            }
+        }
+
+        val tabpanel = doc.select("div[class='row zb-table']")[0].parent()
+        tabpanel.children().forEach{
+            if (it.className().contains("pverecommend")) {
+                specialEquipList.add(SpecialEquipData().pharse(it))
             }
         }
         return this
@@ -85,4 +122,7 @@ class ShipEquipData(
 
         return Image(imageId)
     }
+
+
 }
+
