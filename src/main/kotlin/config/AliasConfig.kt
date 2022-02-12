@@ -395,6 +395,7 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "海星炮" to "试作型三联装152mm主炮T0",
         "海王星炮" to "试作型三联装152mm主炮T0",
         "西雅图炮" to "试作型三联装152mm高平两用炮Mk17T0",
+        "b38" to "B-38_三联装152mm主炮MK-5",
         "150改" to "试作型双联装SKC28式150mm主炮改T0",
         "巴尔的摩炮" to "三联装203mm主炮Mk15T0",
         "恰巴炮" to "试作型三联装203mm主炮Mark_IXT0",
