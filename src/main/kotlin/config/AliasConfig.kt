@@ -61,6 +61,7 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "小克爹" to "小克利夫兰",
         "小金坷垃" to "小圣地亚哥",
         "μ克爹" to "克利夫兰(μ兵装)",
+        "μ克利夫兰" to "克利夫兰(μ兵装)",
         "水星" to "水星纪念",
         "500" to "五十铃"
     ))
@@ -336,7 +337,14 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "冴矢" to "伊58",
         "六重" to "伊60",
         "伊吕波" to "伊168",
-        "诗玖玲" to "伊490"
+        "诗玖玲" to "伊490",
+
+        "花园" to "新泽西",
+        "卡莉永" to "提康德罗加",
+        "树城" to "博伊西",
+        "喷水鱼" to "射水鱼",
+        "雾城" to "旧金山",
+        "塞普拉斯" to "莫里森"
     ))
 
 
@@ -435,6 +443,7 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "彩炮" to "试作型双联装457mm主炮MkAT0",
         "香槟炮" to "试作型三联装406mm/50主炮T0",
         "奥丁炮" to "试作型三联装305mmSKC39主炮T0",
+        "马可波罗炮" to "试作型三联装406mm主炮Model1940",
         "mk7" to "三联装406mm主炮Mk7T0"
     ))
 
