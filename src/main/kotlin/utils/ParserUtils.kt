@@ -118,18 +118,12 @@ object ParserUtils {
 
     // 装备一图榜解析
     private fun parseEquipTop(doc: Document, commandList: List<String>): ImagesData {
-        when (commandList[2]) {
-
-        }
-
-
-        return ImagesData(arrayListOf("https://patchwiki.biligame.com/images/blhx/thumb/a/ae/gm88lkv52ctg4hrs4shcxq049vx7w75.jpg/1170px-%E8%A3%85%E5%A4%87%E4%B8%80%E5%9B%BE%E6%A6%9C.jpg.png"))
+        val url = doc.select("img[alt='装备一图榜.jpg']").attr("src")
+            .split(Regex("/[\\d]*px"))[0].replace("/thumb", "")
+        println(url)
+        return ImagesData(arrayListOf(url))
     }
 
-    //
-    fun parseShipTop(doc: Document) : ImagesData {
-        return ImagesData(arrayListOf("装备一图榜"))
-    }
 
     fun wordToPinyin(text : String) : String {
         val format = HanyuPinyinOutputFormat()

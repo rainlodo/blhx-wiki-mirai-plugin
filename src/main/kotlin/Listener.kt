@@ -18,10 +18,12 @@ import org.iris.wiki.config.CommandConfig
 import org.iris.wiki.config.MESSAGE_ERROR
 import org.iris.wiki.config.QQ_DIC
 import org.iris.wiki.config.SEARCH_URL
+import org.iris.wiki.data.ImagesData
 import org.iris.wiki.utils.HttpUtils
 import org.iris.wiki.utils.ImageUtil
 import org.iris.wiki.utils.MessageBuildUtils
 import org.iris.wiki.utils.ParserUtils
+import org.jsoup.Jsoup
 import java.util.*
 
 @OptIn(ConsoleExperimentalApi::class)
@@ -81,11 +83,11 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
 
     suspend fun wiki(commandList: Array<String>, sender: Member) {
         if (commandList[1] in arrayOf("舰船一图榜", "一图榜", "pve一图榜")) {
-            val src =
-                ImageUtil.getImageAsExResource("https://patchwiki.biligame.com/images/blhx/8/84/oyb0mzeadmus8vscl7is4veyr9ywyyy.png")
-            val imageId: String = src.uploadAsImage(sender.group).imageId
-            src.close()
-            sender.group.sendMessage(Image(imageId))
+
+            val doc = Jsoup.parse(HttpUtils.get("${SEARCH_URL}PVE用舰船综合性能强度榜"))
+            val url = doc.select("div[id='mc_collapse-1']").select("img")[0].attr("src")
+            sender.group.sendMessage(ImagesData(arrayListOf(url)).toMessage(sender))
+
         } else {
 
             if (commandList[1] in ALIAS_MAP) {
