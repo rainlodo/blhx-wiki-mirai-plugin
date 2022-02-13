@@ -2,20 +2,20 @@ package org.iris.wiki.config
 
 val SEARCH_URL = "https://wiki.biligame.com/blhx/index.php?search="
 
-val COMMON = "基本信息"
 
 val BOAT_UPDATE = "改造"
 val BOAT_NO_UPDATA = "还没有改造呢~"
 
-val BOAT_SKILL = "技能"
 
 val MESSAGE_HELP = "指令格式如下：\n" +
     "wiki [舰船]/[装备]\n" +
     "wiki [舰船] 皮肤/配装/出处/评价/科技点/[语音]\n" +
     "wiki [装备] 出处\n" +
     "wiki 大建 轻池/特池/重池/[活动池]\n" +
+    "wiki [榜单]" +
     "猜老婆/舰娘\n" +
-    "装备名中的空格用_代替~"
+    "装备名中的空格用_代替~\n\n" +
+    "bug请在https://gitee.com/arisaka-iris/blhx-wiki-mirai-plugin/issues反馈"
 
 val MESSAGE_ERROR = "输入指令有误~\n" +
     MESSAGE_HELP

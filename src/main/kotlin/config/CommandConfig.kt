@@ -50,6 +50,25 @@ object CommandConfig : AutoSavePluginConfig("CommandConfig") {
     @ValueDescription("推荐舰娘使用的装备")
     val equip : Array<String> by value(arrayOf("装备", "出装", "配装"))
 
+    // 榜单
+    @ValueDescription("常用榜单")
+    val table : Array<String> by value(arrayOf("榜单", "表单", "图榜"))
+
+    // 目前支持榜单
+    @ValueDescription("支持查询的榜单")
+    val tableList : String by value(
+        "目前支持查询的榜单有：\n" +
+        "*()内为简写\n" +
+        "PVE用舰船综合性能强度榜(舰娘一图榜)\n" +
+        "装备一图榜\n" +
+        "认知觉醒推荐榜(觉醒榜)\n" +
+        "萌新入坑推荐榜(萌新榜)\n" +
+        "兑换装备推荐榜(兑换榜)\n" +
+        "装备研发推荐榜(研发榜)\n" +
+        "改造舰船推荐榜(改造榜)\n" +
+        "井号打捞表(打捞表)\n"
+    )
+
     // 舰娘语音目录
     val voice_map = mapOf<String, String>(
         "自我介绍" to "profile",

@@ -5,6 +5,7 @@ import org.iris.wiki.config.CommonConfig
 import org.iris.wiki.data.Data
 import org.iris.wiki.action.Draw
 import org.iris.wiki.action.Question
+import org.iris.wiki.config.CommandConfig
 import org.iris.wiki.data.ImagesData
 import org.iris.wiki.data.TextData
 import org.iris.wiki.utils.DrawUtils
@@ -21,8 +22,8 @@ object Checker {
             // 不许wiki作者QAQ
             return ImagesData(arrayListOf("${CommonConfig.emoji_path}/wiki_iris.jpg")).activateAt()
         }
-        else if (commandList[1] in listOf("ccc", "cct", "菜菜冲", "菜菜秃", "小林", "林总")) {
-            return TextData("ccttql")
+        else if (commandList[1] in CommandConfig.table) {
+            return TextData(CommandConfig.tableList)
         }
         else if (commandList[1] in listOf("锉刀", "锉宝", "挫刀", "小锉锉")) {
             // 锉宝可是要生气了

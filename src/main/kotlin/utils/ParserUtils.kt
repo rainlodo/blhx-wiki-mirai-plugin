@@ -27,14 +27,20 @@ object ParserUtils {
             return when (type) {
                 "舰娘图鉴" -> parseShip(doc, commandList)
                 in arrayOf("鱼雷", "防空炮", "舰炮", "设备", "舰载机", "导弹") -> parseEquip(doc, commandList)
-                "装备分析" -> {
-                    return if (linkTitle.next().next().text().equals("装备一图榜")) {
-                        parseEquipTop(doc, commandList)
+//                "装备分析" -> {
+//                    return if (linkTitle.next().next().text().equals("装备一图榜")) {
+//                        parseEquipTop(doc, commandList)
+//                    } else {
+//                        null
+//                    }
+//                }
+                else -> {
+                    if (doc.select("h1[id='firstHeading']").text().contains(Regex("[榜表]"))) {
+                        pasreTable(doc, commandList)
                     } else {
                         null
                     }
                 }
-                else -> null
             }
         }
         catch (e: Exception) {
@@ -91,6 +97,7 @@ object ParserUtils {
         return TextData(text)
     }
 
+    // 舰娘评价
     private fun parseShipEvaluate(doc: Document) : Data {
         val table = doc.select("table[class='wikitable sv-remark']")[0]
         val trList = table.child(0).children()
@@ -120,10 +127,33 @@ object ParserUtils {
     private fun parseEquipTop(doc: Document, commandList: List<String>): ImagesData {
         val url = doc.select("img[alt='装备一图榜.jpg']").attr("src")
             .split(Regex("/[\\d]*px"))[0].replace("/thumb", "")
-        println(url)
         return ImagesData(arrayListOf(url))
     }
 
+    // PVE舰娘一图榜解析
+    private fun parseShipTop(doc: Document, commandList: List<String>): ImagesData {
+        val url = doc.select("div[id='mc_collapse-1']").select("img")[0].attr("src")
+        return ImagesData(arrayListOf(url))
+    }
+
+    // 榜单解析
+    private fun pasreTable(doc: Document, commandList: List<String>): ImagesData {
+        when (commandList[1]) {
+            "装备一图榜" -> return parseEquipTop(doc, commandList)
+            "PVE用舰船综合性能强度榜" -> return parseShipTop(doc, commandList)
+            else -> {
+                val imagesData = ImagesData()
+                doc.select("span[id='${commandList[1]}']")[0].parent().nextElementSibling().select("img").forEach {
+                    val url = it.attr("src").split(Regex("/[\\d]*px"))[0].replace("/thumb", "")
+                    println(url)
+                    imagesData.images.add(url)
+                }
+                return imagesData
+            }
+        }
+
+
+    }
 
     fun wordToPinyin(text : String) : String {
         val format = HanyuPinyinOutputFormat()

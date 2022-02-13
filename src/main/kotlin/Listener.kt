@@ -82,13 +82,13 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
 
 
     suspend fun wiki(commandList: Array<String>, sender: Member) {
-        if (commandList[1] in arrayOf("舰船一图榜", "一图榜", "pve一图榜")) {
-
-            val doc = Jsoup.parse(HttpUtils.get("${SEARCH_URL}PVE用舰船综合性能强度榜"))
-            val url = doc.select("div[id='mc_collapse-1']").select("img")[0].attr("src")
-            sender.group.sendMessage(ImagesData(arrayListOf(url)).toMessage(sender))
-
-        } else {
+//        if (commandList[1] in arrayOf("舰船一图榜", "一图榜", "pve一图榜")) {
+//
+//            val doc = Jsoup.parse(HttpUtils.get("${SEARCH_URL}PVE用舰船综合性能强度榜"))
+//            val url = doc.select("div[id='mc_collapse-1']").select("img")[0].attr("src")
+//            sender.group.sendMessage(ImagesData(arrayListOf(url)).toMessage(sender))
+//
+//        } else {
 
             if (commandList[1] in ALIAS_MAP) {
                 commandList[1] = ALIAS_MAP[commandList[1]].toString()
@@ -104,7 +104,7 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
             val message = MessageBuildUtils.build(sender, result, commandList.toList())
 
             sender.group.sendMessage(message)
-        }
+//        }
     }
 
 
