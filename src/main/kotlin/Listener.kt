@@ -9,25 +9,40 @@ import net.mamoe.mirai.contact.Member
 import net.mamoe.mirai.event.events.*
 import net.mamoe.mirai.event.globalEventChannel
 import net.mamoe.mirai.message.data.At
-import net.mamoe.mirai.message.data.Image
 import net.mamoe.mirai.message.data.PlainText
-import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
 import net.mamoe.mirai.utils.MiraiExperimentalApi
-import org.iris.wiki.config.AliasConfig.ALIAS_MAP
-import org.iris.wiki.config.CommandConfig
-import org.iris.wiki.config.MESSAGE_ERROR
-import org.iris.wiki.config.QQ_DIC
-import org.iris.wiki.config.SEARCH_URL
-import org.iris.wiki.data.ImagesData
+import org.iris.wiki.config.*
 import org.iris.wiki.utils.HttpUtils
-import org.iris.wiki.utils.ImageUtil
 import org.iris.wiki.utils.MessageBuildUtils
 import org.iris.wiki.utils.ParserUtils
-import org.jsoup.Jsoup
 import java.util.*
 
 @OptIn(ConsoleExperimentalApi::class)
 internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
+
+    val ALIAS_MAP : HashMap<String, String> = hashMapOf()
+
+    init {
+        val mapList = listOf(
+            AliasConfig.ALIAS_DD_MAP,
+            AliasConfig.ALIAS_CL_MAP,
+            AliasConfig.ALIAS_CA_MAP,
+            AliasConfig.ALIAS_CV_MAP,
+            AliasConfig.ALIAS_BB_MAP,
+            AliasConfig.ALIAS_OTHER_MAP,
+            AliasConfig.ALIAS_JP_MAP,
+            AliasConfig.ALIAS_DD_GUN_MAP,
+            AliasConfig.ALIAS_C_GUN_MAP,
+            AliasConfig.ALIAS_BB_GUN_MAP,
+            AliasConfig.ALIAS_AIR_GUN_MAP,
+            AliasConfig.ALIAS_PLANE_MAP,
+            AliasConfig.ALIAS_TORPEDO_MAP,
+            AliasConfig.ALIAS_DEVICE_MAP
+        )
+        mapList.forEach {
+            ALIAS_MAP.putAll(it)
+        }
+    }
 
     @OptIn(MiraiExperimentalApi::class)
     fun subscribe() {
@@ -82,29 +97,23 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
 
 
     suspend fun wiki(commandList: Array<String>, sender: Member) {
-//        if (commandList[1] in arrayOf("舰船一图榜", "一图榜", "pve一图榜")) {
-//
-//            val doc = Jsoup.parse(HttpUtils.get("${SEARCH_URL}PVE用舰船综合性能强度榜"))
-//            val url = doc.select("div[id='mc_collapse-1']").select("img")[0].attr("src")
-//            sender.group.sendMessage(ImagesData(arrayListOf(url)).toMessage(sender))
-//
-//        } else {
-
-            if (commandList[1] in ALIAS_MAP) {
-                commandList[1] = ALIAS_MAP[commandList[1]].toString()
-            }
 
 
-            var result = Checker.check(commandList, sender)
-            if (result == null) {
-                result = ParserUtils.parse(HttpUtils.get(SEARCH_URL + commandList[1]), commandList.toList())
-            }
+        if (commandList[1] in ALIAS_MAP) {
+            commandList[1] = ALIAS_MAP[commandList[1]].toString()
+        }
 
 
-            val message = MessageBuildUtils.build(sender, result, commandList.toList())
+        var result = Checker.check(commandList, sender)
+        if (result == null) {
+            result = ParserUtils.parse(HttpUtils.get(SEARCH_URL + commandList[1]), commandList.toList())
+        }
 
-            sender.group.sendMessage(message)
-//        }
+
+        val message = MessageBuildUtils.build(sender, result, commandList.toList())
+
+        sender.group.sendMessage(message)
+
     }
 
 

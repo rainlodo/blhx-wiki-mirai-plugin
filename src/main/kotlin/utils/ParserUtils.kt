@@ -23,17 +23,10 @@ object ParserUtils {
 
             val linkTitle = doc.select("a[title='首页']")
             val type = linkTitle.next().attr("title")
-            // 根据副标题来判断当前页面类型 QAQ
+            // 根据副标题或者heading来判断当前页面类型 QAQ
             return when (type) {
                 "舰娘图鉴" -> parseShip(doc, commandList)
                 in arrayOf("鱼雷", "防空炮", "舰炮", "设备", "舰载机", "导弹") -> parseEquip(doc, commandList)
-//                "装备分析" -> {
-//                    return if (linkTitle.next().next().text().equals("装备一图榜")) {
-//                        parseEquipTop(doc, commandList)
-//                    } else {
-//                        null
-//                    }
-//                }
                 else -> {
                     if (doc.select("h1[id='firstHeading']").text().contains(Regex("[榜表]"))) {
                         pasreTable(doc, commandList)

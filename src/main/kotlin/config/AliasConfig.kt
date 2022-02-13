@@ -3,6 +3,7 @@ package org.iris.wiki.config
 import net.mamoe.mirai.console.data.AutoSavePluginConfig
 import net.mamoe.mirai.console.data.ValueDescription
 import net.mamoe.mirai.console.data.value
+import java.util.HashMap
 
 
 object AliasConfig : AutoSavePluginConfig("AliasConfig") {
@@ -604,27 +605,4 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "舵机" to "高性能舵机T0",
         "深投" to "改良深弹投射器T3"
     ))
-
-    val ALIAS_MAP : HashMap<String, String> = hashMapOf()
-
-    init {
-        val mapList = listOf(ALIAS_DD_MAP,
-                             ALIAS_CL_MAP,
-                             ALIAS_CA_MAP,
-                             ALIAS_CV_MAP,
-                             ALIAS_BB_MAP,
-                             ALIAS_OTHER_MAP,
-                             ALIAS_JP_MAP,
-                             ALIAS_DD_GUN_MAP,
-                             ALIAS_C_GUN_MAP,
-                             ALIAS_BB_GUN_MAP,
-                             ALIAS_AIR_GUN_MAP,
-                             ALIAS_PLANE_MAP,
-                             ALIAS_TORPEDO_MAP,
-                             ALIAS_DEVICE_MAP)
-        mapList.forEach {
-            ALIAS_MAP.putAll(it)
-        }
-    }
-
 }
