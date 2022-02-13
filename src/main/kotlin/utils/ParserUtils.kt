@@ -137,7 +137,7 @@ object ParserUtils {
     }
 
     // 榜单解析
-    private fun pasreTable(doc: Document, commandList: List<String>): ImagesData {
+    private fun pasreTable(doc: Document, commandList: List<String>): ImagesData? {
         when (commandList[1]) {
             "装备一图榜" -> return parseEquipTop(doc, commandList)
             "PVE用舰船综合性能强度榜" -> return parseShipTop(doc, commandList)
@@ -147,6 +147,9 @@ object ParserUtils {
                     val url = it.attr("src").split(Regex("/[\\d]*px"))[0].replace("/thumb", "")
                     println(url)
                     imagesData.images.add(url)
+                }
+                if (imagesData.images.isEmpty()) {
+                    return null
                 }
                 return imagesData
             }
