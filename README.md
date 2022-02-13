@@ -86,7 +86,7 @@ $\color{red}{在修改配置文件时应确保机器人（插件）不在运行�
 - **别名设置**
 
   位于`config/blhx-wiki/CommandConfig.yml`，格式如下，“别名：正式名”
-  为方便更新，$\color{red}{用户仅能在ALIAS_USER_MAP下添加别名}，其他词条下修改插件不会记录
+  为方便更新，$\color{red}{用户仅能在ALIAS_USER_MAP下添加别名}$，其他词条下修改插件不会记录
   ```yaml
   ALIAS_USER_MAP: 
     36d: 萨拉托加
