@@ -12,6 +12,8 @@ import net.mamoe.mirai.message.data.At
 import net.mamoe.mirai.message.data.PlainText
 import net.mamoe.mirai.utils.MiraiExperimentalApi
 import org.iris.wiki.config.*
+import org.iris.wiki.config.AliasConfig.ALIAS_MAP
+import org.iris.wiki.config.AliasConfig.ALIAS_USER_MAP
 import org.iris.wiki.utils.HttpUtils
 import org.iris.wiki.utils.MessageBuildUtils
 import org.iris.wiki.utils.ParserUtils
@@ -20,28 +22,9 @@ import java.util.*
 @OptIn(ConsoleExperimentalApi::class)
 internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
 
-    val ALIAS_MAP : HashMap<String, String> = hashMapOf()
-
+    // 添加用户专有词典
     init {
-        val mapList = listOf(
-            AliasConfig.ALIAS_DD_MAP,
-            AliasConfig.ALIAS_CL_MAP,
-            AliasConfig.ALIAS_CA_MAP,
-            AliasConfig.ALIAS_CV_MAP,
-            AliasConfig.ALIAS_BB_MAP,
-            AliasConfig.ALIAS_OTHER_MAP,
-            AliasConfig.ALIAS_JP_MAP,
-            AliasConfig.ALIAS_DD_GUN_MAP,
-            AliasConfig.ALIAS_C_GUN_MAP,
-            AliasConfig.ALIAS_BB_GUN_MAP,
-            AliasConfig.ALIAS_AIR_GUN_MAP,
-            AliasConfig.ALIAS_PLANE_MAP,
-            AliasConfig.ALIAS_TORPEDO_MAP,
-            AliasConfig.ALIAS_DEVICE_MAP
-        )
-        mapList.forEach {
-            ALIAS_MAP.putAll(it)
-        }
+        ALIAS_MAP.putAll(ALIAS_USER_MAP)
     }
 
     @OptIn(MiraiExperimentalApi::class)

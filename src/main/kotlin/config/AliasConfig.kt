@@ -8,7 +8,12 @@ import java.util.HashMap
 
 object AliasConfig : AutoSavePluginConfig("AliasConfig") {
 
-    @ValueDescription("驱逐别名，指令自动转小写，别名中的英文请使用小写字母")
+    @ValueDescription("别名，指令自动转小写，别名中的英文请使用小写字母")
+    val ALIAS_USER_MAP : Map<String, String> by value(mapOf<String, String>(
+
+    ))
+
+    @ValueDescription("驱逐别名,此后为通用别名，用户无法修改，即使修改程序中也无法使用")
     val ALIAS_DD_MAP : Map<String, String> by value(mapOf<String, String>(
         "小加加" to "萨拉托加",
         "彩布里" to "特装型布里MKIII",
@@ -27,8 +32,7 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "臭鼬" to "长波",
         "z404" to "z23",
         "玛丽罗斯" to "玛莉萝丝",
-        "nanoda" to "雪风",
-        "狗群主老婆" to "天后"
+        "nanoda" to "雪风"
     ))
 
     @ValueDescription("轻巡别名")
@@ -605,4 +609,28 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "舵机" to "高性能舵机T0",
         "深投" to "改良深弹投射器T3"
     ))
+
+    val ALIAS_MAP : HashMap<String, String> = hashMapOf()
+
+    init {
+        val mapList = listOf(
+            ALIAS_DD_MAP,
+            ALIAS_CL_MAP,
+            ALIAS_CA_MAP,
+            ALIAS_CV_MAP,
+            ALIAS_BB_MAP,
+            ALIAS_OTHER_MAP,
+            ALIAS_JP_MAP,
+            ALIAS_DD_GUN_MAP,
+            ALIAS_C_GUN_MAP,
+            ALIAS_BB_GUN_MAP,
+            ALIAS_AIR_GUN_MAP,
+            ALIAS_PLANE_MAP,
+            ALIAS_TORPEDO_MAP,
+            ALIAS_DEVICE_MAP
+        )
+        mapList.forEach {
+            ALIAS_MAP.putAll(it)
+        }
+    }
 }
