@@ -29,7 +29,7 @@ object ParserUtils {
                 in arrayOf("鱼雷", "防空炮", "舰炮", "设备", "舰载机", "导弹") -> parseEquip(doc, commandList)
                 else -> {
                     if (doc.select("h1[id='firstHeading']").text().contains(Regex("[榜表]"))) {
-                        pasreTable(doc, commandList)
+                        parseTable(doc, commandList)
                     } else {
                         null
                     }
@@ -130,7 +130,7 @@ object ParserUtils {
     }
 
     // 榜单解析
-    private fun pasreTable(doc: Document, commandList: List<String>): ImagesData? {
+    private fun parseTable(doc: Document, commandList: List<String>): ImagesData? {
         when (commandList[1]) {
             "装备一图榜" -> return parseEquipTop(doc, commandList)
             "PVE用舰船综合性能强度榜" -> return parseShipTop(doc, commandList)
@@ -138,7 +138,6 @@ object ParserUtils {
                 val imagesData = ImagesData()
                 doc.select("span[id='${commandList[1]}']")[0].parent().nextElementSibling().select("img").forEach {
                     val url = it.attr("src").split(Regex("/[\\d]*px"))[0].replace("/thumb", "")
-                    println(url)
                     imagesData.images.add(url)
                 }
                 if (imagesData.images.isEmpty()) {
