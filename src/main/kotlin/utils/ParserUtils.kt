@@ -3,10 +3,7 @@ package org.iris.wiki.utils
 import net.sourceforge.pinyin4j.PinyinHelper
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat
-import org.iris.wiki.config.BOAT_NO_UPDATA
-import org.iris.wiki.config.BOAT_UPDATE
-import org.iris.wiki.config.CommandConfig
-import org.iris.wiki.config.MESSAGE_ERROR
+import org.iris.wiki.config.*
 import org.iris.wiki.data.*
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -18,6 +15,9 @@ object ParserUtils {
         val doc = Jsoup.parse(data)
         try {
             if (doc.select("h1[id='firstHeading']").text() == "搜索结果") {
+                val list = search(commandList)
+                if (list.isNotEmpty()) return searchResult2Data(list, commandList)
+
                 return SearchData().parse(doc, commandList)
             }
 
@@ -212,6 +212,59 @@ object ParserUtils {
             }
             else -> {
                 return TextData("格式错误，时间请使用 时:分分:秒秒 的格式喵")
+            }
+        }
+    }
+
+    // 根据keyword模糊查询
+    fun search(commandList: List<String>) : List<String> {
+        val keyWord = commandList[1]
+
+        // 查询整个keyword
+        var filter = "(.*)$keyWord(.*)"
+        var list = NAME_LIST.filter{
+            it.matches(Regex(filter))
+        }
+        if (list.isNotEmpty()) return list
+
+        // 将中英文数字分开查询
+        var type = 0
+        filter = ""
+        keyWord.forEach {
+            if (codeType(it) != type) {
+                filter += "(.*)"
+                type = codeType(it)
+            }
+            filter += it
+        }
+        filter += "(.*)"
+        list = NAME_LIST.filter{
+            it.matches(Regex(filter))
+        }
+        if (list.isNotEmpty()) return list
+
+        // 全部分解
+        filter = "(.*)"
+        keyWord.forEach {
+            filter += "$it(.*)"
+        }
+        list = NAME_LIST.filter{
+            it.matches(Regex(filter))
+        }
+        return list
+    }
+
+    fun searchResult2Data(list: List<String>, commandList: List<String>) : Data? {
+        return when (list.size) {
+            0 -> null
+            1 -> parse(HttpUtils.get(SEARCH_URL + list[0]), commandList)
+            else -> {
+                var msg = MESSAGE_SEARCH
+                val max = if (list.size > 10) 10 else list.size
+                for (i in 0 until max) {
+                    msg += "\n${list[i]}"
+                }
+                TextData(msg)
             }
         }
     }
