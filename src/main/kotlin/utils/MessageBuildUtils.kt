@@ -21,12 +21,10 @@ object MessageBuildUtils {
 
         // 生成message
         return if (data.at) {
-            At(sender).plus(data.toMessage(sender))
+            At(sender).plus(data.toMessage(sender)).plus(data.extra_msg.build())
         } else {
-            data.toMessage(sender)
+            data.toMessage(sender).plus(data.extra_msg.build())
         }
     }
-
-
 
 }

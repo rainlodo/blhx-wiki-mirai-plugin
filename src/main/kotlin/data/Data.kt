@@ -2,6 +2,8 @@ package org.iris.wiki.data
 
 import net.mamoe.mirai.contact.Member
 import net.mamoe.mirai.message.data.Message
+import net.mamoe.mirai.message.data.MessageChain
+import net.mamoe.mirai.message.data.MessageChainBuilder
 import net.mamoe.mirai.message.data.PlainText
 import org.iris.wiki.config.MESSAGE_HELP
 import org.jsoup.nodes.Document
@@ -14,6 +16,12 @@ open class Data {
      * 是否@发送消息的用户
      */
     var at: Boolean = false
+
+    /**
+     * 额外的消息数据
+     */
+    var extra_msg = MessageChainBuilder()
+
     /**
      * 从网页中爬取所需的信息
      *

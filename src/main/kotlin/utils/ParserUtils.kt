@@ -259,12 +259,15 @@ object ParserUtils {
             0 -> null
             1 -> parse(HttpUtils.get(SEARCH_URL + list[0]), commandList)
             else -> {
-                var msg = MESSAGE_SEARCH
-                val max = if (list.size > 10) 10 else list.size
-                for (i in 0 until max) {
+                var msg = "还找到了以下相近词条喵"
+                val max = if (list.size > 6) 6 else list.size
+                for (i in 1 until max) {
                     msg += "\n${list[i]}"
                 }
-                TextData(msg)
+                if (list.size > 6) msg += "\n......"
+                val data = parse(HttpUtils.get(SEARCH_URL + list[0]), commandList)
+                data?.extra_msg?.add(msg)
+                data
             }
         }
     }
