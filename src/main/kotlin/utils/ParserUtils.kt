@@ -28,10 +28,10 @@ object ParserUtils {
                 "舰娘图鉴" -> parseShip(doc, commandList)
                 in arrayOf("鱼雷", "防空炮", "舰炮", "设备", "舰载机", "导弹") -> parseEquip(doc, commandList)
                 else -> {
-                    if (doc.select("h1[id='firstHeading']").text().contains(Regex("[榜表]"))) {
-                        parseTable(doc, commandList)
-                    } else {
-                        null
+                    when{
+                        doc.select("h1[id='firstHeading']").text().contains(Regex("[榜表]")) -> parseTable(doc, commandList)
+                        doc.select("h1[id='firstHeading']").text().equals("建造时间") -> parseBuildTime(doc, commandList)
+                        else -> null
                     }
                 }
             }
@@ -146,8 +146,74 @@ object ParserUtils {
                 return imagesData
             }
         }
+    }
 
+    // 建造时间表解析
+    private fun parseBuildTime(doc: Document, commandList: List<String>): Data? {
+        when {
+            commandList.size == 2 -> {
+                return TextData(doc.select("div[class='panel panel-info']")[0].text().replace(Regex("[ 、]"), "\n"))
+            }
+            commandList[2].matches(Regex("(\\d[:：])?(\\d)?\\d[:：]\\d\\d")) -> {
+                var time = "0:00:00"
+                when {
+                    commandList[2].matches(Regex("\\d[:：]\\d\\d")) -> time = "0:0" + commandList[2].replace("：", ":")
+                    commandList[2].matches(Regex("\\d\\d[:：]\\d\\d")) -> time = "0:" + commandList[2].replace("：", ":")
+                    else -> time = commandList[2].replace("：", ":")
+                }
 
+                val trList = doc.select("table[class='wikitable sortable']")[0].child(0).children()
+                trList.removeAt(0)
+
+                val timeList = arrayListOf<String>()
+                trList.select("th").forEach {
+                    timeList.add(it.text())
+                }
+
+                // 输入时间不是正确的建造时间
+                if (!timeList.contains(time)) {
+                    timeList.add(time)
+                    var index = 0
+                    timeList.sorted().forEachIndexed { i, it ->
+                        if (it == time) {
+                            index = i
+                            return@forEachIndexed
+                        }
+                    }
+                    val min = if (index - 2 < 0) 0 else index - 2
+                    val max = if (index + 1 > timeList.size - 2) timeList.size - 2 else index + 1
+                    var msg = "未找到此建造时间的舰娘，可以查询下面的相近的建造时间喵"
+                    for (i in min .. max) {
+                        msg += "\n${timeList[i]}"
+                    }
+                    return TextData(msg)
+                }
+
+                // 是建造时间
+                var index = 0
+                timeList.sorted().forEachIndexed { i, it ->
+                    if (it == time) {
+                        index = i
+                        return@forEachIndexed
+                    }
+                }
+
+                return TextData(trList[index].child(1).text()
+                    .replace("限 重 ", "[限定重型池]")
+                    .replace("限 轻 ", "[限定轻型池]")
+                    .replace("限 特 ", "[限定特型池]")
+                    .replace("限 ", "[限定]")
+                    .replace("常 重 ", "[常驻重型池]")
+                    .replace("常 轻 ", "[常驻轻型池]")
+                    .replace("常 特 ", "[常驻特型池]")
+                    .replace("联 ", "[联动]")
+                    .replace(" ", "\n")
+                )
+            }
+            else -> {
+                return TextData("格式错误，时间请使用 时:分分:秒秒 的格式喵")
+            }
+        }
     }
 
     fun wordToPinyin(text : String) : String {
