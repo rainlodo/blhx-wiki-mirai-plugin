@@ -71,6 +71,9 @@
 | wiki 榜单 | 查询目前可查询的各种榜单 | wiki 榜单 |
 | wiki [榜单] | 查询对应榜单 | wiki 装备一图榜 |
 |  |  |  |
+| wiki 建造时间 | 查询当前活动池up舰娘的建造时间 | wiki 建造时间 |
+| wiki 建造时间 [时:分分:秒秒] | 查询当前建造时间可能的舰娘 | wiki 建造时间 4:00:00 |
+|  |  |  |
 | 猜老婆 | 猜舰娘小游戏 | 猜老婆 |
 
 ## 参数设置
@@ -140,5 +143,9 @@ $\color{red}{在修改配置文件时应确保机器人（插件）不在运行�
 - **大建列表乱码**
 
   将`data/blhx-wiki/config/active_pool.json`文件改为GBK格式即可
+
+- **PC端语音不能播放**
+
+  安装[Silk Converter](https://github.com/project-mirai/mirai-silk-converter)插件
 
 ~~如果觉得还不错就点个star吧~~
