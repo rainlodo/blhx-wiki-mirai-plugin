@@ -2,6 +2,7 @@ package org.iris.wiki
 
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
+import net.mamoe.mirai.console.plugin.version
 import org.iris.wiki.action.QuestionListener
 //import org.iris.wiki.command.WikiConfigCommand
 import org.iris.wiki.config.AliasConfig
@@ -38,19 +39,16 @@ object Wiki : KotlinPlugin(
 
         AliasConfig.reload()
         CommandConfig.reload()
-//        ShipQuestionCommand.register()
-//        WikiConfigCommand.register()
+
         Listener.subscribe()
         QuestionListener.subscribe()
     }
 
     override fun onDisable() {
-//        ShipQuestionCommand.unregister()
 
         Listener.stop()
         QuestionListener.stop()
 
-//        WikiConfigCommand.unregister()
         super.onDisable()
     }
 

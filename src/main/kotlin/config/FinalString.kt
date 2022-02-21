@@ -31,12 +31,6 @@ val MESSAGE_PARSE_ERROR = "页面解析有误，暂不支持此种类页面解�
     "(｡•́︿•̀｡)\n" +
     "可以直接点击下方链接打开页面\n"
 
-val QQ_DIC = hashMapOf<Long, String>(
-    1609277270L to "cct",
-    2597766090L to "枪炮",
-    3302191152L to "百合子",
-    943584533L  to "奈芙莲"
-)
 
 val EQUIP_LIST = listOf(
     "五联装533mm鱼雷",

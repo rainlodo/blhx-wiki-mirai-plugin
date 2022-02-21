@@ -69,6 +69,22 @@ object CommandConfig : AutoSavePluginConfig("CommandConfig") {
         "井号打捞表(打捞表)\n"
     )
 
+    // 支持查询的语音
+    val voiceList =
+        "请输入具体语音类型，如：\n" +
+        "wiki 小加加 技能\n" +
+        "目前支持查询的语音有：\n" +
+            "自我介绍，获取语音，" +
+            "登录，查看详情，主页，" +
+            "触摸，特触，摸头，" +
+            "任务提醒，任务完成，邮件，" +
+            "回港，失望/未知，陌生/调率/普通，" +
+            "友好/理解，喜欢/同步/协作，爱/共鸣/应援，" +
+            "誓约，委托完成，强化，" +
+            "开战，mvp，失败，" +
+            "技能，大破"
+
+
     // 舰娘语音目录
     val voice_map = mapOf<String, String>(
         "自我介绍" to "profile",

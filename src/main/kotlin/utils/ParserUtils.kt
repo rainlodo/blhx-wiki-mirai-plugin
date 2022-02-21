@@ -272,18 +272,6 @@ object ParserUtils {
         }
     }
 
-    fun wordToPinyin(text : String) : String {
-        val format = HanyuPinyinOutputFormat()
-        format.caseType = HanyuPinyinCaseType.LOWERCASE
-        var res = ""
-        text.forEach {
-            if (codeType(it) == 1)
-                res += PinyinHelper.toHanyuPinyinStringArray(it, format)[0][0]
-            else
-                res += it
-        }
-        return res
-    }
 
     fun codeType(ch: Char): Int {
         return if (ch in '\u4e00'..'\u9fa5') 1 //中文字符

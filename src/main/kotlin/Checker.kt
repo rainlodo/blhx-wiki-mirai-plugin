@@ -18,11 +18,7 @@ object Checker {
 
     fun check(commandList: Array<String>, sender: Member) : Data? {
 
-        if (ParserUtils.wordToPinyin(commandList[1]) == "yls" || commandList[1] in listOf("iris", "atri", "亚托莉")) {
-            // 不许wiki作者QAQ
-            return ImagesData(arrayListOf("${CommonConfig.emoji_path}/wiki_iris.jpg")).activateAt()
-        }
-        else if (commandList[1] in CommandConfig.table) {
+        if (commandList[1] in CommandConfig.table) {
             return TextData(CommandConfig.tableList)
         }
         else if (commandList[1] in listOf("锉刀", "锉宝", "挫刀", "小锉锉")) {
@@ -35,6 +31,9 @@ object Checker {
                 command += commandList[2]
             }
             return draw(command.replace("大建", ""))
+        }
+        else if (commandList.size > 2 && commandList[2] in listOf("语音", "[语音]")) {
+            return TextData(CommandConfig.voiceList)
         }
         else {
             return null
