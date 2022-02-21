@@ -1,8 +1,5 @@
 package org.iris.wiki.utils
 
-import net.sourceforge.pinyin4j.PinyinHelper
-import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType
-import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat
 import org.iris.wiki.config.*
 import org.iris.wiki.data.*
 import org.jsoup.Jsoup
