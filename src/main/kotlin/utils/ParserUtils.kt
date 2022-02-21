@@ -149,7 +149,11 @@ object ParserUtils {
     private fun parseBuildTime(doc: Document, commandList: List<String>): Data? {
         when {
             commandList.size == 2 -> {
-                return TextData(doc.select("div[class='panel panel-info']")[0].text().replace(Regex("[ 、]"), "\n"))
+                return try {
+                    TextData(doc.select("div[class='panel panel-info']")[0].text().replace(Regex("[ 、]"), "\n"))
+                } catch (e: Exception) {
+                    TextData("现在还没有活动池喵")
+                }
             }
             commandList[2].matches(Regex("(\\d[:：])?(\\d)?\\d[:：]\\d\\d")) -> {
                 var time = "0:00:00"
