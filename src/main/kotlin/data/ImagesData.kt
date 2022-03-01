@@ -27,10 +27,11 @@ data class ImagesData (
         }
         if (images.isEmpty()) {
             images.add("${CommonConfig.emoji_path}/meiyinci.jpg")
+            if (commandList[1] == "美因茨") {
+                images.add("${CommonConfig.emoji_path}/joker_is_me.jpeg")
+            }
         }
-        if (commandList[1] == "美因茨") {
-            images.add("${CommonConfig.emoji_path}/joker_is_me.jpeg")
-        }
+
         return super.parse(doc, commandList)
     }
 

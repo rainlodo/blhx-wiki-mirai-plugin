@@ -37,11 +37,10 @@ class ImageUtil {
          */
         fun getImageAsExResource(imageUri: String): ExternalResource {
 
-            if (imageUri.startsWith("http")) {
-                return imageToBytes(ImageIO.read(URL(imageUri)), "png").toByteArray().toExternalResource()
-            }
-            else {
-                return Path(imageUri).toFile().toExternalResource()
+            return if (imageUri.startsWith("http")) {
+                imageToBytes(ImageIO.read(URL(imageUri)), "png").toByteArray().toExternalResource()
+            } else {
+                Path(imageUri).toFile().toExternalResource()
             }
         }
 

@@ -4,6 +4,7 @@ import org.iris.wiki.config.*
 import org.iris.wiki.data.*
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import java.io.File
 
 
 object ParserUtils {
@@ -49,6 +50,7 @@ object ParserUtils {
             in CommandConfig.from -> ShipData().parse(doc, commandList)
 //            BOAT_UPDATE -> parseShipUpadta(doc)
             in CommandConfig.dress -> ImagesData().parse(doc, commandList)
+            in CommandConfig.dressLarge -> parseDressLarge(doc, commandList)
             in CommandConfig.voice_map -> AudioData().parse(doc, commandList)
             in CommandConfig.tech -> parseShipTech(doc, commandList)
             in CommandConfig.evaluate -> parseShipEvaluate(doc)
@@ -215,6 +217,33 @@ object ParserUtils {
                 return TextData("格式错误，时间请使用 时:分分:秒秒 的格式喵")
             }
         }
+    }
+
+    // 皮肤大图
+    private fun parseDressLarge(doc: Document, commandList: List<String>): Data {
+        if (!File(CommonConfig.ship_skin_path).exists()) {
+            return TextData("还没有下载皮肤文件喵")
+        }
+
+        val data = ImagesData()
+
+        println(commandList[1])
+        val fileTree:FileTreeWalk = File(CommonConfig.ship_skin_path).walk()
+        fileTree.maxDepth(1)//遍历目录层级为1，即无需检查子目录
+            .filter { it.isFile } //只挑选出文件,不处理文件夹
+            .filter { it.name.startsWith("${commandList[1].uppercase()}_") }
+            .forEach {
+                println(it.path)
+                data.images.add(it.path)
+            }
+
+        if (data.images.isEmpty()) {
+            data.images.add("${CommonConfig.emoji_path}/meiyinci.jpg")
+            if (commandList[1] == "美因茨") {
+                data.images.add("${CommonConfig.emoji_path}/joker_is_me.jpeg")
+            }
+        }
+        return data
     }
 
     // 根据keyword模糊查询

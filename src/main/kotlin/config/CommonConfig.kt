@@ -16,5 +16,6 @@ object CommonConfig {
     val equip_path = "$root/image/equip"
     
     val ship_path = "$root/image/ship"
+    val ship_skin_path = "$root/image/skin"
     val ship_label_path = "data/${root.split('\\').last()}/config/label"
 }

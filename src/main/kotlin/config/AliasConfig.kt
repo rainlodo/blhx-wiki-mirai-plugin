@@ -28,8 +28,10 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "加倍林" to "标枪",
         "加倍淋" to "标枪",
         "赵四" to "尼古拉斯",
+        "举高高" to "埃尔德里奇",
         "新月jp" to "新月JP",
         "臭鼬" to "长波",
+        "凌波" to "绫波",
         "z404" to "z23",
         "玛丽罗斯" to "玛莉萝丝",
         "nanoda" to "雪风"

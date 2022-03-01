@@ -27,6 +27,10 @@ object CommandConfig : AutoSavePluginConfig("CommandConfig") {
     @ValueDescription("舰娘皮肤")
     val dress : Array<String> by value(arrayOf("皮肤", "换装"))
 
+    // 舰娘皮肤
+    @ValueDescription("舰娘皮肤原图")
+    val dressLarge : Array<String> by value(arrayOf("皮肤原图", "皮肤大图"))
+
     @ValueDescription("舰娘改造所需素材")
     val update : Array<String> by value(arrayOf("改造", "改"))
 
