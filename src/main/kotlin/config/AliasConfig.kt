@@ -91,7 +91,8 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "μ爆地魔" to "巴尔的摩(μ兵装)",
         "波特彩" to "波特兰",
         "57" to "吾妻",
-        "艾吉尔" to "埃吉尔"
+        "艾吉尔" to "埃吉尔",
+        "屎壳郎" to "喀琅施塔得"
     ))
 
     @ValueDescription("战列别名")
@@ -420,7 +421,7 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "b38" to "B-38_三联装152mm主炮MK-5",
         "150改" to "试作型双联装SKC28式150mm主炮改T0",
         "巴尔的摩炮" to "三联装203mm主炮Mk15T0",
-        "恰巴炮" to "试作型三联装203mm主炮Mark_IXT0",
+        "恰巴炮" to "B-38_三联装152mm主炮MK-5T3",
         "扎拉炮" to "双联203mm主炮Model1927T3",
         "欧根炮" to "双联装203mmSKC主炮T3",
         "罗恩炮" to "试作型三联装203mmSKC主炮T0",
@@ -431,7 +432,9 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "德雷克炮" to "试作型三联装234mm主炮T0",
         "柴郡炮" to "试作型双联装234mm主炮T0",
         "吾妻炮" to "试作型三联装310mm主炮T0",
-        "埃吉尔炮" to "试作型三联装305mmSKC39主炮(超巡用)T0"
+        "埃吉尔炮" to "试作型三联装305mmSKC39主炮(超巡用)T0",
+        "屎壳郎炮" to "B-50_三联装305mm主炮MK-15T0",
+        "喀琅施塔得炮" to "B-50_三联装305mm主炮MK-15T0"
     ))
 
     @ValueDescription("战列炮")

@@ -227,13 +227,13 @@ object ParserUtils {
 
         val data = ImagesData()
 
-        println(commandList[1])
+
         val fileTree:FileTreeWalk = File(CommonConfig.ship_skin_path).walk()
         fileTree.maxDepth(1)//遍历目录层级为1，即无需检查子目录
             .filter { it.isFile } //只挑选出文件,不处理文件夹
             .filter { it.name.startsWith("${commandList[1].uppercase()}_") }
             .forEach {
-                println(it.path)
+
                 data.images.add(it.path)
             }
 

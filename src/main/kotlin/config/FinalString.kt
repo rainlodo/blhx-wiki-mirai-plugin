@@ -402,7 +402,8 @@ val EQUIP_LIST = listOf(
     "苍穹喷射机",
     "爆裂钻孔机",
     "古立特圣剑",
-    "征战巨坦"
+    "征战巨坦",
+    "b-50_三联装305mm主炮mk-15"
 )
 
 val SHIP_LIST = listOf(
@@ -936,7 +937,12 @@ val SHIP_LIST = listOf(
     "齐柏林伯爵",
     "龙凤",
     "龙骑兵",
-    "龙骧"
+    "龙骧",
+    "喀琅施塔得",
+    "阿尔汉格尔斯克",
+    "伏尔加",
+    "灵敏",
+    "基辅"
 )
 
 val NAME_LIST = SHIP_LIST + EQUIP_LIST

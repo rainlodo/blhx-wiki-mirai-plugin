@@ -40,14 +40,16 @@ data class ImagesData (
         if (images.size > 3) {
             val mutableList = mutableListOf<ForwardMessage.Node>()
             for (url in images) {
+                val src = ImageUtil.getImageAsExResource(url)
                 mutableList.add(ForwardMessage.Node(
                     sender.bot.id,
                     Date().time.toInt(),
                     sender.bot.nameCardOrNick,
                     buildMessageChain {
-                        +sender.uploadImage(ImageUtil.getImageAsExResource(url))
+                        +sender.uploadImage(src)
                     }
                 ))
+                src.close()
             }
             return  RawForwardMessage(mutableList).render(
                 object : ForwardMessage.DisplayStrategy {
