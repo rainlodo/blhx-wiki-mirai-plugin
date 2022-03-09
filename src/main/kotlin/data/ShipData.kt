@@ -57,14 +57,14 @@ data class ShipData(
 
         camp = trList[2].select("td")[3].text()
 
-        time = trList[3].select("td")[1].text()
-
-        normal = trList[4].select("td")[1].text().replace(" ", "\n  ")
-
-        active = trList[5].select("td")[1].text().replace(" ", "\n  ")
-
-        if (trList[6].select("td")[0].text().equals("其他途径")) {
-            other = trList[6].select("td")[1].text().replace(" ", "\n  ")
+        for (i in 3 until trList.size) {
+            val label = trList[i].select("td")[0].text()
+            when {
+                label.contains("建造时间") -> time = trList[i].select("td")[1].text()
+                label.contains("普通掉落点") -> normal = trList[i].select("td")[1].text().replace(" ", "\n  ")
+                label.contains("活动/档案") -> active = trList[i].select("td")[1].text().replace(" ", "\n  ")
+                label.contains("其他途径") -> other = trList[i].select("td")[1].text().replace(" ", "\n  ")
+            }
         }
 
 
