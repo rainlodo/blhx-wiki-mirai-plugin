@@ -100,6 +100,7 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
 
         "大帝" to "腓特烈大帝",
         "波斯猫" to "俾斯麦",
+        "北宅" to "提尔比茨",
         "大加加" to "加斯科涅",
         "北卡" to "北卡罗来纳",
         "花生" to "华盛顿",
@@ -114,6 +115,7 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "维托里奥" to "维托里奥·维内托",
         "维内托" to "维托里奥·维内托",
         "vv" to "维托里奥·维内托",
+        "绿托" to "利托里奥",
         "伊丽莎白" to "伊丽莎白女王",
         "傻白" to "伊丽莎白女王",
         "扶桑META" to "扶桑·META",

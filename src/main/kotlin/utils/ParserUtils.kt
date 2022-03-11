@@ -1,5 +1,6 @@
 package org.iris.wiki.utils
 
+import net.mamoe.mirai.message.data.PlainText
 import org.iris.wiki.config.*
 import org.iris.wiki.data.*
 import org.jsoup.Jsoup
@@ -10,6 +11,9 @@ import java.io.File
 object ParserUtils {
 
     fun parse(data: String, commandList: List<String>) : Data? {
+        if (data.isEmpty()) {
+            return TextData("网络连接错误，请重试喵")
+        }
         val doc = Jsoup.parse(data)
         try {
             if (doc.select("h1[id='firstHeading']").text() == "搜索结果") {
@@ -135,11 +139,16 @@ object ParserUtils {
             "PVE用舰船综合性能强度榜" -> return parseShipTop(doc, commandList)
             else -> {
                 val imagesData = ImagesData()
-                doc.select("span[id='${commandList[1]}']")[0].parent().nextElementSibling().select("img").forEach {
-                    val url = it.attr("src").split(Regex("/[\\d]*px"))[0].replace("/thumb", "")
-                    imagesData.images.add(url)
+                try {
+                    doc.select("span[id='${commandList[1]}']")[0].parent().nextElementSibling().select("img").forEach {
+                        val url = it.attr("src").split(Regex("/[\\d]*px"))[0].replace("/thumb", "")
+                        imagesData.images.add(url)
+                    }
+                    if (imagesData.images.isEmpty()) {
+                        return null
+                    }
                 }
-                if (imagesData.images.isEmpty()) {
+                catch (_: Exception) {
                     return null
                 }
                 return imagesData
@@ -287,7 +296,13 @@ object ParserUtils {
     fun searchResult2Data(list: List<String>, commandList: List<String>) : Data? {
         return when (list.size) {
             0 -> null
-            1 -> parse(HttpUtils.get(SEARCH_URL + list[0]), commandList)
+            1 -> {
+                // 替换搜索的关键词
+                val commands = arrayListOf<String>()
+                commands.addAll(commandList)
+                commands[1] = list[0]
+                parse(HttpUtils.get(SEARCH_URL + list[0]), commands)
+            }
             else -> {
                 var msg = "还找到了以下相近词条喵"
                 val max = if (list.size > 6) 6 else list.size
@@ -295,7 +310,12 @@ object ParserUtils {
                     msg += "\n${list[i]}"
                 }
                 if (list.size > 6) msg += "\n......"
-                val data = parse(HttpUtils.get(SEARCH_URL + list[0]), commandList)
+
+                // 替换搜索的关键词
+                val commands = arrayListOf<String>()
+                commands.addAll(commandList)
+                commands[1] = list[0]
+                val data = parse(HttpUtils.get(SEARCH_URL + list[0]), commands)
                 data?.extra_msg?.add(msg)
                 data
             }

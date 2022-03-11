@@ -24,10 +24,13 @@ object HttpUtils {
     )
 
     private fun sendRequest(request: Request): String {
-        val response = client.newCall(request).execute()
-        val body: String = response.body!!.string()
+        return try {
+            val response = client.newCall(request).execute()
+            response.body!!.string()
+        } catch (_: Exception) {
+            ""
+        }
 //        return json.parseToJsonElement(body)
-        return body
     }
 
 
