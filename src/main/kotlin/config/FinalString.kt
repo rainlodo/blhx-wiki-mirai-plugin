@@ -942,7 +942,10 @@ val SHIP_LIST = listOf(
     "阿尔汉格尔斯克",
     "伏尔加",
     "灵敏",
-    "基辅"
+    "基辅",
+    "帝国",
+    "庞培·马格诺",
+    "的里雅斯特"
 )
 
 val NAME_LIST = SHIP_LIST + EQUIP_LIST
