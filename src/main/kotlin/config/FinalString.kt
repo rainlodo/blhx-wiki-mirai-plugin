@@ -1,10 +1,10 @@
 package org.iris.wiki.config
 
-val SEARCH_uRL = "https://wiki.biligame.com/blhx/index.php?search="
+val SEARCH_URL = "https://wiki.biligame.com/blhx/index.php?search="
 
 
-val BOAT_uPDATE = "改造"
-val BOAT_NO_uPDATA = "还没有改造呢~"
+val BOAT_UPDATE = "改造"
+val BOAT_NO_UPDATA = "还没有改造呢~"
 
 
 val MESSAGE_HELP = "指令格式如下：\n" +
@@ -23,7 +23,7 @@ val MESSAGE_ERROR = "输入指令有误~\n" +
 val MESSAGE_SEARCH = "没有对应的词条但是找到了以下相关内容，可以尝试搜索下面的词条~\n" +
     "(〃'▽'〃)\n"
 
-val MESSAGE_NO_RESuLT = "没有查询到结果呢~\n" +
+val MESSAGE_NO_RESULT = "没有查询到结果呢~\n" +
     "(〃'▽'〃)\n" +
     MESSAGE_HELP
 
@@ -32,7 +32,7 @@ val MESSAGE_PARSE_ERROR = "页面解析有误，暂不支持此种类页面解�
     "可以直接点击下方链接打开页面\n"
 
 
-val EQuIP_LIST = listOf(
+val EQUIP_LIST = listOf(
     "五联装533mm鱼雷",
     "四联装533mm鱼雷",
     "三联装533mm鱼雷",
@@ -949,4 +949,4 @@ val SHIP_LIST = listOf(
     "山城·meta"
 )
 
-val NAME_LIST = SHIP_LIST + EQuIP_LIST
+val NAME_LIST = SHIP_LIST + EQUIP_LIST

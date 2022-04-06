@@ -69,7 +69,7 @@ data class ShipData(
                 label.contains("其他途径") -> other_from = trList[i].select("td")[1].text().replace(" ", "\n  ")
             }
         }
-        time?.replace("活动", "${active}活动")
+        time = time?.replace("活动", "${active}活动")
 
         pic = doc
             .select("div[class='tab_con active']")[0]

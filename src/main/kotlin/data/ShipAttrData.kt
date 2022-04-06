@@ -119,7 +119,7 @@ data class ShipAttrData(
                 label.contains("其他途径") -> other_from = trList[i].select("td")[1].text()
             }
         }
-        time.replace("活动", "${active}活动")
+        time = time.replace("活动", "${active}活动")
         canUpgrade = doc.select("span[id='改造详情']").isNotEmpty()
         if (canUpgrade) {
             type = doc.select("span[id='改造详情']")[0].parent()
