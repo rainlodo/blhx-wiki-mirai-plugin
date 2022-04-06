@@ -1,10 +1,10 @@
 package org.iris.wiki.config
 
-val SEARCH_URL = "https://wiki.biligame.com/blhx/index.php?search="
+val SEARCH_uRL = "https://wiki.biligame.com/blhx/index.php?search="
 
 
-val BOAT_UPDATE = "改造"
-val BOAT_NO_UPDATA = "还没有改造呢~"
+val BOAT_uPDATE = "改造"
+val BOAT_NO_uPDATA = "还没有改造呢~"
 
 
 val MESSAGE_HELP = "指令格式如下：\n" +
@@ -23,7 +23,7 @@ val MESSAGE_ERROR = "输入指令有误~\n" +
 val MESSAGE_SEARCH = "没有对应的词条但是找到了以下相关内容，可以尝试搜索下面的词条~\n" +
     "(〃'▽'〃)\n"
 
-val MESSAGE_NO_RESULT = "没有查询到结果呢~\n" +
+val MESSAGE_NO_RESuLT = "没有查询到结果呢~\n" +
     "(〃'▽'〃)\n" +
     MESSAGE_HELP
 
@@ -32,7 +32,7 @@ val MESSAGE_PARSE_ERROR = "页面解析有误，暂不支持此种类页面解�
     "可以直接点击下方链接打开页面\n"
 
 
-val EQUIP_LIST = listOf(
+val EQuIP_LIST = listOf(
     "五联装533mm鱼雷",
     "四联装533mm鱼雷",
     "三联装533mm鱼雷",
@@ -409,32 +409,32 @@ val EQUIP_LIST = listOf(
 val SHIP_LIST = listOf(
     "22",
     "33",
-    "U-101",
-    "U-110",
-    "U-1206",
-    "U-37",
-    "U-410",
-    "U-47",
-    "U-522",
-    "U-556",
-    "U-557",
-    "U-73",
-    "U-81",
-    "U-96",
-    "Z1",
-    "Z18",
-    "Z19",
-    "Z2",
-    "Z20",
-    "Z21",
-    "Z23",
-    "Z24",
-    "Z25",
-    "Z26",
-    "Z28",
-    "Z35",
-    "Z36",
-    "Z46",
+    "u-101",
+    "u-110",
+    "u-1206",
+    "u-37",
+    "u-410",
+    "u-47",
+    "u-522",
+    "u-556",
+    "u-557",
+    "u-73",
+    "u-81",
+    "u-96",
+    "z1",
+    "z18",
+    "z19",
+    "z2",
+    "z20",
+    "z21",
+    "z23",
+    "z24",
+    "z25",
+    "z26",
+    "z28",
+    "z35",
+    "z36",
+    "z46",
     "三日月",
     "三浦梓",
     "三笠",
@@ -631,7 +631,7 @@ val SHIP_LIST = listOf(
     "扎拉",
     "托里拆利",
     "扶桑",
-    "扶桑·META",
+    "扶桑·meta",
     "抚顺",
     "拉·加利索尼埃",
     "拉德福特",
@@ -686,7 +686,7 @@ val SHIP_LIST = listOf(
     "标枪",
     "格伦维尔",
     "格奈森瑙",
-    "格奈森瑙·META",
+    "格奈森瑙·meta",
     "格拉斯哥",
     "格罗斯特",
     "格里德利",
@@ -711,7 +711,7 @@ val SHIP_LIST = listOf(
     "浦波",
     "浦风",
     "海伦娜",
-    "海伦娜·META",
+    "海伦娜·meta",
     "海咲",
     "海因里希亲王",
     "海圻",
@@ -750,7 +750,7 @@ val SHIP_LIST = listOf(
     "白龙",
     "百鬼绫目",
     "皇家方舟",
-    "皇家方舟·META",
+    "皇家方舟·meta",
     "盐湖城",
     "睦月",
     "矶风",
@@ -806,7 +806,7 @@ val SHIP_LIST = listOf(
     "芝加哥",
     "花月",
     "苍龙",
-    "苍龙·META",
+    "苍龙·meta",
     "苏塞克斯",
     "苏维埃罗西亚",
     "苏维埃贝拉罗斯",
@@ -891,7 +891,7 @@ val SHIP_LIST = listOf(
     "阿达尔伯特亲王",
     "陆奥",
     "隼鹰",
-    "隼鹰·META",
+    "隼鹰·meta",
     "雪风",
     "雷",
     "雷鸣",
@@ -905,9 +905,9 @@ val SHIP_LIST = listOf(
     "风云",
     "飞鸟川千濑",
     "飞鹰",
-    "飞鹰·META",
+    "飞鹰·meta",
     "飞龙",
-    "飞龙·META",
+    "飞龙·meta",
     "香格里拉",
     "香槟",
     "马可·波罗",
@@ -945,7 +945,8 @@ val SHIP_LIST = listOf(
     "基辅",
     "帝国",
     "庞培·马格诺",
-    "的里雅斯特"
+    "的里雅斯特",
+    "山城·meta"
 )
 
-val NAME_LIST = SHIP_LIST + EQUIP_LIST
+val NAME_LIST = SHIP_LIST + EQuIP_LIST

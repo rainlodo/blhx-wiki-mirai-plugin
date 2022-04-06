@@ -175,8 +175,8 @@ class ShipAttrComponent(
 
         // 计算出处栏的高度
         val from = arrayListOf<Component>()
-        if (data.normal != "") {
-            val textList = data.normal.split("、")
+        if (data.normal_from != "") {
+            val textList = data.normal_from.split("、")
             val max = if (4 > textList.size) textList.size else 4
             var text = textList[0]
             for (i in (1 until max)) {
@@ -185,11 +185,11 @@ class ShipAttrComponent(
             if (max < textList.size) text += "等"
             from.add(TextComponent(text, 20F).init())
         }
-        if (data.active != "") {
-            from.add(TextComponent(data.active.split(" ").last(), 20F).init())
+        if (data.active_from != "") {
+            from.add(TextComponent(data.active_from.split(" ").last(), 20F).init())
         }
-        if (data.other != "") {
-            data.other.replace(" ", "、").split("、").forEach{
+        if (data.other_from != "") {
+            data.other_from.replace(" ", "、").split("、").forEach{
                 if (it.contains("兑换") || it.contains("科研") ||
                     it.contains("奖励") || it.contains("META") ||
                     it.contains("彩蛋")) {

@@ -21,15 +21,17 @@ data class ShipData(
     var level: String = "",
     @SerialName("阵营")
     var camp: String = "",
+    @SerialName("相关活动")
+    var active: String = "",
     @SerialName("建造时间")
     var time: String? = null,
 
     @SerialName("普通掉落点")
-    var normal: String = "",
+    var normal_from: String = "",
     @SerialName("活动掉落点")
-    var active: String = "",
+    var active_from: String = "",
     @SerialName("其他来源")
-    var other: String = "",
+    var other_from: String = "",
 
 
     @SerialName("获得科技点")
@@ -61,12 +63,13 @@ data class ShipData(
             val label = trList[i].select("td")[0].text()
             when {
                 label.contains("建造时间") -> time = trList[i].select("td")[1].text()
-                label.contains("普通掉落点") -> normal = trList[i].select("td")[1].text().replace(" ", "\n  ")
-                label.contains("活动/档案") -> active = trList[i].select("td")[1].text().replace(" ", "\n  ")
-                label.contains("其他途径") -> other = trList[i].select("td")[1].text().replace(" ", "\n  ")
+                label.contains("普通掉落点") -> normal_from = trList[i].select("td")[1].text().replace(" ", "\n  ")
+                label.contains("活动/档案") -> active_from = trList[i].select("td")[1].text().replace(" ", "\n  ")
+                label.contains("相关活动") -> active = trList[i].select("td")[1].text()
+                label.contains("其他途径") -> other_from = trList[i].select("td")[1].text().replace(" ", "\n  ")
             }
         }
-
+        time?.replace("活动", "${active}活动")
 
         pic = doc
             .select("div[class='tab_con active']")[0]
@@ -86,14 +89,14 @@ data class ShipData(
         builder.add(Image(imageId))
         builder.add("建造时间：${time}\n")
         var from = "  "
-        if (normal != "") {
-            from += "$normal\n  "
+        if (normal_from != "") {
+            from += "$normal_from\n  "
         }
-        if (active != "") {
-            from += "$active\n  "
+        if (active_from != "") {
+            from += "$active_from\n  "
         }
-        if (other != "") {
-            from += other
+        if (other_from != "") {
+            from += other_from
         }
         if (from == "") {
             from = "暂无获得途径"

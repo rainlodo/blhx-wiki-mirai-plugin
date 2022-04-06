@@ -26,6 +26,8 @@ data class ShipAttrData(
     var level: String = "",
     @SerialName("阵营")
     var camp: String = "",
+    @SerialName("相关活动")
+    var active: String = "",
     @SerialName("建造时间")
     var time: String = "",
     @SerialName("pic")
@@ -34,11 +36,11 @@ data class ShipAttrData(
     var canUpgrade: Boolean= false,
 
     @SerialName("普通掉落点")
-    var normal: String = "",
+    var normal_from: String = "",
     @SerialName("活动掉落点")
-    var active: String = "",
+    var active_from: String = "",
     @SerialName("其他来源")
-    var other: String = "",
+    var other_from: String = "",
 
 
     @SerialName("耐久")
@@ -111,11 +113,13 @@ data class ShipAttrData(
             val label = trList[i].select("td")[0].text()
             when {
                 label.contains("建造时间") -> time = trList[i].select("td")[1].text()
-                label.contains("普通掉落点") -> normal = trList[i].select("td")[1].text()
-                label.contains("活动/档案") -> active = trList[i].select("td")[1].text()
-                label.contains("其他途径") -> other = trList[i].select("td")[1].text()
+                label.contains("普通掉落点") -> normal_from = trList[i].select("td")[1].text()
+                label.contains("活动/档案") -> active_from = trList[i].select("td")[1].text()
+                label.contains("相关活动") -> active = trList[i].select("td")[1].text()
+                label.contains("其他途径") -> other_from = trList[i].select("td")[1].text()
             }
         }
+        time.replace("活动", "${active}活动")
         canUpgrade = doc.select("span[id='改造详情']").isNotEmpty()
         if (canUpgrade) {
             type = doc.select("span[id='改造详情']")[0].parent()
