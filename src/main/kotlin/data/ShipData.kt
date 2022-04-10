@@ -30,6 +30,8 @@ data class ShipData(
     var normal_from: String = "",
     @SerialName("活动掉落点")
     var active_from: String = "",
+    @SerialName("档案掉落点")
+    var file_from: String = "",
     @SerialName("其他来源")
     var other_from: String = "",
 
@@ -64,7 +66,8 @@ data class ShipData(
             when {
                 label.contains("建造时间") -> time = trList[i].select("td")[1].text()
                 label.contains("普通掉落点") -> normal_from = trList[i].select("td")[1].text().replace(" ", "\n  ")
-                label.contains("活动/档案") -> active_from = trList[i].select("td")[1].text().replace(" ", "\n  ")
+                label.contains("活动 掉落点") -> active_from = trList[i].select("td")[1].text().replace(" ", "\n  ")
+                label.contains("档案掉落点") -> file_from = trList[i].select("td")[1].text().replace(" ", "\n  ")
                 label.contains("相关活动") -> active = trList[i].select("td")[1].text()
                 label.contains("其他途径") -> other_from = trList[i].select("td")[1].text().replace(" ", "\n  ")
             }
@@ -94,6 +97,9 @@ data class ShipData(
         }
         if (active_from != "") {
             from += "$active_from\n  "
+        }
+        if (file_from != "") {
+            from += "$file_from\n  "
         }
         if (other_from != "") {
             from += other_from

@@ -185,8 +185,11 @@ class ShipAttrComponent(
             if (max < textList.size) text += "等"
             from.add(TextComponent(text, 20F).init())
         }
-        if (data.active_from != "") {
+        if (data.active_from != "" && data.file_from == "") {
             from.add(TextComponent(data.active_from.split(" ").last(), 20F).init())
+        }
+        if (data.file_from != "") {
+            from.add(TextComponent(data.file_from.split(" ").last(), 20F).init())
         }
         if (data.other_from != "") {
             data.other_from.replace(" ", "、").split("、").forEach{
