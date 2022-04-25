@@ -332,6 +332,6 @@ class ShipAttrComponent(
     private fun drawCenter(text: String, x: Int, y: Int, h: Int, w: Int) {
         val textComponent = TextComponent(text, 20f).init()
         g2.drawImage(textComponent.draw(), x + (w - textComponent.getComponentWidth()) / 2,
-        y + (h - textComponent.getComponentHeight()) / 2, null)
+        y + 2 + (h - textComponent.getComponentHeight()) / 2, null)
     }
 }

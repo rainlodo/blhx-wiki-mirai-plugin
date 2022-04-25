@@ -1,6 +1,6 @@
 package org.iris.wiki.command
 
-import jdk.nashorn.internal.AssertsEnabled
+
 import net.mamoe.mirai.console.command.CommandSender
 import net.mamoe.mirai.console.command.CompositeCommand
 import org.iris.wiki.Wiki
@@ -39,7 +39,7 @@ object WikiConfigCommand : CompositeCommand(
         sendMessage("缓存清除成功喵")
     }
 
-    @SubCommand("equip_detail_on")
+    @SubCommand("舰船装备详情", "equipdetailon")
     suspend fun CommandSender.equip_detail(enabled: Boolean = true) {
         WikiConfig.ship_equip_efficiency_on = enabled
         sendMessage("设置成功喵")

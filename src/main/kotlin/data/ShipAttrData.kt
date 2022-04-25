@@ -232,7 +232,7 @@ data class ShipAttrData(
         equip_detail.add(EquipEfficiencyData("槽位", "装备类型", "效率", "武器数", "预装填数"))
         for (i in 2..4) {
             try {
-                tdList = trList[i].select("td")
+                tdList = trList[i + if (canUpgrade) 1 else 0].select("td")
                 val equipEfficiencyData = EquipEfficiencyData()
                 equipEfficiencyData.index = tdList[0].text()
                 equipEfficiencyData.name = tdList[1].select("span[class=\"tjmode1\"]").text()
