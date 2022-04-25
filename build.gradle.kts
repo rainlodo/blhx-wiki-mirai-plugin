@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "org.iris.wiki"
-version = "0.3.9"
+version = "0.3.10"
 
 repositories {
     mavenLocal()

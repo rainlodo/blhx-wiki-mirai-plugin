@@ -9,6 +9,7 @@ import org.iris.wiki.action.QuestionListener
 import org.iris.wiki.command.WikiConfigCommand
 import org.iris.wiki.config.AliasConfig
 import org.iris.wiki.config.CommandConfig
+import org.iris.wiki.config.WikiConfig
 
 /**
  * 使用 kotlin 版请把
@@ -29,7 +30,7 @@ object Wiki : KotlinPlugin(
     JvmPluginDescription(
         id = "org.iris.wiki",
         name = "blhx-wiki",
-        version = "0.3.9"
+        version = "0.3.10"
     ) {
         author("iris")
         // author 和 info 可以删除.
@@ -41,6 +42,7 @@ object Wiki : KotlinPlugin(
 
         AliasConfig.reload()
         CommandConfig.reload()
+        WikiConfig.reload()
 
         Listener.subscribe()
         QuestionListener.subscribe()

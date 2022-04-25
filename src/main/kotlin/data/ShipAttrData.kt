@@ -15,6 +15,20 @@ import java.io.File
 import javax.imageio.ImageIO
 
 @Serializable
+data class EquipEfficiencyData(
+    @SerialName("槽位")
+    var index: String = "",
+    @SerialName("装备类型")
+    var name: String = "",
+    @SerialName("效率")
+    var efficiency: String = "",
+    @SerialName("武器数")
+    var count: String = "",
+    @SerialName("预装填数")
+    var prefill_count: String = "",
+)
+
+@Serializable
 data class ShipAttrData(
     @SerialName("名称")
     var name: String = "",
@@ -77,7 +91,10 @@ data class ShipAttrData(
     var xiaohao : String = "",
 
     @SerialName("技能")
-    var skill : ArrayList<SkillData> = arrayListOf()
+    var skill : ArrayList<SkillData> = arrayListOf(),
+
+    @SerialName("装备详情")
+    var equip_detail : ArrayList<EquipEfficiencyData> = arrayListOf()
 ) : Data() {
 
 
@@ -159,7 +176,7 @@ data class ShipAttrData(
 
         val tableAttr = doc.select("table[class='wikitable sv-performance']")
         trList = tableAttr[1].child(0).children()
-        val tdList = arrayListOf<Element>()
+        var tdList = arrayListOf<Element>()
         for (i in 1..7) {
             tdList.addAll(trList[i].children())
         }
@@ -184,7 +201,7 @@ data class ShipAttrData(
                 }
             }
         }
-        val table = doc.select("table[class='wikitable sv-skill']")
+        var table = doc.select("table[class='wikitable sv-skill']")
         trList = table.select("tr")
 
         for (i in (if (canUpgrade) 2 else 1) until trList.size) {
@@ -206,6 +223,26 @@ data class ShipAttrData(
             }
             catch (e : Exception) {
 //                println(trList[i].html())
+            }
+        }
+
+        // 解析装备详情
+        table = doc.select("table[class='wikitable sv-equipment']")
+        trList = table.select("tr")
+        equip_detail.add(EquipEfficiencyData("槽位", "装备类型", "效率", "武器数", "预装填数"))
+        for (i in 2..4) {
+            try {
+                tdList = trList[i].select("td")
+                val equipEfficiencyData = EquipEfficiencyData()
+                equipEfficiencyData.index = tdList[0].text()
+                equipEfficiencyData.name = tdList[1].select("span[class=\"tjmode1\"]").text()
+                equipEfficiencyData.efficiency = tdList[2].select("span[class=\"tjmode1\"]").text()
+                equipEfficiencyData.count = tdList[3].select("span[class=\"tjmode1\"]").text()
+                equipEfficiencyData.prefill_count = tdList[4].select("span[class=\"tjmode1\"]").text()
+                equip_detail.add(equipEfficiencyData)
+            }
+            catch (e : Exception) {
+                println(trList[i].html())
             }
         }
 

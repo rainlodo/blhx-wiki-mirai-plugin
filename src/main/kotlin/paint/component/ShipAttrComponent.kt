@@ -1,7 +1,9 @@
 package org.iris.wiki.paint.component
 
 
+import org.iris.wiki.command.WikiConfigCommand
 import org.iris.wiki.config.CommonConfig
+import org.iris.wiki.config.WikiConfig
 import org.iris.wiki.data.ShipAttrData
 import org.iris.wiki.paint.PaintUtils
 import org.iris.wiki.utils.ImageUtil
@@ -206,9 +208,9 @@ class ShipAttrComponent(
         }
 
         // 建造时间 出处
-        if (h + boxY > 690) {
+        if (h + boxY > 710) {
             boxX = 50
-            boxY = 550
+            boxY = 710 - h
         }
 
         var label = TextComponent("建造时间", 20F).init()
@@ -239,6 +241,39 @@ class ShipAttrComponent(
             from.forEach {
                 g2.drawImage(it.draw(), boxX + (boxWidth + labelWidth - it.getComponentWidth()) / 2, boxY, null)
                 boxY += it.getComponentHeight()
+            }
+        }
+
+        // 武器效率详情
+        if (WikiConfig.ship_equip_efficiency_on) {
+            // 确定在画布中的位置
+            val lineHeight = 30
+            val lineLength = arrayListOf(70, 270, 370, 470, 570)
+            if (boxX == 50) {
+                boxY -= h + lineHeight * 4
+            }
+            else if (boxY + lineHeight * 4 > 720) {
+                boxX = 50
+                boxY = 710 - lineHeight * 4
+            }
+
+            // 绘制背景及网格
+            g2.color = colorAttr
+            g2.fillRect(boxX, boxY, boxWidth, lineHeight * 4)
+            g2.color = Color.WHITE
+            g2.drawLine(boxX, boxY, boxX, boxY + 4 * lineHeight)
+            for (i in 0..4) {
+                g2.drawLine(boxX, boxY + lineHeight * i, boxX + boxWidth, boxY + lineHeight * i)
+                g2.drawLine(boxX + lineLength[i], boxY, boxX + lineLength[i], boxY + 4 * lineHeight)
+            }
+
+            for (equip in data.equip_detail) {
+                drawCenter(equip.index, boxX, boxY, lineHeight, lineLength[0])
+                drawCenter(equip.name, boxX + lineLength[0], boxY, lineHeight, lineLength[1] - lineLength[0])
+                drawCenter(equip.efficiency, boxX + lineLength[1], boxY, lineHeight, lineLength[2] - lineLength[1])
+                drawCenter(equip.count, boxX + lineLength[2], boxY, lineHeight, lineLength[3] - lineLength[2])
+                drawCenter(equip.prefill_count, boxX + lineLength[3], boxY, lineHeight, lineLength[4] - lineLength[3])
+                boxY += lineHeight
             }
         }
 
@@ -292,5 +327,11 @@ class ShipAttrComponent(
             val pic = ImageUtil.getImage(data.pic)
             g2.drawImage(pic, 50, 0, 525, 788, null)
         }
+    }
+
+    private fun drawCenter(text: String, x: Int, y: Int, h: Int, w: Int) {
+        val textComponent = TextComponent(text, 20f).init()
+        g2.drawImage(textComponent.draw(), x + (w - textComponent.getComponentWidth()) / 2,
+        y + (h - textComponent.getComponentHeight()) / 2, null)
     }
 }
