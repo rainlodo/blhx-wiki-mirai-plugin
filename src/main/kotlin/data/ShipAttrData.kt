@@ -252,6 +252,13 @@ data class ShipAttrData(
     override suspend fun toMessage(sender: Member): Message {
 
         val path = "${CommonConfig.ship_output_path}/${name}.png"
+
+        // 检测输出文件夹是否存在
+        val folder = File(CommonConfig.ship_output_path)
+        if (!folder.exists() && !folder.isDirectory) {
+            folder.mkdir()
+        }
+
         val file = File(path)
         if (!file.exists()) {
             val shipAttrComponent = ShipAttrComponent(this)

@@ -111,6 +111,13 @@ data class EquipAttrData(
     override suspend fun toMessage(sender: Member): Message {
         val sname = name.replace("\\", "_").replace("/", "_")
         val path = "${CommonConfig.equip_output_path}/${sname}T${tno}.png"
+
+        // 检测输出文件夹是否存在
+        val folder = File(CommonConfig.equip_output_path)
+        if (!folder.exists() && !folder.isDirectory) {
+            folder.mkdir()
+        }
+
         val file = File(path)
         if (!file.exists()) {
             val equipAttrComponent = EquipAttrComponent(this)
