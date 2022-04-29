@@ -70,7 +70,8 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "μ克爹" to "克利夫兰(μ兵装)",
         "μ克利夫兰" to "克利夫兰(μ兵装)",
         "水星" to "水星纪念",
-        "500" to "五十铃"
+        "500" to "五十铃",
+        "双子" to "埃姆登"
     ))
 
     @ValueDescription("重巡别名")
@@ -92,7 +93,9 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "波特彩" to "波特兰",
         "57" to "吾妻",
         "艾吉尔" to "埃吉尔",
-        "屎壳郎" to "喀琅施塔得"
+        "屎壳郎" to "喀琅施塔得",
+        "铁血约克" to "约克DE",
+        "皇家约克" to "约克"
     ))
 
     @ValueDescription("战列别名")
