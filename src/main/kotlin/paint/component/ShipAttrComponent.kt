@@ -162,7 +162,10 @@ class ShipAttrComponent(
                 if (count == 3) {
                     count = 0
                     x = boxX + 10
-                    boxY += 30 + 5
+                    if (i != 14) {
+                        // 不是最后一个
+                        boxY += 30 + 5
+                    }
                 }
             }
         }

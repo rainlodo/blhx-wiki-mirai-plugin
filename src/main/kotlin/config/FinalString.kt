@@ -403,7 +403,11 @@ val EQUIP_LIST = listOf(
     "爆裂钻孔机",
     "古立特圣剑",
     "征战巨坦",
-    "b-50_三联装305mm主炮mk-15"
+    "b-50_三联装305mm主炮mk-15",
+
+
+    "PVE用舰船综合性能强度榜",
+    "装备一图榜"
 )
 
 val SHIP_LIST = listOf(

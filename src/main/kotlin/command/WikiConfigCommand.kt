@@ -33,6 +33,7 @@ object WikiConfigCommand : CompositeCommand(
     }
 
     @SubCommand("clear")
+    @Description("清除图片缓存")
     suspend fun CommandSender.clear() {
         deleteDirectoryFiles(File(CommonConfig.ship_output_path))
         deleteDirectoryFiles(File(CommonConfig.equip_output_path))
@@ -40,8 +41,15 @@ object WikiConfigCommand : CompositeCommand(
     }
 
     @SubCommand("舰船装备详情", "equipdetailon")
+    @Description("开启/关闭舰娘wiki中的舰娘装备详情板块")
     suspend fun CommandSender.equip_detail(enabled: Boolean = true) {
         WikiConfig.ship_equip_efficiency_on = enabled
         sendMessage("设置成功喵")
     }
+
+//    @SubCommand("alias", "别名")
+//    suspend fun CommandSender.alias(enabled: Boolean = true) {
+//        WikiConfig.ship_equip_efficiency_on = enabled
+//        sendMessage("设置成功喵")
+//    }
 }

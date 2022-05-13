@@ -8,6 +8,7 @@ object CommonConfig {
     
     val ttf = "$root/思源黑体.ttf"
 
+    val output_path = "$root/out"
     val equip_output_path = "$root/out/equip"
     val ship_output_path = "$root/out/ship"
     val emoji_path = "$root/image/emoji"

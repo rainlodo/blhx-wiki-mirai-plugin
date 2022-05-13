@@ -254,9 +254,11 @@ data class ShipAttrData(
         val path = "${CommonConfig.ship_output_path}/${name}.png"
 
         // 检测输出文件夹是否存在
-        val folder = File(CommonConfig.ship_output_path)
-        if (!folder.exists() && !folder.isDirectory) {
-            folder.mkdir()
+        for (path in listOf(CommonConfig.output_path, CommonConfig.ship_output_path)) {
+            val folder = File(path)
+            if (!folder.exists() && !folder.isDirectory) {
+                folder.mkdir()
+            }
         }
 
         val file = File(path)
