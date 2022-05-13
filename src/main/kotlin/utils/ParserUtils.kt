@@ -55,6 +55,7 @@ object ParserUtils {
 //            BOAT_UPDATE -> parseShipUpadta(doc)
             in CommandConfig.dress -> ImagesData().parse(doc, commandList)
             in CommandConfig.dressLarge -> parseDressLarge(doc, commandList)
+            in CommandConfig.picLarge -> parsePicLarge(doc, commandList)
             in CommandConfig.voice_map -> AudioData().parse(doc, commandList)
             in CommandConfig.tech -> parseShipTech(doc, commandList)
             in CommandConfig.evaluate -> parseShipEvaluate(doc)
@@ -253,6 +254,22 @@ object ParserUtils {
             }
         }
         return data
+    }
+
+    // 舰船原图
+    private fun parsePicLarge(doc: Document, commandList: List<String>): Data {
+
+        val data = ImagesData()
+
+        val name = commandList[1].uppercase().split(".")[0]
+
+        if (File("${CommonConfig.ship_path}/${name}.png").exists()) {
+            data.images.add("${CommonConfig.ship_path}/${name}.png")
+            return data
+        }
+        else {
+            return TextData("未找到该舰娘的原图喵\n该舰娘不存在或者数据文件未更新喵")
+        }
     }
 
     // 根据keyword模糊查询
