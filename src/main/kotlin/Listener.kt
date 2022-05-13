@@ -37,7 +37,7 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
                         .split(Regex("[ ]+"))
                         .dropLastWhile { it.isEmpty() }
                         .toTypedArray()
-                    if (commandList[0] in CommandConfig.wiki) {
+                    if (commandList.isNotEmpty() && commandList[0] in CommandConfig.wiki) {
                         when (commandList.size) {
                             1 -> group.sendMessage(MESSAGE_HELP)
                             2 -> wiki(commandList, sender)
