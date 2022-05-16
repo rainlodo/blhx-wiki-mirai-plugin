@@ -21,6 +21,9 @@ object Checker {
         if (commandList[1] in CommandConfig.table) {
             return TextData(CommandConfig.tableList)
         }
+        else if (commandList[1] in listOf("help", "Help", "HELP", "帮助", "指令")) {
+            return ImagesData(arrayListOf("${CommonConfig.emoji_path}/help.png"))
+        }
         else if (commandList[1] in listOf("锉刀", "锉宝", "挫刀", "小锉锉")) {
             // 锉宝可是要生气了
             return ImagesData(arrayListOf("${CommonConfig.emoji_path}/cuodao_${(1..4).random()}.jpg")).activateAt()

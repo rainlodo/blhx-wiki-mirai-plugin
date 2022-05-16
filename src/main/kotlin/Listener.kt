@@ -13,6 +13,7 @@ import net.mamoe.mirai.utils.MiraiExperimentalApi
 import org.iris.wiki.config.*
 import org.iris.wiki.config.AliasConfig.ALIAS_MAP
 import org.iris.wiki.config.AliasConfig.ALIAS_USER_MAP
+import org.iris.wiki.data.ImagesData
 import org.iris.wiki.utils.HttpUtils
 import org.iris.wiki.utils.MessageBuildUtils
 import org.iris.wiki.utils.ParserUtils
@@ -39,7 +40,7 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
                         .toTypedArray()
                     if (commandList.isNotEmpty() && commandList[0] in CommandConfig.wiki) {
                         when (commandList.size) {
-                            1 -> group.sendMessage(MESSAGE_HELP)
+                            1 -> group.sendMessage(ImagesData(arrayListOf("${CommonConfig.emoji_path}/help.png")).toMessage(sender))
                             2 -> wiki(commandList, sender)
                             3 -> wiki(commandList, sender)
                             else -> group.sendMessage(MESSAGE_ERROR)

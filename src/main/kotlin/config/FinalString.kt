@@ -18,14 +18,15 @@ val MESSAGE_HELP = "指令格式如下：\n" +
     "bug请在https://gitee.com/arisaka-iris/blhx-wiki-mirai-plugin/issues反馈"
 
 val MESSAGE_ERROR = "输入指令有误~\n" +
-    MESSAGE_HELP
+    "请输入 wiki 查看指令列表\n\n" +
+    "bug请在https://gitee.com/arisaka-iris/blhx-wiki-mirai-plugin/issues反馈"
 
 val MESSAGE_SEARCH = "没有对应的词条但是找到了以下相关内容，可以尝试搜索下面的词条~\n" +
     "(〃'▽'〃)\n"
 
 val MESSAGE_NO_RESULT = "没有查询到结果呢~\n" +
     "(〃'▽'〃)\n" +
-    MESSAGE_HELP
+    "输入 wiki 可以查看指令列表喵"
 
 val MESSAGE_PARSE_ERROR = "页面解析有误，暂不支持此种类页面解析~\n" +
     "(｡•́︿•̀｡)\n" +
