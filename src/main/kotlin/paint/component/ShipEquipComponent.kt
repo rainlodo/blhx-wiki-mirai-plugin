@@ -94,6 +94,7 @@ class ShipEquipComponent(
                     g2.color = Color.RED
                     g2.stroke = BasicStroke(4f)
                     g2.drawLine(lastIconStart+43, boxY+18, boxX-3, boxY+18)
+                    g2.stroke = BasicStroke(1f)
                 }
             }
             boxY += 42
