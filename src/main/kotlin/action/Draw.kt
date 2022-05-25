@@ -102,7 +102,10 @@ class Draw {
                     feiqiu = false
                 }
                 in 190..489 -> rareList.add(DrawUtils.Rarity.N)
-                in (1000 - pool.ur.sumOf { it.probability })..1000 -> rareList.add(DrawUtils.Rarity.UR)
+                in (1000 - pool.ur.sumOf { it.probability })..1000 -> {
+                    rareList.add(DrawUtils.Rarity.UR)
+                    feiqiu = false
+                }
                 else -> rareList.add(DrawUtils.Rarity.R)
             }
             nameList.add(map[k]!!)
