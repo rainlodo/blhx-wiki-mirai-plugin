@@ -1,6 +1,5 @@
 package org.iris.wiki.paint.component
 
-import org.iris.wiki.Checker.draw
 import org.iris.wiki.data.ShipEquipData
 import org.iris.wiki.utils.ImageUtil
 import java.awt.BasicStroke
