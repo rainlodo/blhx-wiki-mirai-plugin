@@ -476,6 +476,7 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "香槟炮" to "试作型三联装406mm/50主炮T0",
         "奥丁炮" to "试作型三联装305mmSKC39主炮T0",
         "马可波罗炮" to "试作型三联装406mm主炮Model1940",
+        "马可炮" to "试作型三联装406mm主炮Model1940",
         "mk7" to "三联装406mm主炮Mk7T0"
     ))
 
@@ -618,7 +619,8 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "金火控" to "高性能火控雷达T0",
         "火控" to "高性能火控雷达T0",
         "舵机" to "高性能舵机T0",
-        "深投" to "改良深弹投射器T3"
+        "深投" to "改良深弹投射器T3",
+        "彩火控" to "海军部火控台T0"
     ))
 
     val ALIAS_MAP : HashMap<String, String> = hashMapOf()
