@@ -11,6 +11,7 @@ object CommonConfig {
     val output_path = "$root/out"
     val equip_output_path = "$root/out/equip"
     val ship_output_path = "$root/out/ship"
+    val reply_image_path = "$root/out/reply" // 自动回复中图片的存储路径
     val emoji_path = "$root/image/emoji"
     val json_string = "$root/config"
     val head_path = "$root/image/icon/head"

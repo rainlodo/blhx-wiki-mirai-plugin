@@ -6,8 +6,10 @@ import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.console.plugin.version
 import org.iris.wiki.action.QuestionListener
+import org.iris.wiki.command.ReplyCommand
 import org.iris.wiki.command.WikiConfigCommand
 import org.iris.wiki.config.AliasConfig
+import org.iris.wiki.config.AutoReplyConfig
 import org.iris.wiki.config.CommandConfig
 import org.iris.wiki.config.WikiConfig
 
@@ -30,7 +32,7 @@ object Wiki : KotlinPlugin(
     JvmPluginDescription(
         id = "org.iris.wiki",
         name = "blhx-wiki",
-        version = "0.3.11"
+        version = "0.3.12"
     ) {
         author("iris")
         // author 和 info 可以删除.
@@ -43,16 +45,19 @@ object Wiki : KotlinPlugin(
         AliasConfig.reload()
         CommandConfig.reload()
         WikiConfig.reload()
+        AutoReplyConfig.reload()
 
         Listener.subscribe()
         QuestionListener.subscribe()
 
         WikiConfigCommand.register()
+        ReplyCommand.register()
     }
 
     override fun onDisable() {
 
         WikiConfigCommand.unregister()
+        ReplyCommand.unregister()
 
         Listener.stop()
         QuestionListener.stop()

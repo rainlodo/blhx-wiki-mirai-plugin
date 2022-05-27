@@ -6,6 +6,7 @@ import org.iris.wiki.data.*
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import java.io.File
+import java.net.URLEncoder
 
 
 object ParserUtils {

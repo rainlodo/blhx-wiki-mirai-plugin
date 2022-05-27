@@ -17,7 +17,6 @@ object CommandConfig : AutoSavePluginConfig("CommandConfig") {
     @ValueDescription("wiki指令名")
     val wiki : Array<String> by value(arrayOf("wiki", ".wiki", "/wiki", "yls"))
 
-    val test = listOf("test")
 
     // 基本属性页面
     @ValueDescription("舰娘、装备基本属性")

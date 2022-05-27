@@ -5,7 +5,9 @@ import org.iris.wiki.config.CommonConfig
 import org.iris.wiki.data.Data
 import org.iris.wiki.action.Draw
 import org.iris.wiki.action.Question
+import org.iris.wiki.config.AutoReplyConfig
 import org.iris.wiki.config.CommandConfig
+import org.iris.wiki.data.AutoReplyData
 import org.iris.wiki.data.ImagesData
 import org.iris.wiki.data.TextData
 import org.iris.wiki.utils.DrawUtils
@@ -37,6 +39,9 @@ object Checker {
         }
         else if (commandList.size > 2 && commandList[2] in listOf("语音", "[语音]")) {
             return TextData(CommandConfig.voiceList)
+        }
+        else if (commandList[1] in AutoReplyConfig.REPLY_COMMAND_MAP) {
+            return AutoReplyData(AutoReplyConfig.REPLY_COMMAND_MAP[commandList[1]]!!)
         }
         else {
             return null
