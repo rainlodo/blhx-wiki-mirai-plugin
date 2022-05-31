@@ -176,7 +176,7 @@ object ParserUtils {
                     else -> time = commandList[2].replace("：", ":")
                 }
 
-                val trList = doc.select("table[class='wikitable sortable']")[0].child(0).children()
+                val trList = doc.select("table[class='wikitable sortable buildingtable']")[0].child(0).children()
                 trList.removeAt(0)
 
                 val timeList = arrayListOf<String>()
