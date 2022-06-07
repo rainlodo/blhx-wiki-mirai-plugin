@@ -168,12 +168,13 @@ object ParserUtils {
                     TextData("现在还没有活动池喵")
                 }
             }
-            commandList[2].matches(Regex("(\\d[:：])?(\\d)?\\d[:：]\\d\\d")) -> {
-                var time = "0:00:00"
-                when {
-                    commandList[2].matches(Regex("\\d[:：]\\d\\d")) -> time = "0:0" + commandList[2].replace("：", ":")
-                    commandList[2].matches(Regex("\\d\\d[:：]\\d\\d")) -> time = "0:" + commandList[2].replace("：", ":")
-                    else -> time = commandList[2].replace("：", ":")
+            commandList[2].matches(Regex("((0)?\\d[:：])?(\\d)?\\d[:：]\\d\\d")) -> {
+                var time = commandList[2].replace("：", ":")
+                time = when {
+                    time.matches(Regex("\\d[:：]\\d\\d")) -> "0:0$time"
+                    time.matches(Regex("\\d\\d[:：]\\d\\d")) -> "0:$time"
+                    time.matches(Regex("0\\d[:：]\\d\\d[:：]\\d\\d")) -> time.removeRange(0, 1)
+                    else -> time
                 }
 
                 val trList = doc.select("table[class='wikitable sortable buildingtable']")[0].child(0).children()
