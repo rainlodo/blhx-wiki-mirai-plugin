@@ -21,6 +21,7 @@ class ShipEquipData(
         arrayListOf(),
         arrayListOf(),
         arrayListOf(),
+        arrayListOf(),
         arrayListOf()
     ),
     val specialEquipList: ArrayList<SpecialEquipData> = arrayListOf()
@@ -35,27 +36,30 @@ class ShipEquipData(
     ) {
 
         fun pharse(doc: Element) : EquipLabelData {
-            doc.children().forEach {
-                if (it.text() != "") {
-                    text = it.text()
-                    var style = it.attr("style")
-                    if (style.contains("color:red")) {
-                        fontColor = Color.RED
-                    }
-                    val index = style.indexOf("#")
-                    if (index > 0 && index + 7 <= style.length) {
-                        style = style.substring(index, index + 7)
-                        bgColor = PaintUtils.hex2Color(style)
-                    }
-                }
-                else {
-                    val images = it.select("img")
-                    images.forEach{
-                        pics.add(it.attr("src").replace("30px", "60px"))
-                    }
-                }
+            val td = doc.children()[0]
+
+            // 获取字体颜色及背景颜色
+            var style = td.attr("style")
+            if (style.contains("color:red")) {
+                fontColor = Color.RED
+            }
+            val index = style.indexOf("#")
+            if (index > 0 && index + 7 <= style.length) {
+                style = style.substring(index, index + 7)
+                bgColor = PaintUtils.hex2Color(style)
             }
 
+            text = td.text()
+            if (td.text().isEmpty()) {
+                // 是空项
+                text = "   "
+            }
+            else {
+                val images = td.select("img")
+                images.forEach{ img ->
+                    pics.add(img.attr("src").replace("30px", "60px"))
+                }
+            }
             return this
         }
 
@@ -91,7 +95,7 @@ class ShipEquipData(
 
     override fun parse(doc: Document, commandList: List<String>): Data {
 
-        val tables = doc.select("div[class='row zb-table']")[0].children()
+        val tables = doc.select("div[class='row']")[0].children()
         for (i in tables.indices) {
             val trs = tables[i].select("tbody")[0].children()
             for (j in trs.indices) {
@@ -99,7 +103,7 @@ class ShipEquipData(
             }
         }
 
-        val tabpanel = doc.select("div[class='row zb-table']")[0].parent()
+            val tabpanel = doc.select("div[class='row']")[0].parent()
         tabpanel.children().forEach{
             if (it.className().contains("pverecommend")) {
                 specialEquipList.add(SpecialEquipData().pharse(it))

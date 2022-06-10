@@ -10,12 +10,12 @@ class ShipEquipComponent(
     val data : ShipEquipData
 ) : Component() {
 
-    private val labelWidth = 400
+    private val labelWidth = 350
     private val labelHeight = 50
     private val margin = 10
 
     override fun init(): Component {
-        width = 5 * labelWidth + 6 * margin
+        width = 6 * labelWidth + 7 * margin
         height = 1000
 
         return super.init()
