@@ -70,12 +70,12 @@ class SpecialEquipComponent(
         g2.drawImage(pic, 512, y - 201, 32, 45, null)
 
 
-        if (data.owner != null) {
+        if (data.owner?.isNotEmpty() == true) {
             tagComponent = TextComponent("专属兵装", 20F)
             typeComponent = TextComponent(data.owner!!, 20F)
 
             // type
-            g2.color = Color.RED
+            g2.color = Color(100, 100, 100, 200)
             g2.fillRect(20, y - 80, 100, 30)
             typeComponent.setPaddingVertical(3)
             typeComponent.init()
@@ -83,7 +83,7 @@ class SpecialEquipComponent(
 
 
             // tag
-            g2.color = Color(100, 100, 100, 200)
+            g2.color = Color.RED
             g2.fillRect(20, y - 40, 100, 30)
             tagComponent.init()
             g2.drawImage(tagComponent.draw(), 20 + (100 - tagComponent.getComponentWidth()) / 2, y - 38, null)

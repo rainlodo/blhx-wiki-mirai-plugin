@@ -122,10 +122,10 @@ object ParserUtils {
     // 特殊兵装页面解析
     private fun parseSpecialEquip(doc: Document, commandList: List<String>) : Data? {
         if (commandList.size == 2) {
-            return EquipAttrData().parse(doc, commandList)
+            return SpecialEquipData().parse(doc, commandList)
         }
         return when (commandList[2]) {
-            in CommandConfig.attribute -> EquipAttrData().parse(doc, commandList)
+            in CommandConfig.attribute -> SpecialEquipData().parse(doc, commandList)
             else -> TextData(MESSAGE_ERROR)
         }
     }
