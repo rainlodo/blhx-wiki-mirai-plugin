@@ -32,7 +32,7 @@ object Wiki : KotlinPlugin(
     JvmPluginDescription(
         id = "org.iris.wiki",
         name = "blhx-wiki",
-        version = "0.3.12"
+        version = "0.3.13"
     ) {
         author("iris")
         // author 和 info 可以删除.

@@ -7,6 +7,7 @@ import org.iris.wiki.action.Draw
 import org.iris.wiki.action.Question
 import org.iris.wiki.config.AutoReplyConfig
 import org.iris.wiki.config.CommandConfig
+import org.iris.wiki.config.WikiConfig
 import org.iris.wiki.data.AutoReplyData
 import org.iris.wiki.data.ImagesData
 import org.iris.wiki.data.TextData
@@ -31,6 +32,9 @@ object Checker {
             return ImagesData(arrayListOf("${CommonConfig.emoji_path}/cuodao_${(1..4).random()}.jpg")).activateAt()
         }
         else if (commandList[1].contains("大建") || commandList.size > 2 && commandList[2].contains("大建")) {
+            if (WikiConfig.draw_ship_ban_list.contains(sender.group.id.toString())) {
+                return TextData("本群未开启大建喵")
+            }
             var command = commandList[1]
             if (commandList.size > 2) {
                 command += commandList[2]

@@ -3,6 +3,8 @@ package org.iris.wiki.command
 
 import net.mamoe.mirai.console.command.CommandSender
 import net.mamoe.mirai.console.command.CompositeCommand
+import net.mamoe.mirai.console.command.UserCommandSender
+import net.mamoe.mirai.contact.Group
 import org.iris.wiki.Wiki
 import org.iris.wiki.config.CommonConfig
 import org.iris.wiki.config.WikiConfig
@@ -52,4 +54,32 @@ object WikiConfigCommand : CompositeCommand(
 //        WikiConfig.ship_equip_efficiency_on = enabled
 //        sendMessage("设置成功喵")
 //    }
+
+    @SubCommand("大建")
+    @Description("开启/关闭本群的大建功能")
+    suspend fun UserCommandSender.draw_ship_enable(enabled: Boolean) {
+        if (subject is Group) {
+            if (enabled) {
+                WikiConfig.draw_ship_ban_list.remove(subject.id.toString())
+                sendMessage("设置成功喵")
+            } else {
+                WikiConfig.draw_ship_ban_list.add(subject.id.toString())
+                sendMessage("设置成功喵")
+            }
+        }
+    }
+
+    @SubCommand("猜老婆")
+    @Description("开启/关闭本群的猜老婆功能")
+    suspend fun UserCommandSender.gusss_ship_enable(enabled: Boolean) {
+        if (subject is Group) {
+            if (enabled) {
+                WikiConfig.gauss_ship_ban_list.remove(subject.id.toString())
+                sendMessage("设置成功喵")
+            } else {
+                WikiConfig.gauss_ship_ban_list.add(subject.id.toString())
+                sendMessage("设置成功喵")
+            }
+        }
+    }
 }

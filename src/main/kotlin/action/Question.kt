@@ -18,6 +18,7 @@ import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
 import net.mamoe.mirai.utils.MiraiExperimentalApi
 import org.iris.wiki.Wiki
 import org.iris.wiki.config.CommonConfig
+import org.iris.wiki.config.WikiConfig
 import org.iris.wiki.utils.ImageUtil
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -122,6 +123,13 @@ internal object QuestionListener : CoroutineScope by Wiki.childScope("QuestionLi
             message.forEach {
                 // 猜舰娘
                 if (it.contentToString() in listOf("猜老婆", "猜舰娘")) {
+
+                    if (WikiConfig.gauss_ship_ban_list.contains(group.id.toString())) {
+                        group.sendMessage("本群未开启猜老婆功能喵")
+                        return@subscribeAlways
+                    }
+
+
                     if (!state.keys.contains(group.id)) {
                         state[group.id] = STATE_SLEEP
                     }
