@@ -1,12 +1,10 @@
 package org.iris.wiki.utils
 
-import net.mamoe.mirai.message.data.PlainText
 import org.iris.wiki.config.*
 import org.iris.wiki.data.*
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import java.io.File
-import java.net.URLEncoder
 
 
 object ParserUtils {
@@ -30,6 +28,7 @@ object ParserUtils {
             return when (type) {
                 "舰娘图鉴" -> parseShip(doc, commandList)
                 in arrayOf("鱼雷", "防空炮", "舰炮", "设备", "舰载机", "导弹") -> parseEquip(doc, commandList)
+                in arrayOf("特殊兵装") -> parseSpecialEquip(doc, commandList)
                 else -> {
                     when{
                         doc.select("h1[id='firstHeading']").text().contains(Regex("[榜表]")) -> parseTable(doc, commandList)
@@ -115,6 +114,17 @@ object ParserUtils {
         }
         return when (commandList[2]) {
             in CommandConfig.from -> EquipData().parse(doc, commandList)
+            in CommandConfig.attribute -> EquipAttrData().parse(doc, commandList)
+            else -> TextData(MESSAGE_ERROR)
+        }
+    }
+
+    // 特殊兵装页面解析
+    private fun parseSpecialEquip(doc: Document, commandList: List<String>) : Data? {
+        if (commandList.size == 2) {
+            return EquipAttrData().parse(doc, commandList)
+        }
+        return when (commandList[2]) {
             in CommandConfig.attribute -> EquipAttrData().parse(doc, commandList)
             else -> TextData(MESSAGE_ERROR)
         }
