@@ -63,7 +63,9 @@ object WikiConfigCommand : CompositeCommand(
                 WikiConfig.draw_ship_ban_list.remove(subject.id.toString())
                 sendMessage("设置成功喵")
             } else {
-                WikiConfig.draw_ship_ban_list.add(subject.id.toString())
+                if (!WikiConfig.draw_ship_ban_list.contains(subject.id.toString())) {
+                    WikiConfig.draw_ship_ban_list.add(subject.id.toString())
+                }
                 sendMessage("设置成功喵")
             }
         }
@@ -77,7 +79,9 @@ object WikiConfigCommand : CompositeCommand(
                 WikiConfig.gauss_ship_ban_list.remove(subject.id.toString())
                 sendMessage("设置成功喵")
             } else {
-                WikiConfig.gauss_ship_ban_list.add(subject.id.toString())
+                if (!WikiConfig.gauss_ship_ban_list.contains(subject.id.toString())) {
+                    WikiConfig.gauss_ship_ban_list.add(subject.id.toString())
+                }
                 sendMessage("设置成功喵")
             }
         }
