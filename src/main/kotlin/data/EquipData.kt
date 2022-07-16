@@ -46,7 +46,7 @@ data class EquipData(
         for (i in thList.indices) {
             when (thList[i].text().replace("\n", "")) {
                 "整装获取" -> from = tdList[i].text().replace(" ", "\n  ")
-                "设计图获取" -> piece = tdList[i].text().replace(" ", "\n  ")
+                "图纸获取" -> piece = tdList[i].text().replace(" ", "\n  ")
                 "研发路线" -> {
                     val html = tdList[i].html()
                         .replace("&gt;", ">")
