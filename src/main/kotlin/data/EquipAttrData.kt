@@ -7,6 +7,7 @@ import net.mamoe.mirai.message.data.Image
 import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
+import org.iris.wiki.Wiki
 import org.iris.wiki.config.CommonConfig
 import org.iris.wiki.paint.component.EquipAttrComponent
 import org.jsoup.nodes.Document
@@ -79,8 +80,14 @@ data class EquipAttrData(
     private fun getAttrText(node: Element, tab: Int) : String {
         var text = ""
         return if (node.tagName() == "table") {
-            getTabs(tab) + node.select("tr")[0].child(0).text() +
-                ":" + node.select("tr")[0].child(1).text() + "\n"
+            try {
+                getTabs(tab) + node.select("tr")[0].child(0).text() +
+                    ":" + node.select("tr")[0].child(1).text() + "\n"
+            }
+            catch (e: Exception) {
+                getTabs(tab) + node.select("tr")[0].child(0).text() +
+                    ": \n"
+            }
         }
         else if (node.tagName() == "li") {
             getAttrText(node.child(0), tab)
