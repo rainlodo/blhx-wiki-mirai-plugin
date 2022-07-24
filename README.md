@@ -35,7 +35,7 @@
 
 ## 插件启用
 
-*详细部署教程在[这里](https://gitee.com/arisaka-iris/blhx-wiki)
+*详细部署教程在[这里](https://github.com/DK09/blhx-wiki)
 
 - [安装Mirai Console](https://github.com/mamoe/mirai/blob/dev/docs/UserManual.md)
 
