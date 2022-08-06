@@ -49,7 +49,7 @@ object ParserUtils {
 
         // 首先判断是不是占坑舰娘，see https://searchwiki.biligame.com/blhx/index.php?search=%E8%BF%99%E6%98%AF%E6%9F%90%E4%BA%BA%E6%8C%96%E7%9A%84%E4%B8%80%E4%B8%AA%E5%9D%91
         doc.select("big").select("b").forEach {
-            it.text().contains("这是某人挖的一个坑").let {
+            if (it.text().contains("这是某人挖的一个坑")) {
                 return TextData("是还没有实装的舰娘呢")
             }
         }
