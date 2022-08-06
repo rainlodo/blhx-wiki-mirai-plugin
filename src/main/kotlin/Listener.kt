@@ -53,9 +53,11 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
 
         globalEventChannel().subscribeAlways<NudgeEvent> {
 
-            // 戳了戳小加加
+            // 戳了戳事件
             if (this.target == bot && this.subject is Group) {
-                wiki(arrayOf("wiki", "小加加", "摸摸"), this.from as Member)
+                if (CommandConfig.touch_first_param != "无" && CommandConfig.touch_second_param != "无") {
+                    wiki(arrayOf("wiki", CommandConfig.touch_first_param, CommandConfig.touch_second_param), this.from as Member)
+                }
             }
         }
 

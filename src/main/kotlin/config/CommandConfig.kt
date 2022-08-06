@@ -61,6 +61,14 @@ object CommandConfig : AutoSavePluginConfig("CommandConfig") {
     @ValueDescription("常用榜单")
     val table : Array<String> by value(arrayOf("榜单", "表单", "图榜"))
 
+    // 戳一戳事件对应舰娘
+    @ValueDescription("戳一戳事件对应舰娘(wiki __1__ __2__ 指令中的__1__), 为 '无' 时不对戳一戳事件反应")
+    val touch_first_param : String by value("小加加")
+
+    // 戳一戳事件对应查询
+    @ValueDescription("戳一戳事件对应查询命令(wiki __1__ __2__ 指令中的__2__)")
+    val touch_second_param : String by value("触摸")
+
     // 目前支持榜单
     @ValueDescription("支持查询的榜单")
     val tableList : String by value(
