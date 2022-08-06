@@ -69,6 +69,14 @@ object CommandConfig : AutoSavePluginConfig("CommandConfig") {
     @ValueDescription("戳一戳事件对应查询命令(wiki __1__ __2__ 指令中的__2__)")
     val touch_second_param : String by value("触摸")
 
+    // 戳一戳事件对应舰娘
+    @ValueDescription("隐藏功能，发送本地涩图（需要设置本地涩图文件夹路径）")
+    val setu : Array<String> by value(arrayOf("涩图", "涩涩", "色图", "色色"))
+
+    // 戳一戳事件对应查询
+    @ValueDescription("本地涩图文件夹路径(注意不能使用\\，请用/代替)")
+    val setu_path : String by value("无")
+
     // 目前支持榜单
     @ValueDescription("支持查询的榜单")
     val tableList : String by value(

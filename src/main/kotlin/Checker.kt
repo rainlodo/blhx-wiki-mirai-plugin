@@ -13,6 +13,8 @@ import org.iris.wiki.data.ImagesData
 import org.iris.wiki.data.TextData
 import org.iris.wiki.utils.DrawUtils
 import org.iris.wiki.utils.ParserUtils
+import org.jsoup.nodes.Document
+import java.io.File
 
 /**
  * 用于对搜索的词进行检测，过滤掉一些特殊意义的词汇
@@ -46,6 +48,9 @@ object Checker {
         }
         else if (commandList[1] in AutoReplyConfig.REPLY_COMMAND_MAP) {
             return AutoReplyData(AutoReplyConfig.REPLY_COMMAND_MAP[commandList[1]]!!)
+        }
+        else if (commandList[1] in CommandConfig.setu) {
+            return setu()
         }
         else {
             return null
@@ -85,6 +90,19 @@ object Checker {
             return TextData(text)
         }
         return Draw().draw(type)
+    }
+
+    fun setu() : Data {
+        if (!File(CommandConfig.setu_path).exists() || !File(CommandConfig.setu_path).isDirectory) {
+            return TextData("不许涩涩喵")
+        }
+
+        val files = File(CommandConfig.setu_path).listFiles()
+        return if (files.isNotEmpty()) {
+            ImagesData(arrayListOf(files.random().absolutePath))
+        } else {
+            TextData("不许涩涩喵")
+        }
     }
 
 }
