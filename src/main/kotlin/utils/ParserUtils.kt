@@ -54,6 +54,15 @@ object ParserUtils {
             }
         }
 
+        val newCommandList : ArrayList<String> = commandList as ArrayList<String>
+        // 更新command中的舰娘名称，从而让皮肤大图和皮肤原图查询正确
+        try {
+            val shipData = ShipAttrData().parse(doc, commandList)
+            newCommandList[1] = (shipData as ShipAttrData).name.split("（")[0]
+        } catch (e: java.lang.Exception) {
+
+        }
+
 
         if (commandList.size == 2) {
             return ShipAttrData().parse(doc, commandList)
@@ -63,8 +72,8 @@ object ParserUtils {
             in CommandConfig.from -> ShipData().parse(doc, commandList)
 //            BOAT_UPDATE -> parseShipUpadta(doc)
             in CommandConfig.dress -> ImagesData().parse(doc, commandList)
-            in CommandConfig.dressLarge -> parseDressLarge(doc, commandList)
-            in CommandConfig.picLarge -> parsePicLarge(doc, commandList)
+            in CommandConfig.dressLarge -> parseDressLarge(doc, newCommandList)
+            in CommandConfig.picLarge -> parsePicLarge(doc, newCommandList)
             in CommandConfig.voice_map -> AudioData().parse(doc, commandList)
             in CommandConfig.tech -> parseShipTech(doc, commandList)
             in CommandConfig.evaluate -> parseShipEvaluate(doc)
