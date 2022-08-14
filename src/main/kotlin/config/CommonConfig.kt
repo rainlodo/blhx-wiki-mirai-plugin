@@ -19,8 +19,10 @@ object CommonConfig {
     
     val ship_path = "$root/image/ship"
     val ship_skin_path = "$root/image/skin"
-    val ship_label_path = when(System.getProperties().getProperty("os.name")) {
-        "Windows" -> "data/${root.split('\\').last()}/config/label"
-        else -> "$root/config/label"
+    val ship_label_path = if(System.getProperties().getProperty("os.name").lowercase().contains("win")) {
+        "data/${root.split('\\').last()}/config/label"
+    }
+    else {
+        "$root/config/label"
     }
 }
