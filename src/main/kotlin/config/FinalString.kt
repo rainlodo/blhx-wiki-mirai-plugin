@@ -441,7 +441,8 @@ val EQUIP_LIST = listOf(
 
 
     "PVE用舰船综合性能强度榜",
-    "装备一图榜"
+    "装备一图榜",
+    "认知觉醒推荐榜",
 )
 
 val SHIP_LIST = listOf(

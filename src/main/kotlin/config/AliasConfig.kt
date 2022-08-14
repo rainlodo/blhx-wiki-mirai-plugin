@@ -302,6 +302,7 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "研发榜" to "装备研发推荐榜",
         "改造榜" to "改造舰船推荐榜",
         "萌新榜" to "萌新入坑推荐榜",
+        "跨队榜" to "跨队舰船推荐榜"
     ))
 
     @ValueDescription("和谐名")

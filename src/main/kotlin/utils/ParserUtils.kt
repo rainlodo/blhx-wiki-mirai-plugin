@@ -170,9 +170,16 @@ object ParserUtils {
             else -> {
                 val imagesData = ImagesData()
                 try {
-                    doc.select("span[id='${commandList[1]}']")[0].parent().nextElementSibling().select("img").forEach {
+
+                    doc.select("div[class='center']").select("img").forEach {
                         val url = it.attr("src").split(Regex("/[\\d]*px"))[0].replace("/thumb", "")
                         imagesData.images.add(url)
+                    }
+                    if (imagesData.images.isEmpty()) {
+                        doc.select("span[id='${commandList[1]}']")[0].parent().nextElementSibling().select("img").forEach {
+                            val url = it.attr("src").split(Regex("/[\\d]*px"))[0].replace("/thumb", "")
+                            imagesData.images.add(url)
+                        }
                     }
                     if (imagesData.images.isEmpty()) {
                         return null
