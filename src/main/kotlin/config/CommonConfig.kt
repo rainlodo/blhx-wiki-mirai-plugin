@@ -4,13 +4,14 @@ import org.iris.wiki.Wiki.dataFolder
 
 object CommonConfig {
 
-    private val root = dataFolder.absolutePath
+    val root = dataFolder.absolutePath
     
     val ttf = "$root/思源黑体.ttf"
 
     val output_path = "$root/out"
     val equip_output_path = "$root/out/equip"
     val ship_output_path = "$root/out/ship"
+    val stage_output_path = "$root/out/stage"
     val reply_image_path = "$root/out/reply" // 自动回复中图片的存储路径
     val emoji_path = "$root/image/emoji"
     val json_string = "$root/config"

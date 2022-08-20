@@ -291,7 +291,8 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
 
         "一图榜" to "PVE用舰船综合性能强度榜",
         "舰娘一图榜" to "PVE用舰船综合性能强度榜",
-        "强度榜" to "PVE用舰船综合性能强度榜",
+        "舰娘榜" to "PVE用舰船综合性能强度榜",
+        "强度榜" to "认知觉醒推荐榜",
         "PVE一图榜" to "PVE用舰船综合性能强度榜",
         "认知觉醒榜" to "认知觉醒推荐榜",
         "觉醒榜" to "认知觉醒推荐榜",

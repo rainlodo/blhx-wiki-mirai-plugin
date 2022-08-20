@@ -4,6 +4,7 @@ import org.iris.wiki.config.*
 import org.iris.wiki.data.*
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
 import java.io.File
 
 
@@ -33,6 +34,7 @@ object ParserUtils {
                     when{
                         doc.select("h1[id='firstHeading']").text().contains(Regex("[榜表]")) -> parseTable(doc, commandList)
                         doc.select("h1[id='firstHeading']").text().equals("建造时间") -> parseBuildTime(doc, commandList)
+                        doc.select("div[id='mw-normal-catlinks']").text().contains("关卡图鉴") -> parseLevel(doc, commandList)
                         else -> null
                     }
                 }
@@ -159,7 +161,9 @@ object ParserUtils {
     // PVE舰娘一图榜解析
     private fun parseShipTop(doc: Document, commandList: List<String>): ImagesData {
         val url = doc.select("div[id='mc_collapse-1']").select("img")[0].attr("src")
-        return ImagesData(arrayListOf(url))
+        val data = ImagesData(arrayListOf(url))
+        data.extra_msg.add("该榜已过时，可以查询 觉醒榜 代替喵")
+        return data
     }
 
     // 榜单解析
@@ -191,6 +195,10 @@ object ParserUtils {
                 return imagesData
             }
         }
+    }
+
+    private fun parseLevel(doc: Document, commandList: List<String>): Data? {
+        return StageData().parse(doc, commandList)
     }
 
     // 建造时间表解析
@@ -382,5 +390,9 @@ object ParserUtils {
         else if (ch in '\u0030'..'\u0039') 2//数字字符
         else if ((ch in '\u0041'..'\u005A') or (ch in '\u0061'..'\u007A')) 3//英文字符
         else 0
+    }
+
+    fun Element.isDisplayNone() : Boolean {
+        return this.attr("style").contains("display:none")
     }
 }

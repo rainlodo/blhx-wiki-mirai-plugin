@@ -38,14 +38,22 @@ object PaintUtils {
 
 
     fun hex2Color(hex: String): Color {
-        return if (hex.startsWith("#")) {
-            Color(
-                Integer.valueOf(hex.substring(1, 3), 16),
-                Integer.valueOf(hex.substring(3, 5), 16),
-                Integer.valueOf(hex.substring(5), 16)
-            )
+        if (hex.startsWith("#")) {
+            if (hex.length == 4) {
+                return Color(
+                    Integer.valueOf(hex.substring(1, 2), 16) * 17,
+                    Integer.valueOf(hex.substring(2, 3), 16) * 17,
+                    Integer.valueOf(hex.substring(3), 16) * 17
+                )
+            } else {
+                return Color(
+                    Integer.valueOf(hex.substring(1, 3), 16),
+                    Integer.valueOf(hex.substring(3, 5), 16),
+                    Integer.valueOf(hex.substring(5), 16)
+                )
+            }
         } else {
-            Color.BLACK
+            return Color.BLACK
         }
     }
 
