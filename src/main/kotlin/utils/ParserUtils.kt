@@ -58,7 +58,7 @@ object ParserUtils {
         // 更新command中的舰娘名称，从而让皮肤大图和皮肤原图查询正确
         try {
             val shipData = ShipAttrData().parse(doc, commandList)
-            newCommandList[1] = (shipData as ShipAttrData).name.split("（")[0]
+            newCommandList[1] = (shipData as ShipAttrData).name.split(Regex("[（.]"))[0]
         } catch (e: java.lang.Exception) {
 
         }
