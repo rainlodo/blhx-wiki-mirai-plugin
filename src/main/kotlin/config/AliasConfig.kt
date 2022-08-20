@@ -160,6 +160,7 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "albm" to "阿拉巴马",
         "黑龙" to "新泽西",
         "格鲁吉亚" to "佐治亚",
+        "几把兔" to "新泽西",
 
         "saber" to "声望",
         "老纳" to "纳尔逊",
