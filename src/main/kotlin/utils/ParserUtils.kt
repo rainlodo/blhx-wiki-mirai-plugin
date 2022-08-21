@@ -6,6 +6,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import java.io.File
+import java.net.URLEncoder
 
 
 object ParserUtils {
@@ -41,7 +42,9 @@ object ParserUtils {
             }
         }
         catch (e: Exception) {
-            return TextData("解析发生错误\n$e")
+            return TextData("解析发生错误\n$e\n可以点击查看原网页\n" +
+                (SEARCH_URL + URLEncoder.encode(commandList[1]))
+            )
         }
 
     }
