@@ -297,6 +297,7 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "认知觉醒榜" to "认知觉醒推荐榜",
         "觉醒榜" to "认知觉醒推荐榜",
         "打捞表" to "井号打捞表",
+        "打捞榜" to "井号打捞表",
         "兑换榜" to "兑换装备推荐榜",
         "商店榜" to "兑换装备推荐榜",
         "商店兑换榜" to "兑换装备推荐榜",

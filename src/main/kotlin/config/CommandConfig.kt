@@ -61,6 +61,9 @@ object CommandConfig : AutoSavePluginConfig("CommandConfig") {
     @ValueDescription("常用榜单")
     val table : Array<String> by value(arrayOf("榜单", "表单", "图榜"))
 
+    @ValueDescription("婚皮原图")
+    val wedding : Array<String> by value(arrayOf("婚皮原图", "婚皮大图", "婚纱原图", "婚纱大图"))
+
     // 戳一戳事件对应舰娘
     @ValueDescription("戳一戳事件对应舰娘(wiki __1__ __2__ 指令中的__1__), 为 '无' 时不对戳一戳事件反应")
     val touch_first_param : String by value("小加加")

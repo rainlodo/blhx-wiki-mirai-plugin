@@ -78,6 +78,7 @@ object ParserUtils {
 //            BOAT_UPDATE -> parseShipUpadta(doc)
             in CommandConfig.dress -> ImagesData().parse(doc, commandList)
             in CommandConfig.dressLarge -> parseDressLarge(doc, newCommandList)
+            in CommandConfig.wedding -> parseWeddingLarge(doc, newCommandList)
             in CommandConfig.picLarge -> parsePicLarge(doc, newCommandList)
             in CommandConfig.voice_map -> AudioData().parse(doc, commandList)
             in CommandConfig.tech -> parseShipTech(doc, commandList)
@@ -179,12 +180,12 @@ object ParserUtils {
                 try {
 
                     doc.select("div[class='center']").select("img").forEach {
-                        val url = it.attr("src").split(Regex("/[\\d]*px"))[0].replace("/thumb", "")
+                        val url = it.attr("src").split(Regex("/[\\d]*px-"))[0].replace("/thumb", "")
                         imagesData.images.add(url)
                     }
                     if (imagesData.images.isEmpty()) {
                         doc.select("span[id='${commandList[1]}']")[0].parent().nextElementSibling().select("img").forEach {
-                            val url = it.attr("src").split(Regex("/[\\d]*px"))[0].replace("/thumb", "")
+                            val url = it.attr("src").split(Regex("/[\\d]*px-"))[0].replace("/thumb", "")
                             imagesData.images.add(url)
                         }
                     }
@@ -318,6 +319,17 @@ object ParserUtils {
         else {
             return TextData("未找到该舰娘的原图喵\n该舰娘不存在或者数据文件未更新喵")
         }
+    }
+
+    private fun parseWeddingLarge(doc: Document, commandList: List<String>): Data {
+        if (!File(CommonConfig.ship_skin_path).exists()) {
+            return TextData("还没有下载皮肤文件喵")
+        }
+        val path = "${CommonConfig.ship_skin_path}/${commandList[1]}_W.png"
+        if (!File(path).exists()) {
+            return TextData("该舰娘没有婚纱或者没有下载最新完整皮肤包喵")
+        }
+        return ImagesData(arrayListOf(path))
     }
 
     // 根据keyword模糊查询
