@@ -43,10 +43,10 @@ class ShipEquipData(
             if (style.contains("color:red")) {
                 fontColor = Color.RED
             }
-            val index = style.indexOf("#")
-            if (index > 0 && index + 7 <= style.length) {
-                style = style.substring(index, index + 7)
-                bgColor = PaintUtils.hex2Color(style)
+
+            val regex = Regex("background:(#[^;]+);(.*)")
+            regex.matchEntire(style)?.let {
+                bgColor = PaintUtils.hex2Color(it.groupValues[1])
             }
 
             text = td.text()
