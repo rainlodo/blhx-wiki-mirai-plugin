@@ -2,19 +2,18 @@ package org.iris.wiki
 
 import net.mamoe.mirai.contact.Member
 import org.iris.wiki.config.CommonConfig
-import org.iris.wiki.data.Data
 import org.iris.wiki.action.Draw
 import org.iris.wiki.action.Question
 import org.iris.wiki.config.AutoReplyConfig
 import org.iris.wiki.config.CommandConfig
 import org.iris.wiki.config.WikiConfig
-import org.iris.wiki.data.AutoReplyData
-import org.iris.wiki.data.ImagesData
-import org.iris.wiki.data.TextData
+import org.iris.wiki.data.*
 import org.iris.wiki.utils.DrawUtils
 import org.iris.wiki.utils.ParserUtils
 import org.jsoup.nodes.Document
+import java.awt.image.BufferedImage
 import java.io.File
+import javax.imageio.ImageIO
 
 /**
  * 用于对搜索的词进行检测，过滤掉一些特殊意义的词汇
@@ -99,7 +98,15 @@ object Checker {
 
         val files = File(CommandConfig.setu_path).listFiles()
         return if (files.isNotEmpty()) {
-            ImagesData(arrayListOf(files.random().absolutePath))
+            // 随机加几个噪点，规避tx的md5检测
+            val image: BufferedImage = ImageIO.read(files.random())
+            image.setRGB(0,0,0)
+            (0..5).forEach { _ ->
+                val x = (0 until image.width).random()
+                val y = (0 until image.height).random()
+                image.setRGB(x, y, 0xffffff)
+            }
+            BufferImagesData(arrayListOf(image))
         } else {
             TextData("不许涩涩喵")
         }
