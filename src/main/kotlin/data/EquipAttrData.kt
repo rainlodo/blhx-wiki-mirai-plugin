@@ -66,7 +66,7 @@ data class EquipAttrData(
         }
         attr += "适用舰种"
 
-        liList.last().select("td").forEach {
+        liList.last().select("td").first().children().forEach {
             if (it.className() != "appShipType notAppShipType" &&
                 it.className() != "appShipType notAppShipType forbiddenShipType") {
                 use += it.text()
