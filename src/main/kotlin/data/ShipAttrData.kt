@@ -165,6 +165,12 @@ data class ShipAttrData(
         }
         code = nameList[index].text()
 
+        // 小柴郡wiki上面没有称号，需要特殊判断
+        if (name.equals("HMS Little Cheshire")) {
+            name = "小柴郡"
+            code = "HMS Little Cheshire"
+        }
+
         val picList = doc
             .select("div[class='Contentbox2']")[0]
             .select("div")
