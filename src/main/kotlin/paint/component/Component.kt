@@ -1,5 +1,6 @@
 package org.iris.wiki.paint.component
 
+import org.iris.wiki.utils.ImageUtil
 import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.RenderingHints
@@ -48,12 +49,7 @@ open class Component(
 
         g2.dispose()
 
-        // 添加随机噪点，避免tx的md5检测  （wiki 夕张）
-        (0..5).forEach { _ ->
-            val x = (0 until bi.width).random()
-            val y = (0 until bi.height).random()
-            bi.setRGB(x, y, 0xffffff)
-        }
+        ImageUtil.randomNoise(bi)
         return bi
     }
 

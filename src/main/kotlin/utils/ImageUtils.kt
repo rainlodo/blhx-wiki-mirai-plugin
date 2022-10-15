@@ -5,6 +5,7 @@ import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 import okhttp3.Headers
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import org.iris.wiki.config.WikiConfig
 
 import java.awt.Dimension
 import java.awt.Graphics2D
@@ -38,10 +39,21 @@ class ImageUtil {
         fun getImageAsExResource(imageUri: String): ExternalResource {
 
             return if (imageUri.startsWith("http")) {
-                imageToBytes(ImageIO.read(URL(imageUri)), "png").toByteArray().toExternalResource()
+                imageToBytes(randomNoise(ImageIO.read(URL(imageUri))), "png").toByteArray().toExternalResource()
             } else {
-                Path(imageUri).toFile().toExternalResource()
+                imageToBytes(randomNoise(ImageIO.read(File(imageUri))), "png").toByteArray().toExternalResource()
             }
+        }
+
+        fun randomNoise(image: BufferedImage) : BufferedImage {
+            if (WikiConfig.image_noise_on) {
+                (0..5).forEach { _ ->
+                    val x = (0 until image.width).random()
+                    val y = (0 until image.height).random()
+                    image.setRGB(x, y, 0xffffff)
+                }
+            }
+            return image
         }
 
         /**

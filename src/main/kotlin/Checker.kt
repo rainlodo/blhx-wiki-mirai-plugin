@@ -3,14 +3,11 @@ package org.iris.wiki
 import net.mamoe.mirai.contact.Member
 import org.iris.wiki.config.CommonConfig
 import org.iris.wiki.action.Draw
-import org.iris.wiki.action.Question
 import org.iris.wiki.config.AutoReplyConfig
 import org.iris.wiki.config.CommandConfig
 import org.iris.wiki.config.WikiConfig
 import org.iris.wiki.data.*
 import org.iris.wiki.utils.DrawUtils
-import org.iris.wiki.utils.ParserUtils
-import org.jsoup.nodes.Document
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
