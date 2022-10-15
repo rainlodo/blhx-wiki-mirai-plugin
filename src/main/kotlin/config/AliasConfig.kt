@@ -601,7 +601,8 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "82炮" to "四联装380mm主炮Mle1935T3",
         "巴尔炮" to "四联装380mm主炮Mle1935T3",
         "黎塞留炮" to "四联装380mm主炮Mle1935T3",
-        "香槟炮" to "试作型三联装406mm/50主炮T0"
+        "香槟炮" to "试作型三联装406mm/50主炮T0",
+        "武藏炮" to "460mm三连装炮T0",
     ))
 
     @ValueDescription("防空炮")
