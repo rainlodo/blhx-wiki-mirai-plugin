@@ -19,27 +19,23 @@ data class SearchData(
         super.parse(doc, commandList)
         val divList = doc.select("div[class='searchresults']")[0].select("div[class='mw-search-result-heading']")
         for (div in divList) {
-            result.add(div.child(0).attr("title"))
+            val title = div.child(0).attr("title")
+            if (title.contains(commandList[1])) {
+                result.add(title)
+            }
         }
         return super.parse(doc, commandList)
     }
 
     override suspend fun toMessage(sender: Member): Message {
         val builder = MessageChainBuilder()
-        val out : ArrayList<String> = arrayListOf()
-        for (res in result) {
-            if (res.contains(commandList[1])) {
-                out.add(res)
-            }
-        }
 
-
-        if (out.isEmpty()) {
+        if (result.isEmpty()) {
             builder.add(MESSAGE_NO_RESULT)
         }
         else {
             builder.add(MESSAGE_SEARCH)
-            for (res in out) {
+            for (res in result) {
                 builder.add("\n$res")
             }
         }

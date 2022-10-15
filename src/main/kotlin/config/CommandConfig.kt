@@ -188,4 +188,5 @@ object CommandConfig : AutoSavePluginConfig("CommandConfig") {
         "大破语音" to "hp_warning",
     )
 
+    val ALL_COMMAND = hashSetOf<String>()
 }

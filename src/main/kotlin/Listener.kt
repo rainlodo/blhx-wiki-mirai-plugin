@@ -2,6 +2,7 @@ package org.iris.wiki
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancelChildren
+import net.mamoe.mirai.console.command.ConsoleCommandSender.bot
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import net.mamoe.mirai.console.util.CoroutineScopeUtils.childScope
 import net.mamoe.mirai.contact.Group
@@ -13,7 +14,10 @@ import net.mamoe.mirai.utils.MiraiExperimentalApi
 import org.iris.wiki.config.*
 import org.iris.wiki.config.AliasConfig.ALIAS_MAP
 import org.iris.wiki.config.AliasConfig.ALIAS_USER_MAP
+import org.iris.wiki.config.CommandConfig.ALL_COMMAND
+import org.iris.wiki.config.CommandConfig.voice_map
 import org.iris.wiki.data.ImagesData
+import org.iris.wiki.data.SearchData
 import org.iris.wiki.utils.HttpUtils
 import org.iris.wiki.utils.MessageBuildUtils
 import org.iris.wiki.utils.ParserUtils
@@ -25,6 +29,21 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
     // 添加用户专有词典
     init {
         ALIAS_MAP.putAll(ALIAS_USER_MAP)
+        val COMMANDS_LIST = setOf(
+                CommandConfig.attribute,
+                CommandConfig.dress,
+                CommandConfig.dressLarge,
+                CommandConfig.picLarge,
+                CommandConfig.from,
+                CommandConfig.tech,
+                CommandConfig.evaluate,
+                CommandConfig.equip,
+                CommandConfig.wedding
+        )
+        for (list in COMMANDS_LIST) {
+            ALL_COMMAND.addAll(list)
+        }
+        ALL_COMMAND.addAll(voice_map.keys)
     }
 
     @OptIn(MiraiExperimentalApi::class)
@@ -33,7 +52,7 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
 
             message.forEach {
                 if (it is PlainText) {
-                    val commandList = it.contentToString()
+                    var commandList = it.contentToString()
                         .lowercase(Locale.getDefault())
                         .split(Regex("[ ]+"))
                         .dropLastWhile { it.isEmpty() }
@@ -45,6 +64,8 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
                             3 -> wiki(commandList, sender)
                             else -> group.sendMessage(MESSAGE_ERROR)
                         }
+                    } else {
+                        phraseCommand(it.contentToString(), sender)
                     }
 
                 }
@@ -67,8 +88,37 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
         coroutineContext.cancelChildren()
     }
 
+    suspend fun phraseCommand(msg: String, sender: Member) {
+        if (WikiConfig.command_parse_on) {
+            var text = msg.lowercase(Locale.getDefault())
+                .replace(Regex("[ ]+"), "")
+            val commandList = arrayOf("", "", CommandConfig.attribute.first())
+            for (wiki in CommandConfig.wiki) {
+                if (text.startsWith(wiki)) {
+                    text = text.removeRange(0, wiki.length)
+                    commandList[0] = wiki
+                    break
+                }
+            }
+            for (command in ALL_COMMAND) {
+                if (text.endsWith(command)) {
+                    text = text.substring(0, text.length - command.length)
+                    commandList[2] = command
+                    break
+                } else if (text.startsWith(command)) {
+                    text = text.removeRange(0, command.length)
+                    commandList[2] = command
+                    break
+                }
+            }
+            commandList[1] = text
+            if (commandList[0] in CommandConfig.wiki) {
+                wiki(commandList, sender, false)
+            }
+        }
+    }
 
-    suspend fun wiki(commandList: Array<String>, sender: Member) {
+    suspend fun wiki(commandList: Array<String>, sender: Member, searchAgain: Boolean=true) {
 
 
         if (commandList[1] in ALIAS_MAP) {
@@ -80,7 +130,10 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
         if (result == null) {
             result = ParserUtils.parse(HttpUtils.get(SEARCH_URL + commandList[1]), commandList.toList())
         }
-
+        if (searchAgain && WikiConfig.command_parse_on && result is SearchData && result.result.isEmpty()) {
+            phraseCommand(commandList.joinToString(""), sender)
+            return
+        }
 
         val message = MessageBuildUtils.build(sender, result, commandList.toList())
 
