@@ -95,7 +95,7 @@ class ShipEquipData(
 
     override fun parse(doc: Document, commandList: List<String>): Data {
 
-        val tables = doc.select("div[class='row']").last().children()
+        val tables = doc.select("div[class='row']")[1].children()
         for (i in tables.indices) {
             val trs = tables[i].select("tbody")[0].children()
             for (j in trs.indices) {
@@ -103,7 +103,7 @@ class ShipEquipData(
             }
         }
 
-            val tabpanel = doc.select("div[class='row']").last().parent()
+        val tabpanel = doc.select("div[class='row']")[1].parent()
         tabpanel.children().forEach{
             if (it.className().contains("pverecommend")) {
                 specialEquipList.add(SpecialEquipData().pharse(it))
