@@ -35,8 +35,6 @@
 
 ## 插件启用
 
-不会部署可以拉作者的机器人3052613643(萝卜子3号)，不过服务器可能不稳，每天不定时同意，拉了不要举报
-
 *详细部署教程在[这里](https://github.com/DK09/blhx-wiki)
 
 - [安装Mirai Console](https://github.com/mamoe/mirai/blob/dev/docs/UserManual.md)
