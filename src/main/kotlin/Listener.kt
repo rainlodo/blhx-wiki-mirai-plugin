@@ -1,14 +1,9 @@
 package org.iris.wiki
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancelChildren
-import net.mamoe.mirai.console.command.ConsoleCommandSender.bot
-import net.mamoe.mirai.console.util.ConsoleExperimentalApi
-import net.mamoe.mirai.console.util.CoroutineScopeUtils.childScope
 import net.mamoe.mirai.contact.Group
 import net.mamoe.mirai.contact.Member
+import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.events.*
-import net.mamoe.mirai.event.globalEventChannel
 import net.mamoe.mirai.message.data.PlainText
 import net.mamoe.mirai.utils.MiraiExperimentalApi
 import org.iris.wiki.config.*
@@ -23,8 +18,7 @@ import org.iris.wiki.utils.MessageBuildUtils
 import org.iris.wiki.utils.ParserUtils
 import java.util.*
 
-@OptIn(ConsoleExperimentalApi::class)
-internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
+internal object Listener {
 
     // 添加用户专有词典
     init {
@@ -46,9 +40,10 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
         ALL_COMMAND.addAll(voice_map.keys)
     }
 
+    val channel = GlobalEventChannel.parentScope(Wiki)
     @OptIn(MiraiExperimentalApi::class)
     fun subscribe() {
-        globalEventChannel().subscribeAlways<GroupMessageEvent> {
+        channel.subscribeAlways<GroupMessageEvent> {
 
             message.forEach {
                 if (it is PlainText) {
@@ -72,7 +67,7 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
             }
         }
 
-        globalEventChannel().subscribeAlways<NudgeEvent> {
+        channel.subscribeAlways<NudgeEvent> {
 
             // 戳了戳事件
             if (this.target == bot && this.subject is Group) {
@@ -84,9 +79,6 @@ internal object Listener : CoroutineScope by Wiki.childScope("Listener") {
 
     }
 
-    fun stop() {
-        coroutineContext.cancelChildren()
-    }
 
     suspend fun phraseCommand(msg: String, sender: Member) {
         if (WikiConfig.command_parse_on) {
