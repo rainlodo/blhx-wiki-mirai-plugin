@@ -1,22 +1,17 @@
 package org.iris.wiki.action
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import net.mamoe.mirai.console.command.CommandSender.Companion.toCommandSender
-import net.mamoe.mirai.console.util.ConsoleExperimentalApi
-import net.mamoe.mirai.console.util.CoroutineScopeUtils.childScope
 import net.mamoe.mirai.contact.Group
-import net.mamoe.mirai.event.EventPriority
+import net.mamoe.mirai.event.*
 import net.mamoe.mirai.event.events.*
-import net.mamoe.mirai.event.globalEventChannel
-import net.mamoe.mirai.event.syncFromEventOrNull
 import net.mamoe.mirai.message.data.*
 import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
-import net.mamoe.mirai.utils.MiraiExperimentalApi
 import org.iris.wiki.Wiki
+import org.iris.wiki.action.QuestionListener.nextAnswerOrNull
 import org.iris.wiki.config.CommonConfig
 import org.iris.wiki.config.WikiConfig
 import org.iris.wiki.utils.ImageUtil
@@ -24,6 +19,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import javax.imageio.ImageIO
 import kotlin.collections.HashMap
+import kotlin.coroutines.intrinsics.suspendCoroutineUninterceptedOrReturn
 
 /**
  * 问题
@@ -85,14 +81,14 @@ class Question(
 /**
  * 问题监听
  */
-@OptIn(ConsoleExperimentalApi::class)
-internal object QuestionListener : CoroutineScope by Wiki.childScope("QuestionListener") {
+internal object QuestionListener {
 
     private const val STATE_SLEEP = 0
     private const val STATE_RUNNING = 1
 
     var state = hashMapOf<Long, Int>()
     val mutex = Mutex()
+    val channel = GlobalEventChannel.parentScope(Wiki)
 
     private val WRONG_MESSAGE = listOf(
         " 回答错误哦~",
@@ -110,15 +106,15 @@ internal object QuestionListener : CoroutineScope by Wiki.childScope("QuestionLi
         priority: EventPriority = EventPriority.MONITOR,
         noinline filter: suspend P.(P) -> Boolean = { true }
     ): P? {
-        require(timeoutMillis > 0) { "timeoutMillis must be > 0" }
-        return syncFromEventOrNull<P, P>(timeoutMillis, priority) {
-            takeIf { subject == this@nextAnswerOrNull.subject && filter(it, it) }
+        return  withTimeoutOrNull(timeoutMillis) {
+            channel.syncFromEvent<P, P>(priority) {
+                it.takeIf { subject == this@nextAnswerOrNull.subject && filter(it, it) }
+            }
         }
     }
 
-    @OptIn(MiraiExperimentalApi::class)
     fun subscribe() {
-        globalEventChannel().subscribeAlways<GroupMessageEvent> {
+        channel.subscribeAlways<GroupMessageEvent> {
 
             message.forEach {
                 // 猜舰娘
@@ -140,6 +136,7 @@ internal object QuestionListener : CoroutineScope by Wiki.childScope("QuestionLi
 
                     state[group.id] = STATE_RUNNING
                     val start = System.currentTimeMillis()
+
                     val question = Question(30_000, 6).questionShip()
                     group.sendMessage(question.toMessage(group))
                     while (state[group.id] == STATE_RUNNING) {
@@ -173,7 +170,4 @@ internal object QuestionListener : CoroutineScope by Wiki.childScope("QuestionLi
         }
     }
 
-    fun stop() {
-        coroutineContext.cancelChildren()
-    }
 }
