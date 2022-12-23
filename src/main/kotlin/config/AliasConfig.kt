@@ -224,7 +224,10 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "黑沙恩霍斯特" to "沙恩霍斯特·META",
         "黑沙恩" to "沙恩霍斯特·META",
         "沙恩霍斯特meta" to "沙恩霍斯特·META",
-        "沙恩meta" to "沙恩霍斯特·META"
+        "沙恩meta" to "沙恩霍斯特·META",
+
+        "派翠夏" to "帕特莉夏·阿贝尔海姆",
+        "帕特丽夏" to "帕特莉夏·阿贝尔海姆",
     ))
 
     @ValueDescription("航母别名")
@@ -287,6 +290,12 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "u557" to "U-557",
         "u1206" to "U-1206",
         "霞doa" to "霞DOA",
+
+        "哈曼2" to "哈曼ii",
+        "约克城2" to "约克城ii",
+        "北安普敦2" to "北安普敦ii",
+        "大黄蜂2" to "大黄蜂ii",
+        "兰利2" to "兰利ii",
 
 
         "一图榜" to "PVE用舰船综合性能强度榜",
