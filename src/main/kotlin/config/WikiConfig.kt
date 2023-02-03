@@ -21,4 +21,7 @@ object WikiConfig: AutoSavePluginConfig("WikiConfig") {
     @ValueDescription("禁止大建的群列表")
     var draw_ship_ban_list :MutableList<String> by value(mutableListOf())
 
+    @ValueDescription("允许涩涩的群列表")
+    var setu_list :MutableList<String> by value(mutableListOf())
+
 }

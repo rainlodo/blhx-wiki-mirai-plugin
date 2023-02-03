@@ -86,4 +86,20 @@ object WikiConfigCommand : CompositeCommand(
             }
         }
     }
+
+    @SubCommand("涩涩")
+    @Description("开启/关闭本群的猜老婆功能")
+    suspend fun UserCommandSender.h_enable(enabled: Boolean) {
+        if (subject is Group) {
+            if (!enabled) {
+                WikiConfig.setu_list.remove(subject.id.toString())
+                sendMessage("设置成功喵")
+            } else {
+                if (!WikiConfig.setu_list.contains(subject.id.toString())) {
+                    WikiConfig.setu_list.add(subject.id.toString())
+                }
+                sendMessage("设置成功喵")
+            }
+        }
+    }
 }

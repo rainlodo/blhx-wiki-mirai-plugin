@@ -174,10 +174,15 @@ data class ShipAttrData(
         val picList = doc
             .select("div[class='Contentbox2']")[0]
             .select("div")
-        pic = if (canUpgrade) {
-            picList[picList.size - 2].select("img")[0].attr("src")
-        } else {
-            picList[0].select("img")[0].attr("src")
+        pic = try {
+            if (canUpgrade) {
+                picList[picList.size - 2].select("img")[0].attr("src")
+            } else {
+                picList[0].select("img")[0].attr("src")
+            }
+        }
+        catch (e:java.lang.Exception) {
+            ""
         }
 
         val tableAttr = doc.select("table[class='wikitable sv-performance']")

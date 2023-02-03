@@ -46,7 +46,7 @@ object Checker {
             return AutoReplyData(AutoReplyConfig.REPLY_COMMAND_MAP[commandList[1]]!!)
         }
         else if (commandList[1] in CommandConfig.setu) {
-            return setu()
+            return setu(sender)
         }
         else {
             return null
@@ -88,8 +88,8 @@ object Checker {
         return Draw().draw(type)
     }
 
-    fun setu() : Data {
-        if (!File(CommandConfig.setu_path).exists() || !File(CommandConfig.setu_path).isDirectory) {
+    fun setu(sender: Member) : Data {
+        if (!WikiConfig.setu_list.contains(sender.group.id.toString()) || !File(CommandConfig.setu_path).exists() || !File(CommandConfig.setu_path).isDirectory) {
             return TextData("不许涩涩喵")
         }
 
