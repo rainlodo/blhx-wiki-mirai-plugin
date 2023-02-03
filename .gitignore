@@ -9,3 +9,8 @@
 /bots/
 /src/test/
 /data/
+/logs/
+/gradle/
+/plugin-libraries/
+/plugin-shared-libraries/
+/plugins/
