@@ -638,7 +638,8 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "八音盒" to "试作型五式40mm高射机关炮T0",
         "垃圾桶" to "双联37mm高射炮Mle1936T0",
         "105" to "双联105mmSKC高炮T3",
-        "105改" to "双联105mmSKC高炮改进型T0"
+        "105改" to "双联105mmSKC高炮改进型T0",
+        "彩防空炮" to "双联装57mmL/60博福斯对空机炮Mle1951"
     ))
 
     @ValueDescription("鱼雷")
