@@ -33,7 +33,7 @@ val MESSAGE_PARSE_ERROR = "页面解析有误，暂不支持此种类页面解�
     "可以直接点击下方链接打开页面\n"
 
 
-val EQUIP_LIST = listOf(
+var EQUIP_LIST = listOf(
     "五联装533mm鱼雷",
     "四联装533mm鱼雷",
     "三联装533mm鱼雷",
@@ -497,13 +497,9 @@ val EQUIP_LIST = listOf(
     "闪耀梦想",
 
 
-
-    "PVE用舰船综合性能强度榜",
-    "装备一图榜",
-    "认知觉醒推荐榜",
 )
 
-val SHIP_LIST = listOf(
+var SHIP_LIST = listOf(
     "特装型布里mkiii",
     "新泽西",
     "前卫",
@@ -1196,4 +1192,10 @@ val SHIP_LIST = listOf(
     "如月",
 )
 
-val NAME_LIST = SHIP_LIST + EQUIP_LIST
+var OTHER_LIST = listOf(
+    "PVE用舰船综合性能强度榜",
+    "装备一图榜",
+    "认知觉醒推荐榜",
+)
+
+var NAME_LIST = SHIP_LIST + EQUIP_LIST + OTHER_LIST

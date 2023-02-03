@@ -12,6 +12,7 @@ import org.iris.wiki.config.AliasConfig
 import org.iris.wiki.config.AutoReplyConfig
 import org.iris.wiki.config.CommandConfig
 import org.iris.wiki.config.WikiConfig
+import org.iris.wiki.utils.UpdateUtils
 
 /**
  * 使用 kotlin 版请把
@@ -32,7 +33,7 @@ object Wiki : KotlinPlugin(
     JvmPluginDescription(
         id = "org.iris.wiki",
         name = "blhx-wiki",
-        version = "0.4.0"
+        version = "0.4.1"
     ) {
         author("iris")
         // author 和 info 可以删除.
@@ -52,6 +53,8 @@ object Wiki : KotlinPlugin(
 
         WikiConfigCommand.register()
         ReplyCommand.register()
+
+        UpdateUtils.updateAll()
     }
 
     override fun onDisable() {

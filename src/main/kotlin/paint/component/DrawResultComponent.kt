@@ -5,6 +5,7 @@ import org.iris.wiki.paint.PaintUtils
 import org.iris.wiki.utils.ImageUtil
 import java.awt.Color
 import java.awt.image.BufferedImage
+import java.io.File
 
 class DrawResultComponent(
     val rareList : ArrayList<DrawUtils.Rarity>,
@@ -36,7 +37,13 @@ class DrawResultComponent(
         val imageWidth = 90
         val imageHeight = 90
         for (i in rareList.indices) {
-            val image = ImageUtil.getImage(picList[i])
+            val image = ImageUtil.getImage(
+                if (File(picList[i]).exists()) {
+                    picList[i]
+                } else {
+                    "其他R"
+                }
+            )
             val text = TextComponent(nameList[i], 20F, rarity_color_map[rareList[i]]!!)
             text.init()
             text.background(Color(0, 0, 0, 127))

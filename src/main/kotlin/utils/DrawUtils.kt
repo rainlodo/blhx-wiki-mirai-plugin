@@ -47,7 +47,7 @@ object DrawUtils {
     )
 
 
-    val ship_contain_map = hashMapOf<Pair<DrawType, Rarity>, List<String>>()
+    var ship_contain_map = hashMapOf<Pair<DrawType, Rarity>, List<String>>()
     val active_ship_map = hashMapOf<String, ActivePool>()
 
     init {

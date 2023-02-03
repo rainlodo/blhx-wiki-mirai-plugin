@@ -3,11 +3,11 @@ plugins {
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
 
-    id("net.mamoe.mirai-console") version "2.13.0-RC2"
+    id("net.mamoe.mirai-console") version "2.13.4"
 }
 
 group = "org.iris.wiki"
-version = "0.4.0"
+version = "0.4.1"
 
 repositories {
     mavenLocal()

@@ -8,6 +8,7 @@ import net.mamoe.mirai.contact.Group
 import org.iris.wiki.Wiki
 import org.iris.wiki.config.CommonConfig
 import org.iris.wiki.config.WikiConfig
+import org.iris.wiki.utils.UpdateUtils
 import java.io.File
 
 object WikiConfigCommand : CompositeCommand(
@@ -88,7 +89,6 @@ object WikiConfigCommand : CompositeCommand(
     }
 
     @SubCommand("涩涩")
-    @Description("开启/关闭本群的猜老婆功能")
     suspend fun UserCommandSender.h_enable(enabled: Boolean) {
         if (subject is Group) {
             if (!enabled) {
@@ -101,5 +101,11 @@ object WikiConfigCommand : CompositeCommand(
                 sendMessage("设置成功喵")
             }
         }
+    }
+
+    @SubCommand("update")
+    suspend fun UserCommandSender.update() {
+        UpdateUtils.updateAll()
+        sendMessage("更新完毕喵")
     }
 }
