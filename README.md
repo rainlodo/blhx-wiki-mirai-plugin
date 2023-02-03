@@ -122,11 +122,11 @@ $\color{red}{在修改配置文件时应确保机器人（插件）不在运行�
 
 - **指令设置**
 
-  位于`config/blhx-wiki/CommandConfig.yml`,对应Bot指令中的各指令名，可自行修改
+  位于`config/org.iris.wiki/CommandConfig.yml`,对应Bot指令中的各指令名，可自行修改
 
 - **别名设置**
 
-  位于`config/blhx-wiki/CommandConfig.yml`，为方便更新， **用户仅能在ALIAS_USER_MAP下添加别名，其他词条下修改插件不会记录** ，格式如下，“别名：正式名”
+  位于`config/org.iris.wiki/AliasConfig.yml`，为方便更新， **用户仅能在ALIAS_USER_MAP下添加别名，其他词条下修改插件不会记录** ，格式如下，“别名：正式名”
   ```yaml
   ALIAS_USER_MAP: 
     36d: 萨拉托加
@@ -139,7 +139,7 @@ $\color{red}{在修改配置文件时应确保机器人（插件）不在运行�
 
 - **活动卡池设置**
 
-  位于`data/blhx-wiki/config/active_pool.json`，格式如下
+  位于`data/org.iris.wiki/config/active_pool.json`，格式如下
   
   ```json
   {
@@ -175,7 +175,7 @@ $\color{red}{在修改配置文件时应确保机器人（插件）不在运行�
 
 -  **戳一戳事件自定义设置** 
 
-  `/config/org.iris.blhx-wiki/CommandConfig.yml`中，修改`touch_first_param`和`touch_second_param`设置对应戳一戳相应事件（语音指令可以通过`wiki 小加加 语音`查看）
+  `/config/org.iris.wiki/CommandConfig.yml`中，修改`touch_first_param`和`touch_second_param`设置对应戳一戳相应事件（语音指令可以通过`wiki 小加加 语音`查看）
   ```
   # 戳一戳事件对应舰娘(wiki __1__ __2__ 指令中的__1__), 为 '无' 时不对戳一戳事件反应
   touch_first_param: 小加加
