@@ -34,7 +34,7 @@ data class EquipAttrData(
     @SerialName("attr")
     var attr: String= "",
     @SerialName("use")
-    var use: String= ""
+    var use: HashMap<String, Int> = hashMapOf() // <舰种，武器类型> 0:普通，1:主武器，2:副武器
 ) : Data() {
 
     override fun parse(doc: Document, commandList: List<String>) : Data {
@@ -69,7 +69,16 @@ data class EquipAttrData(
         liList.last().select("td").first().children().forEach {
             if (it.className() != "appShipType notAppShipType" &&
                 it.className() != "appShipType notAppShipType forbiddenShipType") {
-                use += it.text()
+                val sup = it.select("sup")
+                if (sup.size > 0) {
+                    if (sup[0].className() == "mainAppShipType") {
+                        use[it.text().replace("主", "")] = 1
+                    } else {
+                        use[it.text().replace("副", "")] = 2
+                    }
+                } else {
+                    use[it.text()] = 0
+                }
             }
         }
 

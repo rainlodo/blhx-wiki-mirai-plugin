@@ -6,6 +6,7 @@ import org.iris.wiki.data.EquipAttrData
 import org.iris.wiki.paint.PaintUtils
 import java.awt.Color
 import java.awt.image.BufferedImage
+import java.awt.image.RescaleOp
 import java.io.File
 import java.net.URL
 import javax.imageio.ImageIO
@@ -133,8 +134,10 @@ class EquipAttrComponent(
         }
 
 
-        g2.drawImage(ImageIO.read(Path("${PaintUtils.PATH_EQUIP_ICON}/use.png").toFile()),
-                    tab, y, null)
+//        g2.drawImage(ImageIO.read(Path("${PaintUtils.PATH_EQUIP_ICON}/use.png").toFile()),
+//                    tab, y, null)
+        g2.color = attrBgColor
+        g2.fillRect(tab, y, width - 2 * tab, 152)
         y += 8
 
         // use
@@ -143,7 +146,29 @@ class EquipAttrComponent(
             if (data.use.contains(PaintUtils.MAP_EQUIP_USE[i])) {
                 g2.drawImage(
                     ImageIO.read(Path("${PaintUtils.PATH_EQUIP_ICON}/use_${i + 1}.png").toFile()),
-                    tab + 26 + count * 104, y, null
+                    tab + 26 + count * 104, y,null
+                )
+                if (data.use[PaintUtils.MAP_EQUIP_USE[i]] == 1) {
+                    g2.drawImage(
+                        ImageIO.read(Path("${PaintUtils.PATH_EQUIP_ICON}/main.png").toFile()),
+                        tab + 20 + count * 104, y - 6, 18, 14, null
+                    )
+                } else if (data.use[PaintUtils.MAP_EQUIP_USE[i]] == 2) {
+                    g2.drawImage(
+                        ImageIO.read(Path("${PaintUtils.PATH_EQUIP_ICON}/sub.png").toFile()),
+                        tab + 20 + count * 104, y - 6, 18, 14, null
+                    )
+                }
+            } else {
+                g2.drawImage(
+                    ImageIO.read(Path("${PaintUtils.PATH_EQUIP_ICON}/use_${i + 1}.png").toFile()),
+                    RescaleOp(FloatArray(4).apply {
+                        this[0] = 1f
+                        this[1] = 1f
+                        this[2] = 1f
+                        this[3] = 0.5f
+                    }, FloatArray(4), null),
+                    tab + 26 + count * 104, y
                 )
             }
 
