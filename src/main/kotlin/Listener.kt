@@ -92,19 +92,26 @@ internal object Listener {
                     break
                 }
             }
-            for (command in ALL_COMMAND) {
-                if (text.endsWith(command)) {
-                    text = text.substring(0, text.length - command.length)
-                    commandList[2] = command
-                    break
-                } else if (text.startsWith(command)) {
-                    text = text.removeRange(0, command.length)
-                    commandList[2] = command
-                    break
-                }
-            }
-            commandList[1] = text
+
             if (commandList[0] in CommandConfig.wiki) {
+                if (ALIAS_MAP.contains(text) || NAME_LIST.contains(text)) {
+                    // 单词条
+                    commandList[1] = text
+                } else {
+                    // 双词条
+                    for (command in ALL_COMMAND) {
+                        if (text.endsWith(command)) {
+                            text = text.substring(0, text.length - command.length)
+                            commandList[2] = command
+                            break
+                        } else if (text.startsWith(command)) {
+                            text = text.removeRange(0, command.length)
+                            commandList[2] = command
+                            break
+                        }
+                    }
+                    commandList[1] = text
+                }
                 wiki(commandList, sender, false)
             }
         }
