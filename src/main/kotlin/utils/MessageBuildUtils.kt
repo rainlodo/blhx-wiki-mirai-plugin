@@ -30,7 +30,7 @@ object MessageBuildUtils {
             }
         } catch (e: IIOException) {
             e.printStackTrace()
-            PlainText("图片读取失败，可能是数据文件不是最新版本喵\n$e")
+            PlainText("图片读取失败，可能是数据文件不是最新版本喵\n如果是大建报错请使用命令 /wkcf updateShipIcon 更新舰娘头像数据喵\n$e")
         } catch (e: Exception) {
             e.printStackTrace()
             PlainText("出错了喵 QAQ\n$e")

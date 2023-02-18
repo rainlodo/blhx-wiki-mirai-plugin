@@ -104,8 +104,16 @@ object WikiConfigCommand : CompositeCommand(
     }
 
     @SubCommand("update")
+    @Description("更新舰娘、装备名称词条以及普池数据")
     suspend fun UserCommandSender.update() {
         UpdateUtils.updateAll()
         sendMessage("更新完毕喵")
+    }
+
+    @SubCommand("updateShipIcon")
+    @Description("更新舰娘头像")
+    suspend fun UserCommandSender.updateShipIcon() {
+        UpdateUtils.updateShipIcon()
+        sendMessage("舰娘头像更新完毕喵")
     }
 }

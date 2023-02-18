@@ -1,11 +1,10 @@
 package org.iris.wiki.utils
 
 import org.iris.wiki.Wiki
-import org.iris.wiki.config.EQUIP_LIST
-import org.iris.wiki.config.NAME_LIST
-import org.iris.wiki.config.OTHER_LIST
-import org.iris.wiki.config.SHIP_LIST
+import org.iris.wiki.config.*
 import org.jsoup.Jsoup
+import java.io.File
+import javax.imageio.ImageIO
 
 // 更新各种数据
 object UpdateUtils {
@@ -72,5 +71,27 @@ object UpdateUtils {
             }
         }
         DrawUtils.ship_contain_map = ship_contain_map
+    }
+
+    /**
+     * 更新头像
+     */
+    fun updateShipIcon() {
+        val data = HttpUtils.get("https://wiki.biligame.com/blhx/%E8%88%B0%E5%A8%98%E5%9B%BE%E9%89%B4")
+
+        val doc = Jsoup.parse(data)
+
+        doc.select("div[id=\"CardSelectTr\"]")[0].select("img").forEach {
+            val url = it.attr("src").replace("/thumb", "").split("/60px")[0]
+            val name = it.attr("alt").replace("头像.jpg", "")
+            if (!name.startsWith("舰娘头像")) {
+                val file = File("${CommonConfig.head_path}/${name}.png")
+                if (!file.exists()) {
+                    val image = ImageUtil.getImage(url)
+                    ImageIO.write(image, "png", file)
+                    Wiki.logger.info("已更新头像：$name")
+                }
+            }
+        }
     }
 }
