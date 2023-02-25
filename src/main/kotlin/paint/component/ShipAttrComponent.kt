@@ -1,7 +1,6 @@
 package org.iris.wiki.paint.component
 
 
-import org.iris.wiki.command.WikiConfigCommand
 import org.iris.wiki.config.CommonConfig
 import org.iris.wiki.config.WikiConfig
 import org.iris.wiki.data.ShipAttrData
@@ -205,19 +204,22 @@ class ShipAttrComponent(
                 }
             }
         }
-        var h = 0
+        var fromHeight = 0
         from.forEach {
-            h += it.getComponentHeight()
-        }
-
-        // 建造时间 出处
-        if (h + boxY > 710) {
-            boxX = 50
-            boxY = 710 - h
+            fromHeight += it.getComponentHeight()
         }
 
         var label = TextComponent("建造时间", 20F).init()
         val labelWidth = 100
+        val timeHeight = label.getComponentHeight()
+
+        // 建造时间 出处
+        if (fromHeight + timeHeight + boxY > 710) {
+            boxX = 50
+            boxY = 710 - fromHeight - timeHeight
+        }
+
+
         g2.color = colorAttr
         g2.fillRect(boxX, boxY, boxWidth, label.getComponentHeight())
         g2.drawImage(label.draw(), boxX + (labelWidth - label.getComponentWidth()) / 2, boxY, null)
@@ -231,15 +233,15 @@ class ShipAttrComponent(
 
 
         g2.color = colorAttr
-        g2.fillRect(boxX, boxY, boxWidth, h)
+        g2.fillRect(boxX, boxY, boxWidth, fromHeight)
         g2.color = Color.WHITE
-        g2.drawRect(boxX, boxY, labelWidth, h)
-        g2.drawRect(boxX + labelWidth, boxY, boxWidth - labelWidth, h)
-        if (h != 0) {
+        g2.drawRect(boxX, boxY, labelWidth, fromHeight)
+        g2.drawRect(boxX + labelWidth, boxY, boxWidth - labelWidth, fromHeight)
+        if (from.isNotEmpty()) {
             label = TextComponent("其他途径", 20F).init()
             g2.drawImage(
                 label.draw(), boxX + (labelWidth - label.getComponentWidth()) / 2,
-                (h - label.getComponentHeight()) / 2 + boxY, null
+                (fromHeight - label.getComponentHeight()) / 2 + boxY, null
             )
             from.forEach {
                 g2.drawImage(it.draw(), boxX + (boxWidth + labelWidth - it.getComponentWidth()) / 2, boxY, null)
@@ -253,7 +255,7 @@ class ShipAttrComponent(
             val lineHeight = 30
             val lineLength = arrayListOf(70, 270, 370, 470, 570)
             if (boxX == 50) {
-                boxY -= h + lineHeight * 4
+                boxY -= fromHeight + timeHeight + lineHeight * 4
             }
             else if (boxY + lineHeight * 4 > 720) {
                 boxX = 50
