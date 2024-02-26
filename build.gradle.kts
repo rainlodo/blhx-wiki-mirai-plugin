@@ -7,11 +7,13 @@ plugins {
 }
 
 group = "org.iris.wiki"
-version = "0.4.2"
+version = "0.4.2.1"
 
 repositories {
     mavenLocal()
     maven("https://maven.aliyun.com/repository/public") // 阿里云国内代理仓库
+    maven("https://maven.aliyun.com/repository/google")
+    maven("https://maven.aliyun.com/repository/jcenter")
     mavenCentral()
 }
 dependencies {

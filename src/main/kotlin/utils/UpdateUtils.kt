@@ -58,7 +58,7 @@ object UpdateUtils {
 
         val doc = Jsoup.parse(data)
         val ship_contain_map = hashMapOf<Pair<DrawUtils.DrawType, DrawUtils.Rarity>, List<String>>()
-        val rarityList = listOf(DrawUtils.Rarity.SSR, DrawUtils.Rarity.SR, DrawUtils.Rarity.R, DrawUtils.Rarity.N)
+        val rarityList = listOf(DrawUtils.Rarity.UR, DrawUtils.Rarity.SSR, DrawUtils.Rarity.SR, DrawUtils.Rarity.R, DrawUtils.Rarity.N)
         val poolList = listOf(DrawUtils.DrawType.Light, DrawUtils.DrawType.Heavy, DrawUtils.DrawType.Special)
         doc.select("div.Root").forEachIndexed { poolIndex, pool ->
             pool.select("td.BuildingList").forEachIndexed { rarityIndex, rarity ->
