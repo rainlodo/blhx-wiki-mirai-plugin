@@ -15,11 +15,11 @@ val MESSAGE_HELP = "指令格式如下：\n" +
     "wiki [榜单]\n" +
     "猜老婆/舰娘\n" +
     "装备名中的空格用_代替~\n\n" +
-    "bug请在https://gitee.com/arisaka-iris/blhx-wiki-mirai-plugin/issues反馈"
+    "bug请在https://gitee.com/rainlodo/blhx-wiki-mirai-plugin/issues反馈"
 
 val MESSAGE_ERROR = "输入指令有误~\n" +
     "请输入 wiki 查看指令列表\n\n" +
-    "bug请在https://gitee.com/arisaka-iris/blhx-wiki-mirai-plugin/issues反馈"
+    "bug请在https://gitee.com/rainlodo/blhx-wiki-mirai-plugin/issues反馈"
 
 val MESSAGE_SEARCH = "没有对应的词条但是找到了以下相关内容，可以尝试搜索下面的词条~\n" +
     "(〃'▽'〃)\n"
@@ -1199,3 +1199,7 @@ var OTHER_LIST = listOf(
 )
 
 var NAME_LIST = SHIP_LIST + EQUIP_LIST + OTHER_LIST
+
+var shipClassList = listOf<String?>() // 船的分类列表
+var techClassList = listOf<String?>() // 科技点的分类列表
+var shipTechPointsMap = mutableMapOf<String?, MutableMap<String?, MutableList<MutableList<String>>>>() // 船的科技点的 map

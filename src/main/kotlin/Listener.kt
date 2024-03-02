@@ -3,7 +3,8 @@ package org.iris.wiki
 import net.mamoe.mirai.contact.Group
 import net.mamoe.mirai.contact.Member
 import net.mamoe.mirai.event.GlobalEventChannel
-import net.mamoe.mirai.event.events.*
+import net.mamoe.mirai.event.events.GroupMessageEvent
+import net.mamoe.mirai.event.events.NudgeEvent
 import net.mamoe.mirai.message.data.PlainText
 import net.mamoe.mirai.utils.MiraiExperimentalApi
 import org.iris.wiki.config.*
@@ -47,7 +48,7 @@ internal object Listener {
 
             message.forEach {
                 if (it is PlainText) {
-                    var commandList = it.contentToString()
+                    val commandList = it.contentToString()
                         .lowercase(Locale.getDefault())
                         .split(Regex("[ ]+"))
                         .dropLastWhile { it.isEmpty() }
@@ -57,6 +58,7 @@ internal object Listener {
                             1 -> group.sendMessage(ImagesData(arrayListOf("${CommonConfig.emoji_path}/help.png")).toMessage(sender))
                             2 -> wiki(commandList, sender)
                             3 -> wiki(commandList, sender)
+                            5 -> techPointTable(commandList, sender)
                             else -> group.sendMessage(MESSAGE_ERROR)
                         }
                     } else {
@@ -118,14 +120,12 @@ internal object Listener {
     }
 
     suspend fun wiki(commandList: Array<String>, sender: Member, searchAgain: Boolean=true) {
-
-
         if (commandList[1] in ALIAS_MAP) {
             commandList[1] = ALIAS_MAP[commandList[1]].toString()
         }
 
-
         var result = Checker.check(commandList, sender)
+
         if (result == null) {
             result = ParserUtils.parse(HttpUtils.get(SEARCH_URL + commandList[1]), commandList.toList())
         }

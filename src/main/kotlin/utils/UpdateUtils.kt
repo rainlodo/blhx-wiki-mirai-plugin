@@ -13,6 +13,7 @@ object UpdateUtils {
         updateShipNameList()
         updateEquipList()
         updateNormalPool()
+        updateShipTechPoints()
     }
 
     // 更新舰娘名称列表
@@ -57,20 +58,20 @@ object UpdateUtils {
         val data = HttpUtils.get("https://wiki.biligame.com/blhx/%E5%BB%BA%E9%80%A0%E6%A8%A1%E6%8B%9F%E5%99%A8")
 
         val doc = Jsoup.parse(data)
-        val ship_contain_map = hashMapOf<Pair<DrawUtils.DrawType, DrawUtils.Rarity>, List<String>>()
+        val shipContainMap = hashMapOf<Pair<DrawUtils.DrawType, DrawUtils.Rarity>, List<String>>()
         val rarityList = listOf(DrawUtils.Rarity.UR, DrawUtils.Rarity.SSR, DrawUtils.Rarity.SR, DrawUtils.Rarity.R, DrawUtils.Rarity.N)
         val poolList = listOf(DrawUtils.DrawType.Light, DrawUtils.DrawType.Heavy, DrawUtils.DrawType.Special)
         doc.select("div.Root").forEachIndexed { poolIndex, pool ->
             pool.select("td.BuildingList").forEachIndexed { rarityIndex, rarity ->
-                ship_contain_map[Pair(poolList[poolIndex], rarityList[rarityIndex])] = ArrayList<String>().apply {
+                shipContainMap[Pair(poolList[poolIndex], rarityList[rarityIndex])] = ArrayList<String>().apply {
                     rarity.select("span.nowrap").forEach {
                         add(it.attr("title"))
                     }
                 }
-                Wiki.logger.info("update pool[${poolList[poolIndex]}, ${rarityList[rarityIndex]}]: ${ship_contain_map[Pair(poolList[poolIndex], rarityList[rarityIndex])]}")
+                Wiki.logger.info("update pool[${poolList[poolIndex]}, ${rarityList[rarityIndex]}]: ${shipContainMap[Pair(poolList[poolIndex], rarityList[rarityIndex])]}")
             }
         }
-        DrawUtils.ship_contain_map = ship_contain_map
+        DrawUtils.ship_contain_map = shipContainMap
     }
 
     /**
@@ -94,4 +95,47 @@ object UpdateUtils {
             }
         }
     }
+
+    // 更新科技点
+    fun updateShipTechPoints(){
+        val data = HttpUtils.get("https://wiki.biligame.com/blhx/%E8%88%B0%E9%98%9F%E7%A7%91%E6%8A%80")
+        val doc = Jsoup.parse(data)
+        val filterTableRows = doc.select("table")[13].select("tr")
+        val shipRows = doc.select("#CardSelectTr > tbody > tr")
+        shipClassList = filterTableRows[0].select("td > li").map { it.text() }
+        techClassList = filterTableRows[8].select("td > li").map { it.text() }
+
+        shipClassList.forEachIndexed{ index, shipClass ->
+            if (index > 1){
+                val t = mutableMapOf<String?, MutableList<MutableList<String>>>()
+                for (shipTechClass in techClassList){
+                    val t1 = mutableListOf<MutableList<String>>()
+                    t[shipTechClass] = t1
+                }
+                shipTechPointsMap[shipClass] = t
+            }
+        }
+
+        shipRows.forEachIndexed{ index, row ->
+            if (index > 1) {
+                // 获取各个属性值
+                val shipClass = row.attr("data-param1").split(",")[0]
+                val rarity = row.attr("data-param2")
+                val obtainTechClass = row.attr("data-param9")
+                val up120TechClass = row.attr("data-param10")
+
+                // 获取每个 td 元素
+                val tds = row.select("td")
+                val shipName = tds[1].select("a > span")[0].text()
+                val nationality = tds[2].text()
+                val obtainTech = tds[8].text()
+                val up120Tech = tds[9].text()
+
+                val shipAttrList = listOf(shipName, nationality, rarity, obtainTech, up120Tech)
+                shipTechPointsMap[shipClass]?.get(obtainTechClass)?.add(shipAttrList.toMutableList())
+                shipTechPointsMap[shipClass]?.get(up120TechClass)?.add(shipAttrList.toMutableList())
+            }
+        }
+    }
+
 }
