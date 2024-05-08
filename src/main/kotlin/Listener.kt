@@ -25,15 +25,15 @@ internal object Listener {
     init {
         ALIAS_MAP.putAll(ALIAS_USER_MAP)
         val COMMANDS_LIST = setOf(
-                CommandConfig.attribute,
-                CommandConfig.dress,
-                CommandConfig.dressLarge,
-                CommandConfig.picLarge,
-                CommandConfig.from,
-                CommandConfig.tech,
-                CommandConfig.evaluate,
-                CommandConfig.equip,
-                CommandConfig.wedding
+            CommandConfig.attribute,
+            CommandConfig.dress,
+            CommandConfig.dressLarge,
+            CommandConfig.picLarge,
+            CommandConfig.from,
+            CommandConfig.tech,
+            CommandConfig.evaluate,
+            CommandConfig.equip,
+            CommandConfig.wedding
         )
         for (list in COMMANDS_LIST) {
             ALL_COMMAND.addAll(list)
@@ -42,6 +42,7 @@ internal object Listener {
     }
 
     val channel = GlobalEventChannel.parentScope(Wiki)
+
     @OptIn(MiraiExperimentalApi::class)
     fun subscribe() {
         channel.subscribeAlways<GroupMessageEvent> {
@@ -55,7 +56,12 @@ internal object Listener {
                         .toTypedArray()
                     if (commandList.isNotEmpty() && commandList[0] in CommandConfig.wiki) {
                         when (commandList.size) {
-                            1 -> group.sendMessage(ImagesData(arrayListOf("${CommonConfig.emoji_path}/help.png")).toMessage(sender))
+                            1 -> group.sendMessage(
+                                ImagesData(arrayListOf("${CommonConfig.emoji_path}/help.png")).toMessage(
+                                    sender
+                                )
+                            )
+
                             2 -> wiki(commandList, sender)
                             3 -> wiki(commandList, sender)
                             5 -> techPointTable(commandList, sender)
@@ -74,7 +80,10 @@ internal object Listener {
             // 戳了戳事件
             if (this.target == bot && this.subject is Group) {
                 if (CommandConfig.touch_first_param != "无" && CommandConfig.touch_second_param != "无") {
-                    wiki(arrayOf("wiki", CommandConfig.touch_first_param, CommandConfig.touch_second_param), this.from as Member)
+                    wiki(
+                        arrayOf("wiki", CommandConfig.touch_first_param, CommandConfig.touch_second_param),
+                        this.from as Member
+                    )
                 }
             }
         }
@@ -119,7 +128,7 @@ internal object Listener {
         }
     }
 
-    suspend fun wiki(commandList: Array<String>, sender: Member, searchAgain: Boolean=true) {
+    suspend fun wiki(commandList: Array<String>, sender: Member, searchAgain: Boolean = true) {
         if (commandList[1] in ALIAS_MAP) {
             commandList[1] = ALIAS_MAP[commandList[1]].toString()
         }

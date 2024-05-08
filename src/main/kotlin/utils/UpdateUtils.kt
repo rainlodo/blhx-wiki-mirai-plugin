@@ -8,7 +8,6 @@ import javax.imageio.ImageIO
 
 // 更新各种数据
 object UpdateUtils {
-
     fun updateAll() {
         updateShipNameList()
         updateEquipList()
@@ -96,7 +95,7 @@ object UpdateUtils {
         }
     }
 
-    // 更新科技点
+    // 更新科技点数据
     fun updateShipTechPoints(){
         val data = HttpUtils.get("https://wiki.biligame.com/blhx/%E8%88%B0%E9%98%9F%E7%A7%91%E6%8A%80")
         val doc = Jsoup.parse(data)

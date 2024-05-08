@@ -22,30 +22,33 @@ import kotlin.io.path.Path
 
 class ImageUtil {
     companion object {
-        private val client = OkHttpClient().newBuilder().connectTimeout(60000, TimeUnit.MILLISECONDS).readTimeout(60000,
-            TimeUnit.MILLISECONDS)
+        private val client = OkHttpClient().newBuilder().connectTimeout(600000, TimeUnit.MILLISECONDS).readTimeout(
+            600000,
+            TimeUnit.MILLISECONDS
+        )
         private val headers = Headers.Builder()
             .add(
                 "user-agent",
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36 Edg/84.0.522.59"
             )
             .add("Referer", "https://www.pixiv.net")
-        private var isChange:Boolean = false
+        private var isChange: Boolean = false
 
 
         /**
          * 将图片链接读取到内存转换成ByteArrayOutputStream，方便操作
          */
         fun getImageAsExResource(imageUri: String): ExternalResource {
-
+            // 强度榜目前直接获取是 jpg 格式
+            val suffix = if (imageUri.endsWith("png")) "png" else "jpg"  // 假设只有这两种格式
             return if (imageUri.startsWith("http")) {
-                imageToBytes(randomNoise(ImageIO.read(URL(imageUri))), "png").toByteArray().toExternalResource()
+                imageToBytes(randomNoise(ImageIO.read(URL(imageUri))), suffix).toByteArray().toExternalResource()
             } else {
-                imageToBytes(randomNoise(ImageIO.read(File(imageUri))), "png").toByteArray().toExternalResource()
+                imageToBytes(randomNoise(ImageIO.read(File(imageUri))), suffix).toByteArray().toExternalResource()
             }
         }
 
-        fun randomNoise(image: BufferedImage) : BufferedImage {
+        fun randomNoise(image: BufferedImage): BufferedImage {
             if (WikiConfig.image_noise_on) {
                 (0..5).forEach { _ ->
                     val x = (0 until image.width).random()
@@ -59,13 +62,14 @@ class ImageUtil {
         /**
          * 从图片中随机截取一部分
          */
-        fun getImagePiece(imagePath: String, w : Int, h : Int): BufferedImage {
+        fun getImagePiece(imagePath: String, w: Int, h: Int): BufferedImage {
             val image = ImageIO.read(File(imagePath))
             while (true) {
                 var transparentCount = 0;
                 val piece = image.getSubimage(
-                    (0 until image.width-w).random(), (0 until image.height-h).random(),
-                 w, h)
+                    (0 until image.width - w).random(), (0 until image.height - h).random(),
+                    w, h
+                )
                 for (i in 0 until w) {
                     for (j in 0 until h) {
                         val pixel = piece.getRGB(i, j);
@@ -81,11 +85,10 @@ class ImageUtil {
             }
         }
 
-        fun getImage(imageUri: String) : BufferedImage {
+        fun getImage(imageUri: String): BufferedImage {
             if (imageUri.startsWith("http")) {
                 return ImageIO.read(URL(imageUri))
-            }
-            else {
+            } else {
                 return ImageIO.read(Path(imageUri).toFile())
             }
         }
@@ -107,17 +110,21 @@ class ImageUtil {
          * @param angel 角度
          * @return 目标图片
          */
-        fun  rotate(src: Image, angel:Int): ByteArrayOutputStream
-        {
+        fun rotate(src: Image, angel: Int): ByteArrayOutputStream {
             val srcWidth: Int = src.getWidth(null);
-            val srcHeight : Int = src.getHeight (null);
-            val rectDes : Rectangle? = CalcRotatedSize ( Rectangle ( Dimension (
-                srcWidth, srcHeight)), angel)
+            val srcHeight: Int = src.getHeight(null);
+            val rectDes: Rectangle? = CalcRotatedSize(
+                Rectangle(
+                    Dimension(
+                        srcWidth, srcHeight
+                    )
+                ), angel
+            )
 
 
             var res: BufferedImage? = null
-            res = BufferedImage (rectDes!!.width, rectDes.height,BufferedImage.TYPE_INT_RGB);
-            val g2: Graphics2D = res.createGraphics ();
+            res = BufferedImage(rectDes!!.width, rectDes.height, BufferedImage.TYPE_INT_RGB);
+            val g2: Graphics2D = res.createGraphics();
             // transform(这里先平移、再旋转比较方便处理；绘图时会采用这些变化，绘图默认从画布的左上顶点开始绘画，源图片的左上顶点与画布左上顶点对齐，然后开始绘画，修改坐标原点后，绘画对应的画布起始点改变，起到平移的效果；然后旋转图片即可)
 
             //平移（原理修改坐标系原点，绘图起点变了，起到了平移的效果，如果作用于旋转，则为旋转中心点）
@@ -135,7 +142,7 @@ class ImageUtil {
 
 
             g2.drawImage(src, null, null);
-            return imageToBytes(res,"PNG")
+            return imageToBytes(res, "PNG")
         }
 
 
@@ -148,8 +155,8 @@ class ImageUtil {
          * image格式字符串.如"gif","png"
          * @return byte数组
          */
-        fun imageToBytes(bImage:BufferedImage, format:String):ByteArrayOutputStream {
-            val out : ByteArrayOutputStream = ByteArrayOutputStream();
+        fun imageToBytes(bImage: BufferedImage, format: String): ByteArrayOutputStream {
+            val out = ByteArrayOutputStream();
 
             try {
                 ImageIO.write(bImage, format, out);

@@ -121,6 +121,7 @@ object DrawUtils {
             in (0..6) -> Rarity.SSR
             in (7 .. 18) -> Rarity.SR
             in (19 .. 69) -> Rarity.R
+            in (70 ..  71) -> Rarity.UR // 添加常驻池 ur
             else -> Rarity.N
         }
     }

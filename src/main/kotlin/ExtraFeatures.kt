@@ -46,7 +46,7 @@ private fun drawTechPointTable(shipClass: String, techClass: String, pageNumber:
             (pageNumber - 1) * 10, shipTechPointsMap[shipClass]?.get(techClass)?.size!!)
     }
 
-    println(tableData)
+//    println(tableData)
     val cellWidth = width / (tableData?.get(0)?.size!!)
     val cellHeight = height / tableData.size
 

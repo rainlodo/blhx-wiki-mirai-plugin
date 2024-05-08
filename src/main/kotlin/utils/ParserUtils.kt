@@ -11,7 +11,7 @@ import java.net.URLEncoder
 
 object ParserUtils {
 
-    fun parse(data: String, commandList: List<String>) : Data? {
+    fun parse(data: String, commandList: List<String>): Data? {
         if (data.isEmpty()) {
             return TextData("网络连接错误，请重试喵")
         }
@@ -32,25 +32,37 @@ object ParserUtils {
                 in arrayOf("鱼雷", "防空炮", "舰炮", "设备", "舰载机", "导弹") -> parseEquip(doc, commandList)
                 in arrayOf("特殊兵装") -> parseSpecialEquip(doc, commandList)
                 else -> {
-                    when{
-                        doc.select("h1[id='firstHeading']").text().contains(Regex("[榜表]")) -> parseTable(doc, commandList)
-                        doc.select("h1[id='firstHeading']").text().equals("建造时间") -> parseBuildTime(doc, commandList)
-                        doc.select("div[id='mw-normal-catlinks']").text().contains("关卡图鉴") -> parseLevel(doc, commandList)
+                    when {
+                        doc.select("h1[id='firstHeading']").text().contains(Regex("[榜表]")) -> parseTable(
+                            doc,
+                            commandList
+                        )
+
+                        doc.select("h1[id='firstHeading']").text().equals("建造时间") -> parseBuildTime(
+                            doc,
+                            commandList
+                        )
+
+                        doc.select("div[id='mw-normal-catlinks']").text().contains("关卡图鉴") -> parseLevel(
+                            doc,
+                            commandList
+                        )
+
                         else -> null
                     }
                 }
             }
-        }
-        catch (e: Exception) {
-            return TextData("解析发生错误\n$e\n可以点击查看原网页\n" +
-                (SEARCH_URL + URLEncoder.encode(commandList[1]))
+        } catch (e: Exception) {
+            return TextData(
+                "解析发生错误\n$e\n可以点击查看原网页\n" +
+                    (SEARCH_URL + URLEncoder.encode(commandList[1]))
             )
         }
 
     }
 
     // 舰船页面解析
-    private fun parseShip(doc: Document, commandList: List<String>) : Data {
+    private fun parseShip(doc: Document, commandList: List<String>): Data {
 
         // 首先判断是不是占坑舰娘，see https://searchwiki.biligame.com/blhx/index.php?search=%E8%BF%99%E6%98%AF%E6%9F%90%E4%BA%BA%E6%8C%96%E7%9A%84%E4%B8%80%E4%B8%AA%E5%9D%91
         doc.select("big").select("b").forEach {
@@ -59,7 +71,7 @@ object ParserUtils {
             }
         }
 
-        val newCommandList : ArrayList<String> = commandList as ArrayList<String>
+        val newCommandList: ArrayList<String> = commandList as ArrayList<String>
         // 更新command中的舰娘名称，从而让皮肤大图和皮肤原图查询正确
         try {
             val shipData = ShipAttrData().parse(doc, commandList)
@@ -90,7 +102,7 @@ object ParserUtils {
     }
 
     // 解析舰船改造需求
-    private fun parseShipUpdate(doc: Document) : String {
+    private fun parseShipUpdate(doc: Document): String {
         val span = doc.select("span[id='改造详情']")
         if (span.isEmpty()) {
             return BOAT_NO_UPDATA
@@ -100,7 +112,7 @@ object ParserUtils {
     }
 
     // 解析舰船提供的科技点
-    private fun parseShipTech(doc: Document, commandList: List<String>) : Data {
+    private fun parseShipTech(doc: Document, commandList: List<String>): Data {
         val table = doc.select("table[class='wikitable sv-category']")[0]
         val trList = table.child(0).children()
 
@@ -119,7 +131,7 @@ object ParserUtils {
     }
 
     // 舰娘评价
-    private fun parseShipEvaluate(doc: Document) : Data {
+    private fun parseShipEvaluate(doc: Document): Data {
         val table = doc.select("table[class='wikitable sv-remark']")[0]
         val trList = table.child(0).children()
         var text = trList[1].html()
@@ -132,7 +144,7 @@ object ParserUtils {
     }
 
     // 装备页面解析
-    private fun parseEquip(doc: Document, commandList: List<String>) : Data? {
+    private fun parseEquip(doc: Document, commandList: List<String>): Data? {
         if (commandList.size == 2) {
             return EquipAttrData().parse(doc, commandList)
         }
@@ -144,7 +156,7 @@ object ParserUtils {
     }
 
     // 特殊兵装页面解析
-    private fun parseSpecialEquip(doc: Document, commandList: List<String>) : Data? {
+    private fun parseSpecialEquip(doc: Document, commandList: List<String>): Data? {
         if (commandList.size == 2) {
             return SpecialEquipData().parse(doc, commandList)
         }
@@ -157,8 +169,8 @@ object ParserUtils {
 
     // 装备一图榜解析
     private fun parseEquipTop(doc: Document, commandList: List<String>): ImagesData {
-        val url = doc.select("img[alt='装备一图榜.jpg']").attr("src")
-            .split(Regex("/[\\d]*px"))[0].replace("/thumb", "")
+        val url = doc.select("div.noresize img").attr("src")
+        println(url)
         return ImagesData(arrayListOf(url))
     }
 
@@ -178,22 +190,23 @@ object ParserUtils {
             else -> {
                 val imagesData = ImagesData()
                 try {
-
                     doc.select("div[class='center']").select("img").forEach {
-                        val url = it.attr("src").split(Regex("/[\\d]*px-"))[0].replace("/thumb", "")
+                        val url = it.attr("src")
+                        println(url)
                         imagesData.images.add(url)
                     }
                     if (imagesData.images.isEmpty()) {
-                        doc.select("span[id='${commandList[1]}']")[0].parent().nextElementSibling().select("img").forEach {
-                            val url = it.attr("src").split(Regex("/[\\d]*px-"))[0].replace("/thumb", "")
+                        doc.select("span[id='${commandList[1]}']")[0].parent().nextElementSibling().select(
+                            "img"
+                        ).forEach {
+                            val url = it.attr("src").split(Regex("/[\\d]*px-"))[0]
                             imagesData.images.add(url)
                         }
                     }
                     if (imagesData.images.isEmpty()) {
                         return null
                     }
-                }
-                catch (_: Exception) {
+                } catch (_: Exception) {
                     return null
                 }
                 return imagesData
@@ -210,11 +223,18 @@ object ParserUtils {
         when {
             commandList.size == 2 -> {
                 return try {
-                    TextData(doc.select("div[class='panel panel-info']")[0].text().replace(Regex("[ 、]"), "\n"))
+                    TextData(
+                        doc.select("div[class='panel panel-info']")[0].text().replace(
+                            Regex(
+                                "[ 、]"
+                            ), "\n"
+                        )
+                    )
                 } catch (e: Exception) {
                     TextData("现在还没有活动池喵")
                 }
             }
+
             commandList[2].matches(Regex("((0)?\\d[:：])?(\\d)?\\d[:：]\\d\\d")) -> {
                 var time = commandList[2].replace("：", ":")
                 time = when {
@@ -224,7 +244,9 @@ object ParserUtils {
                     else -> time
                 }
 
-                val trList = doc.select("table[class='wikitable sortable buildingtable']")[0].child(0).children()
+                val trList = doc.select("table[class='wikitable sortable buildingtable']")[0].child(
+                    0
+                ).children()
                 trList.removeAt(0)
 
                 val timeList = arrayListOf<String>()
@@ -245,7 +267,7 @@ object ParserUtils {
                     val min = if (index - 2 < 0) 0 else index - 2
                     val max = if (index + 1 > timeList.size - 2) timeList.size - 2 else index + 1
                     var msg = "未找到此建造时间的舰娘，可以查询下面的相近的建造时间喵"
-                    for (i in min .. max) {
+                    for (i in min..max) {
                         msg += "\n${timeList[i]}"
                     }
                     return TextData(msg)
@@ -260,18 +282,20 @@ object ParserUtils {
                     }
                 }
 
-                return TextData(trList[index].child(1).text()
-                    .replace("限 重 ", "[限定重型池]")
-                    .replace("限 轻 ", "[限定轻型池]")
-                    .replace("限 特 ", "[限定特型池]")
-                    .replace("限 ", "[限定]")
-                    .replace("常 重 ", "[常驻重型池]")
-                    .replace("常 轻 ", "[常驻轻型池]")
-                    .replace("常 特 ", "[常驻特型池]")
-                    .replace("联 ", "[联动]")
-                    .replace(" ", "\n")
+                return TextData(
+                    trList[index].child(1).text()
+                        .replace("限 重 ", "[限定重型池]")
+                        .replace("限 轻 ", "[限定轻型池]")
+                        .replace("限 特 ", "[限定特型池]")
+                        .replace("限 ", "[限定]")
+                        .replace("常 重 ", "[常驻重型池]")
+                        .replace("常 轻 ", "[常驻轻型池]")
+                        .replace("常 特 ", "[常驻特型池]")
+                        .replace("联 ", "[联动]")
+                        .replace(" ", "\n")
                 )
             }
+
             else -> {
                 return TextData("格式错误，时间请使用 时:分分:秒秒 的格式喵")
             }
@@ -287,7 +311,7 @@ object ParserUtils {
         val data = ImagesData()
 
 
-        val fileTree:FileTreeWalk = File(CommonConfig.ship_skin_path).walk()
+        val fileTree: FileTreeWalk = File(CommonConfig.ship_skin_path).walk()
         fileTree.maxDepth(1)//遍历目录层级为1，即无需检查子目录
             .filter { it.isFile } //只挑选出文件,不处理文件夹
             .filter { it.name.startsWith("${commandList[1].uppercase()}_") }
@@ -315,8 +339,7 @@ object ParserUtils {
         if (File("${CommonConfig.ship_path}/${name}.png").exists()) {
             data.images.add("${CommonConfig.ship_path}/${name}.png")
             return data
-        }
-        else {
+        } else {
             return TextData("未找到该舰娘的原图喵\n该舰娘不存在或者数据文件未更新喵")
         }
     }
@@ -333,12 +356,12 @@ object ParserUtils {
     }
 
     // 根据keyword模糊查询
-    fun search(commandList: List<String>) : List<String> {
+    fun search(commandList: List<String>): List<String> {
         val keyWord = commandList[1]
 
         // 查询整个keyword
         var filter = "(.*)$keyWord(.*)"
-        var list = NAME_LIST.filter{
+        var list = NAME_LIST.filter {
             it.matches(Regex(filter))
         }
         if (list.isNotEmpty()) return list
@@ -354,7 +377,7 @@ object ParserUtils {
             filter += it
         }
         filter += "(.*)"
-        list = NAME_LIST.filter{
+        list = NAME_LIST.filter {
             it.matches(Regex(filter))
         }
         if (list.isNotEmpty()) return list
@@ -364,13 +387,13 @@ object ParserUtils {
         keyWord.forEach {
             filter += "$it(.*)"
         }
-        list = NAME_LIST.filter{
+        list = NAME_LIST.filter {
             it.matches(Regex(filter))
         }
         return list
     }
 
-    fun searchResult2Data(list: List<String>, commandList: List<String>) : Data? {
+    fun searchResult2Data(list: List<String>, commandList: List<String>): Data? {
         return when (list.size) {
             0 -> null
             1 -> {
@@ -380,6 +403,7 @@ object ParserUtils {
                 commands[1] = list[0]
                 parse(HttpUtils.get(SEARCH_URL + list[0]), commands)
             }
+
             else -> {
                 var msg = "还找到了以下相近词条喵"
                 val max = if (list.size > 6) 6 else list.size
@@ -407,7 +431,7 @@ object ParserUtils {
         else 0
     }
 
-    fun Element.isDisplayNone() : Boolean {
+    fun Element.isDisplayNone(): Boolean {
         return this.attr("style").contains("display:none")
     }
 }
