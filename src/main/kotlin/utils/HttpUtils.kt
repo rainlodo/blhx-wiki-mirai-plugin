@@ -1,5 +1,7 @@
 package org.iris.wiki.utils
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -34,13 +36,20 @@ object HttpUtils {
     }
 
 
-    fun get(url: String): String {
-        val request = Request.Builder().url(url)
+    suspend fun get(url: String): String = withContext(Dispatchers.IO) {
+        val request = Request.Builder()
+            .url(url)
             .header("cookie", cookie)
             .header("Content-Type", "application/json; charset=utf-8")
             .header("user-agent", ua.random())
-            .get().build()
-        return sendRequest(request)
+            .get()
+            .build()
+        try {
+            val response = client.newCall(request).execute()
+            response.body!!.string()
+        } catch (_: Exception) {
+            ""
+        }
     }
 
     fun post(url: String, postBody: String): String {
@@ -53,8 +62,8 @@ object HttpUtils {
     }
 
 
-    fun getByteArray(url: String) : ByteArrayOutputStream? {
-        try{
+    fun getByteArray(url: String): ByteArrayOutputStream? {
+        try {
 
             val request = Request.Builder().url(url)
                 .header("cookie", cookie)
@@ -76,8 +85,7 @@ object HttpUtils {
             infoStream.write((Math.random() * 100).toInt() + 1)
             infoStream.close()
             return infoStream
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             return null
         }
     }

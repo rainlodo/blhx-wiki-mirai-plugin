@@ -1,31 +1,43 @@
 package org.iris.wiki
 
-import org.iris.wiki.config.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import net.mamoe.mirai.contact.Member
+import net.mamoe.mirai.message.data.At
+import net.mamoe.mirai.message.data.MessageChainBuilder
+import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
+import org.iris.wiki.config.shipClassList
+import org.iris.wiki.config.shipTechPointsMap
+import org.iris.wiki.config.techClassList
+import org.iris.wiki.utils.UpdateUtils.updateShipTechPoints
 import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.Font
 import java.awt.FontMetrics
 import java.awt.image.BufferedImage
-import javax.imageio.ImageIO
-import net.mamoe.mirai.contact.Member
-import net.mamoe.mirai.message.data.*
-import net.mamoe.mirai.message.data.MessageChainBuilder
-import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 import java.io.ByteArrayOutputStream
+import javax.imageio.ImageIO
 
 
-suspend fun techPointTable(commandList: Array<String>, sender: Member){
-    if (commandList[1] == "筛选" && commandList[2] in shipClassList && commandList[3] in techClassList){
-        val imageBytes = drawTechPointTable(commandList[2], commandList[3], commandList[4].toInt())?.toExternalResource()
+suspend fun techPointTable(commandList: Array<String>, sender: Member) {
+    if (commandList[1] == "筛选" && commandList[2] in shipClassList && commandList[3] in techClassList) {
+        if (shipTechPointsMap.isEmpty()) {
+            updateShipTechPoints()  // 可能存在 mcl 启动时科技点数据获取失败的情况
+        }
+
+        val imageBytes =
+            drawTechPointTable(commandList[2], commandList[3], commandList[4].toInt())?.toExternalResource()
         val builder = MessageChainBuilder()
-        if (imageBytes != null){
+        if (imageBytes != null) {
             val img = sender.uploadImage(imageBytes)
             builder.add(At(sender))
             builder.add(img)
             val msg = builder.build()
             sender.group.sendMessage(msg)
-        }
-        else{
+            withContext(Dispatchers.IO) {
+                imageBytes.close()
+            }
+        } else {
             sender.group.sendMessage("out of Index")
         }
     }
@@ -36,14 +48,14 @@ private fun drawTechPointTable(shipClass: String, techClass: String, pageNumber:
     val height = 600
 
     if ((pageNumber - 1) * 10 > shipTechPointsMap[shipClass]?.get(techClass)?.size!!) return null
-
-    var tableData: MutableList<MutableList<String>>? = null
-    tableData = try {
+    val tableData: MutableList<MutableList<String>>? = try {
         shipTechPointsMap[shipClass]?.get(techClass)?.subList(
-            (pageNumber - 1) * 10, pageNumber * 10)
-    } catch (e: Exception){
+            (pageNumber - 1) * 10, pageNumber * 10
+        )  // 一页十条
+    } catch (e: Exception) {
         shipTechPointsMap[shipClass]?.get(techClass)?.subList(
-            (pageNumber - 1) * 10, shipTechPointsMap[shipClass]?.get(techClass)?.size!!)
+            (pageNumber - 1) * 10, shipTechPointsMap[shipClass]?.get(techClass)?.size!!
+        )
     }
 
 //    println(tableData)
@@ -86,7 +98,7 @@ private fun drawTechPointTable(shipClass: String, techClass: String, pageNumber:
             val x = j * cellWidth + (cellWidth - textWidth) / 2
             val y = (i + 1) * cellHeight - (cellHeight - textHeight) / 2
 
-            if (j == 0){
+            if (j == 0) {
                 val textColor = countryColors[tableData[i][2]] ?: Color.BLACK
                 g2d.color = textColor
             }

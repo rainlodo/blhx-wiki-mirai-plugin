@@ -8,7 +8,7 @@ import javax.imageio.ImageIO
 
 // 更新各种数据
 object UpdateUtils {
-    fun updateAll() {
+     suspend fun updateAll() {
         updateShipNameList()
         updateEquipList()
         updateNormalPool()
@@ -16,7 +16,7 @@ object UpdateUtils {
     }
 
     // 更新舰娘名称列表
-    fun updateShipNameList() : Int {
+    suspend fun updateShipNameList() : Int {
         val data = HttpUtils.get("https://wiki.biligame.com/blhx/%E8%88%B0%E5%A8%98%E5%9B%BE%E9%89%B4")
 
         val doc = Jsoup.parse(data)
@@ -36,7 +36,7 @@ object UpdateUtils {
     }
 
     // 更新装备名称列表
-    fun updateEquipList() : Int {
+    suspend fun updateEquipList() : Int {
         val data = HttpUtils.get("https://wiki.biligame.com/blhx/%E8%A3%85%E5%A4%87")
 
         val doc = Jsoup.parse(data)
@@ -53,7 +53,7 @@ object UpdateUtils {
     }
 
     // 更新常驻池
-    fun updateNormalPool() {
+    suspend fun updateNormalPool() {
         val data = HttpUtils.get("https://wiki.biligame.com/blhx/%E5%BB%BA%E9%80%A0%E6%A8%A1%E6%8B%9F%E5%99%A8")
 
         val doc = Jsoup.parse(data)
@@ -76,7 +76,7 @@ object UpdateUtils {
     /**
      * 更新头像
      */
-    fun updateShipIcon() {
+    suspend fun updateShipIcon() {
         val data = HttpUtils.get("https://wiki.biligame.com/blhx/%E8%88%B0%E5%A8%98%E5%9B%BE%E9%89%B4")
 
         val doc = Jsoup.parse(data)
@@ -96,7 +96,7 @@ object UpdateUtils {
     }
 
     // 更新科技点数据
-    fun updateShipTechPoints(){
+    suspend fun updateShipTechPoints(){
         val data = HttpUtils.get("https://wiki.biligame.com/blhx/%E8%88%B0%E9%98%9F%E7%A7%91%E6%8A%80")
         val doc = Jsoup.parse(data)
         val filterTableRows = doc.select("table")[13].select("tr")

@@ -43,7 +43,6 @@ internal object Listener {
 
     val channel = GlobalEventChannel.parentScope(Wiki)
 
-    @OptIn(MiraiExperimentalApi::class)
     fun subscribe() {
         channel.subscribeAlways<GroupMessageEvent> {
 

@@ -11,7 +11,7 @@ import java.net.URLEncoder
 
 object ParserUtils {
 
-    fun parse(data: String, commandList: List<String>): Data? {
+    suspend fun parse(data: String, commandList: List<String>): Data? {
         if (data.isEmpty()) {
             return TextData("网络连接错误，请重试喵")
         }
@@ -192,13 +192,13 @@ object ParserUtils {
                 try {
                     doc.select("div[class='center']").select("img").forEach {
                         val url = it.attr("src")
-                        println(url)
+//                        println(url)
                         imagesData.images.add(url)
                     }
                     if (imagesData.images.isEmpty()) {
-                        doc.select("span[id='${commandList[1]}']")[0].parent().nextElementSibling().select(
+                        doc.select("span[id='${commandList[1]}']")[0].parent()?.nextElementSibling()?.select(
                             "img"
-                        ).forEach {
+                        )?.forEach {
                             val url = it.attr("src").split(Regex("/[\\d]*px-"))[0]
                             imagesData.images.add(url)
                         }
@@ -393,7 +393,7 @@ object ParserUtils {
         return list
     }
 
-    fun searchResult2Data(list: List<String>, commandList: List<String>): Data? {
+    suspend fun searchResult2Data(list: List<String>, commandList: List<String>): Data? {
         return when (list.size) {
             0 -> null
             1 -> {

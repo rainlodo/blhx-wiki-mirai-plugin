@@ -1,5 +1,6 @@
 package org.iris.wiki
 
+import kotlinx.coroutines.launch
 import net.mamoe.mirai.console.command.CommandManager.INSTANCE.register
 import net.mamoe.mirai.console.command.CommandManager.INSTANCE.unregister
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
@@ -54,15 +55,15 @@ object Wiki : KotlinPlugin(
         WikiConfigCommand.register()
         ReplyCommand.register()
 
-        UpdateUtils.updateAll()
+        launch {
+            UpdateUtils.updateAll()  // 更新舰船、科技点等数据
+        }
     }
 
     override fun onDisable() {
 
         WikiConfigCommand.unregister()
         ReplyCommand.unregister()
-
-
         super.onDisable()
     }
 

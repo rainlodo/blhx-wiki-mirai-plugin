@@ -74,7 +74,9 @@ data class ImagesData (
                 val src = ImageUtil.getImageAsExResource(url)
 //                println(url + "size:" + src.size)
                 val imageId: String = src.uploadAsImage(sender.group).imageId
-                src.close()
+                withContext(Dispatchers.IO) {
+                    src.close()
+                }
                 builder.add(Image(imageId))
             }
             return builder.build()

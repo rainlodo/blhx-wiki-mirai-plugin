@@ -1,5 +1,7 @@
 package org.iris.wiki.utils
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import net.mamoe.mirai.utils.ExternalResource
 import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 import okhttp3.Headers
@@ -16,36 +18,79 @@ import java.io.*
 import java.net.URL
 import java.util.concurrent.TimeUnit
 import javax.imageio.ImageIO
+import javax.imageio.ImageReader
+import javax.imageio.stream.ImageInputStream
 import javax.net.ssl.*
 import kotlin.io.path.Path
 
 
 class ImageUtil {
     companion object {
-        private val client = OkHttpClient().newBuilder().connectTimeout(600000, TimeUnit.MILLISECONDS).readTimeout(
-            600000,
+        private val client = OkHttpClient().newBuilder().connectTimeout(60000, TimeUnit.MILLISECONDS).readTimeout(
+            60000,
             TimeUnit.MILLISECONDS
         )
         private val headers = Headers.Builder()
             .add(
                 "user-agent",
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36 Edg/84.0.522.59"
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) " +
+                    "Chrome/84.0.4147.125 Safari/537.36 Edg/84.0.522.59"
             )
             .add("Referer", "https://www.pixiv.net")
         private var isChange: Boolean = false
 
+        /**
+        减少颜色位数，降低数据量
+         **/
+        private fun reduceColorDepth(image: BufferedImage): BufferedImage {
+            // 维持图片宽高不变并将颜色映射到 8 位颜色空间
+            val reducedColorImage = BufferedImage(image.width, image.height, BufferedImage.TYPE_BYTE_INDEXED)
+            val g2d: Graphics2D = reducedColorImage.createGraphics()
+            g2d.drawImage(image, 0, 0, null)
+            g2d.dispose()
+
+            return reducedColorImage
+        }
+
+        private fun loadImageData(imageUri: String): Pair<BufferedImage, String> {
+            // 读取图像和获取格式
+            val imageInputStream = ImageIO.createImageInputStream(
+                    if (imageUri.startsWith("http")) URL(imageUri).openStream()  // 需要转化为 InputStream
+                    else File(imageUri)
+                )
+
+            val imageReaders = ImageIO.getImageReaders(imageInputStream)
+            if (!imageReaders.hasNext()) throw RuntimeException("Cannot detect image format.")
+            val reader: ImageReader = imageReaders.next()
+            val format = reader.formatName
+            // 读取图像数据
+            reader.input = imageInputStream
+            val imgData = reader.read(0)
+            imageInputStream.close()  // 关闭流
+            return imgData to format  // 返回图片数据和图片格式
+        }
 
         /**
          * 将图片链接读取到内存转换成ByteArrayOutputStream，方便操作
          */
-        fun getImageAsExResource(imageUri: String): ExternalResource {
-            // 强度榜目前直接获取是 jpg 格式
-            val suffix = if (imageUri.endsWith("png")) "png" else "jpg"  // 假设只有这两种格式
-            return if (imageUri.startsWith("http")) {
-                imageToBytes(randomNoise(ImageIO.read(URL(imageUri))), suffix).toByteArray().toExternalResource()
-            } else {
-                imageToBytes(randomNoise(ImageIO.read(File(imageUri))), suffix).toByteArray().toExternalResource()
+        suspend fun getImageAsExResource(imageUri: String): ExternalResource {
+            // 获取图像数据和格式
+            val (imgData, format) = withContext(Dispatchers.IO) {
+                loadImageData(imageUri)
             }
+
+            // 将图像转换为字节数组
+            var imgBytes = imageToBytes(imgData, format)
+            val maxSize = 150000000
+
+            // 如果图像数据大于阈值，则减少颜色深度以减小文件大小
+            if (imgBytes.size() > maxSize) {
+                val reducedColorImage = reduceColorDepth(imgData)
+                imgBytes = imageToBytes(reducedColorImage, format)
+            }
+
+            println("url: $imageUri, Image took ${imgBytes.size()} bytes.")
+            return imgBytes.toByteArray().toExternalResource()
         }
 
         fun randomNoise(image: BufferedImage): BufferedImage {
@@ -62,8 +107,10 @@ class ImageUtil {
         /**
          * 从图片中随机截取一部分
          */
-        fun getImagePiece(imagePath: String, w: Int, h: Int): BufferedImage {
-            val image = ImageIO.read(File(imagePath))
+        suspend fun getImagePiece(imagePath: String, w: Int, h: Int): BufferedImage {
+            val image = withContext(Dispatchers.IO) {
+                ImageIO.read(File(imagePath))
+            }
             while (true) {
                 var transparentCount = 0;
                 val piece = image.getSubimage(
@@ -86,10 +133,10 @@ class ImageUtil {
         }
 
         fun getImage(imageUri: String): BufferedImage {
-            if (imageUri.startsWith("http")) {
-                return ImageIO.read(URL(imageUri))
+            return if (imageUri.startsWith("http")) {
+                ImageIO.read(URL(imageUri))
             } else {
-                return ImageIO.read(Path(imageUri).toFile())
+                ImageIO.read(Path(imageUri).toFile())
             }
         }
 
@@ -113,7 +160,7 @@ class ImageUtil {
         fun rotate(src: Image, angel: Int): ByteArrayOutputStream {
             val srcWidth: Int = src.getWidth(null);
             val srcHeight: Int = src.getHeight(null);
-            val rectDes: Rectangle? = CalcRotatedSize(
+            val rectDes: Rectangle? = calcRotatedSize(
                 Rectangle(
                     Dimension(
                         srcWidth, srcHeight
@@ -172,12 +219,12 @@ class ImageUtil {
          * @param angel 角度
          * @return 目标矩形
          */
-        private fun CalcRotatedSize(src: Rectangle, angel: Int): Rectangle {
+        private fun calcRotatedSize(src: Rectangle, angel: Int): Rectangle {
             val cos = Math.abs(Math.cos(Math.toRadians(angel.toDouble())))
             val sin = Math.abs(Math.sin(Math.toRadians(angel.toDouble())))
-            val des_width = (src.width * cos).toInt() + (src.height * sin).toInt()
-            val des_height = (src.height * cos).toInt() + (src.width * sin).toInt()
-            return Rectangle(Dimension(des_width, des_height))
+            val desWidth = (src.width * cos).toInt() + (src.height * sin).toInt()
+            val desHeight = (src.height * cos).toInt() + (src.width * sin).toInt()
+            return Rectangle(Dimension(desWidth, desHeight))
         }
 
     }
