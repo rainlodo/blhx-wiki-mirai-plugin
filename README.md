@@ -3,7 +3,7 @@
 ## 简介
 
 基于[**mirai框架**](https://github.com/mamoe/mirai)的qq机器人插件，目前功能如下：
-
+- 注意：mirai框架框架目前停更，可能出现code:45无法登陆，请使用[**Overflow:对接 OneBot 11 标准，实现 mirai 的无缝迁移**](https://github.com/MrXiaoM/Overflow)并配合[**拉格朗**](https://github.com/LagrangeDev/Lagrange.Core)或[**其他OneBot 11标准框架**](https://github.com/Stapxs/Stapxs-QQ-Lite-2.0/issues/76)对接[**onebot协议**](https://onebot.dev/)
 - 搜索[碧蓝航线wiki](https://wiki.biligame.com/blhx)上的数据
   - 舰娘基本属性、出处、语音、皮肤列表、科技点、评价、配装
   - 装备基本属性、出处
@@ -145,29 +145,29 @@ $\color{red}{在修改配置文件时应确保机器人（插件）不在运行�
   
   ```json
   {
-  	"name": "ssss",
-  	"ur": [],
-  	"ssr": [{
-  		"name": "宝多六花",
-  		"probability": 20
-  	}, {
-  		"name": "新条茜",
-  		"probability": 20
-  	}, {
-  		"name": "南梦芽",
-  		"probability": 20
-  	}, {
-  		"name": "飞鸟川千濑",
-  		"probability": 5
-  	}],
-  	"sr": [{
-  		"name": "奈美子",
-  		"probability": 25
-  	}, {
-  		"name": "莲SSSS",
-  		"probability": 25
-  	}],
-  	"r": []
+    "name": "ssss",
+    "ur": [],
+    "ssr": [{
+      "name": "宝多六花",
+      "probability": 20
+    }, {
+      "name": "新条茜",
+      "probability": 20
+    }, {
+      "name": "南梦芽",
+      "probability": 20
+    }, {
+      "name": "飞鸟川千濑",
+      "probability": 5
+    }],
+    "sr": [{
+      "name": "奈美子",
+      "probability": 25
+    }, {
+      "name": "莲SSSS",
+      "probability": 25
+    }],
+    "r": []
   }
   ```
   
