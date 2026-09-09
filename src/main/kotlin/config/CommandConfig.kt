@@ -1,105 +1,64 @@
 package org.iris.wiki.config
 
-import net.mamoe.mirai.console.data.AutoSavePluginConfig
-import net.mamoe.mirai.console.data.ValueDescription
-import net.mamoe.mirai.console.data.value
+import org.iris.wiki.Wiki
+import org.iris.wiki.utils.ConfigYamlUtils
 
+object CommandConfig {
 
-/**
- * 命令名的配置
- * 用户输入指令会自动转变为小写
- * @constructor 实例化命令配置
- * @see AutoSavePluginConfig
- */
-object CommandConfig : AutoSavePluginConfig("CommandConfig") {
+    private const val fileName = "CommandConfig.yml"
 
-    // 指令头
-    @ValueDescription("wiki指令名")
-    val wiki : Array<String> by value(arrayOf("wiki", ".wiki", "/wiki", "yls"))
-
-
-    // 基本属性页面
-    @ValueDescription("舰娘、装备基本属性")
-    val attribute : Array<String> by value(arrayOf("属性", "基本信息", "基本"))
-
-    // 舰娘皮肤
-    @ValueDescription("舰娘皮肤")
-    val dress : Array<String> by value(arrayOf("皮肤", "换装"))
-
-    // 舰娘皮肤
-    @ValueDescription("舰娘皮肤原图")
-    val dressLarge : Array<String> by value(arrayOf("皮肤原图", "皮肤大图"))
-
-    // 舰娘原皮
-    @ValueDescription("舰娘原图")
-    val picLarge : Array<String> by value(arrayOf("原皮", "大图"))
-
-    @ValueDescription("舰娘改造所需素材")
-    val update : Array<String> by value(arrayOf("改造", "改"))
-
-    // 舰娘获得途径
-    @ValueDescription("舰娘、装备获得途径")
-    val from : Array<String> by value(arrayOf("出处", "建造", "来源", "获得途径"))
-
-    // 舰娘提供的科技点
-    @ValueDescription("舰娘提供的科技点")
-    val tech : Array<String> by value(arrayOf("科技点", "科技", "舰队科技"))
-
-    // 大佬们对舰娘的评价
-    @ValueDescription("大佬们对舰娘的评价")
-    val evaluate : Array<String> by value(arrayOf("评价"))
-
-    // 画师声优等信息
-    @ValueDescription("画师声优等信息")
-    val other : Array<String> by value(arrayOf("角色信息", "其他", "其它"))
-
-    // 推荐装备
-    @ValueDescription("推荐舰娘使用的装备")
-    val equip : Array<String> by value(arrayOf("装备", "出装", "配装"))
-
-    // 榜单
-    @ValueDescription("常用榜单")
-    val table : Array<String> by value(arrayOf("榜单", "表单", "图榜"))
-
-    @ValueDescription("婚皮原图")
-    val wedding : Array<String> by value(arrayOf("婚皮原图", "婚皮大图", "婚纱原图", "婚纱大图"))
-
-    // 戳一戳事件对应舰娘
-    @ValueDescription("戳一戳事件对应舰娘(wiki __1__ __2__ 指令中的__1__), 为 '无' 时不对戳一戳事件反应")
-    val touch_first_param : String by value("小加加")
-
-    // 戳一戳事件对应查询
-    @ValueDescription("戳一戳事件对应查询命令(wiki __1__ __2__ 指令中的__2__)")
-    val touch_second_param : String by value("触摸")
-
-    // 戳一戳事件对应舰娘
-    @ValueDescription("隐藏功能，发送本地涩图（需要设置本地涩图文件夹路径）")
-    val setu : Array<String> by value(arrayOf("涩图", "涩涩", "色图", "色色"))
-
-    // 戳一戳事件对应查询
-    @ValueDescription("本地涩图文件夹路径(注意不能使用\\，请用/代替)")
-    val setu_path : String by value("无")
-
-    // 目前支持榜单
-    @ValueDescription("支持查询的榜单")
-    val tableList : String by value(
+    private val defaultWiki = arrayOf("wiki", ".wiki", "/wiki", "yls")
+    private val defaultAttribute = arrayOf("属性", "基本信息", "基本")
+    private val defaultDress = arrayOf("皮肤", "换装")
+    private val defaultDressLarge = arrayOf("皮肤原图", "皮肤大图")
+    private val defaultPicLarge = arrayOf("原皮", "大图")
+    private val defaultUpdate = arrayOf("改造", "改")
+    private val defaultFrom = arrayOf("出处", "建造", "来源", "获得途径")
+    private val defaultTech = arrayOf("科技点", "科技", "舰队科技")
+    private val defaultEvaluate = arrayOf("评价")
+    private val defaultOther = arrayOf("角色信息", "其他", "其它")
+    private val defaultEquip = arrayOf("装备", "出装", "配装")
+    private val defaultTable = arrayOf("榜单", "表单", "图榜")
+    private val defaultWedding = arrayOf("婚皮原图", "婚皮大图", "婚纱原图", "婚纱大图")
+    private val defaultSetu = arrayOf("涩图", "涩涩", "色图", "色色")
+    private const val defaultTouchFirstParam = "小加加"
+    private const val defaultTouchSecondParam = "触摸"
+    private const val defaultSetuPath = "无"
+    private const val defaultTableList =
         "目前支持查询的榜单有：\n" +
-        "*()内为简写\n" +
-        "PVE用舰船综合性能强度榜(舰娘一图榜)\n" +
-        "装备一图榜\n" +
-        "认知觉醒推荐榜(觉醒榜)\n" +
-        "萌新入坑推荐榜(萌新榜)\n" +
-        "兑换装备推荐榜(兑换榜)\n" +
-        "装备研发推荐榜(研发榜)\n" +
-        "改造舰船推荐榜(改造榜)\n" +
-        "井号打捞表(打捞表)\n"
-    )
+            "*()内为简写\n" +
+            "PVE用舰船综合性能强度榜(舰娘一图榜)\n" +
+            "装备一图榜\n" +
+            "认知觉醒推荐榜(觉醒榜)\n" +
+            "萌新入坑推荐榜(萌新榜)\n" +
+            "兑换装备推荐榜(兑换榜)\n" +
+            "装备研发推荐榜(研发榜)\n" +
+            "改造舰船推荐榜(改造榜)\n" +
+            "井号打捞表(打捞表)\n"
 
-    // 支持查询的语音
+    var wiki: Array<String> = defaultWiki.copyOf()
+    var attribute: Array<String> = defaultAttribute.copyOf()
+    var dress: Array<String> = defaultDress.copyOf()
+    var dressLarge: Array<String> = defaultDressLarge.copyOf()
+    var picLarge: Array<String> = defaultPicLarge.copyOf()
+    var update: Array<String> = defaultUpdate.copyOf()
+    var from: Array<String> = defaultFrom.copyOf()
+    var tech: Array<String> = defaultTech.copyOf()
+    var evaluate: Array<String> = defaultEvaluate.copyOf()
+    var other: Array<String> = defaultOther.copyOf()
+    var equip: Array<String> = defaultEquip.copyOf()
+    var table: Array<String> = defaultTable.copyOf()
+    var wedding: Array<String> = defaultWedding.copyOf()
+    var touch_first_param: String = defaultTouchFirstParam
+    var touch_second_param: String = defaultTouchSecondParam
+    var setu: Array<String> = defaultSetu.copyOf()
+    var setu_path: String = defaultSetuPath
+    var tableList: String = defaultTableList
+
     val voiceList =
         "请输入具体语音类型，如：\n" +
-        "wiki 小加加 技能\n" +
-        "目前支持查询的语音有：\n" +
+            "wiki 小加加 技能\n" +
+            "目前支持查询的语音有：\n" +
             "自我介绍，获取语音，" +
             "登录，查看详情，主页，" +
             "触摸，特触，摸头，" +
@@ -110,9 +69,7 @@ object CommandConfig : AutoSavePluginConfig("CommandConfig") {
             "开战，mvp，失败，" +
             "技能，大破"
 
-
-    // 舰娘语音目录
-    val voice_map = mapOf<String, String>(
+    val voice_map = mapOf(
         "自我介绍" to "profile",
         "获取台词" to "unlock",
         "获取语音" to "unlock",
@@ -189,4 +146,79 @@ object CommandConfig : AutoSavePluginConfig("CommandConfig") {
     )
 
     val ALL_COMMAND = hashSetOf<String>()
+
+    fun load() {
+        val configFile = Wiki.resolveConfigFile(fileName)
+        if (!configFile.exists()) {
+            save()
+            rebuildAllCommands()
+            return
+        }
+
+        val configMap = ConfigYamlUtils.loadMap(configFile)
+        wiki = ConfigYamlUtils.readStringArray(configMap, "wiki", defaultWiki)
+        attribute = ConfigYamlUtils.readStringArray(configMap, "attribute", defaultAttribute)
+        dress = ConfigYamlUtils.readStringArray(configMap, "dress", defaultDress)
+        dressLarge = ConfigYamlUtils.readStringArray(configMap, "dressLarge", defaultDressLarge)
+        picLarge = ConfigYamlUtils.readStringArray(configMap, "picLarge", defaultPicLarge)
+        update = ConfigYamlUtils.readStringArray(configMap, "update", defaultUpdate)
+        from = ConfigYamlUtils.readStringArray(configMap, "from", defaultFrom)
+        tech = ConfigYamlUtils.readStringArray(configMap, "tech", defaultTech)
+        evaluate = ConfigYamlUtils.readStringArray(configMap, "evaluate", defaultEvaluate)
+        other = ConfigYamlUtils.readStringArray(configMap, "other", defaultOther)
+        equip = ConfigYamlUtils.readStringArray(configMap, "equip", defaultEquip)
+        table = ConfigYamlUtils.readStringArray(configMap, "table", defaultTable)
+        wedding = ConfigYamlUtils.readStringArray(configMap, "wedding", defaultWedding)
+        touch_first_param = ConfigYamlUtils.readString(configMap, "touch_first_param", defaultTouchFirstParam)
+        touch_second_param = ConfigYamlUtils.readString(configMap, "touch_second_param", defaultTouchSecondParam)
+        setu = ConfigYamlUtils.readStringArray(configMap, "setu", defaultSetu)
+        setu_path = ConfigYamlUtils.readString(configMap, "setu_path", defaultSetuPath)
+        tableList = ConfigYamlUtils.readString(configMap, "tableList", defaultTableList)
+        rebuildAllCommands()
+    }
+
+    fun save() {
+        ConfigYamlUtils.saveMap(
+            Wiki.resolveConfigFile(fileName),
+            linkedMapOf(
+                "wiki" to wiki.toList(),
+                "attribute" to attribute.toList(),
+                "dress" to dress.toList(),
+                "dressLarge" to dressLarge.toList(),
+                "picLarge" to picLarge.toList(),
+                "update" to update.toList(),
+                "from" to from.toList(),
+                "tech" to tech.toList(),
+                "evaluate" to evaluate.toList(),
+                "other" to other.toList(),
+                "equip" to equip.toList(),
+                "table" to table.toList(),
+                "wedding" to wedding.toList(),
+                "touch_first_param" to touch_first_param,
+                "touch_second_param" to touch_second_param,
+                "setu" to setu.toList(),
+                "setu_path" to setu_path,
+                "tableList" to tableList
+            )
+        )
+    }
+
+    fun rebuildAllCommands() {
+        ALL_COMMAND.clear()
+        val commands = listOf(
+            attribute,
+            dress,
+            dressLarge,
+            picLarge,
+            from,
+            tech,
+            evaluate,
+            equip,
+            wedding
+        )
+        commands.forEach {
+            ALL_COMMAND.addAll(it)
+        }
+        ALL_COMMAND.addAll(voice_map.keys)
+    }
 }

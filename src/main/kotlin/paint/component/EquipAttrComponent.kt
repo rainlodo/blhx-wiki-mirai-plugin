@@ -4,11 +4,13 @@ package org.iris.wiki.paint.component
 import org.iris.wiki.config.CommonConfig
 import org.iris.wiki.data.EquipAttrData
 import org.iris.wiki.paint.PaintUtils
+import org.iris.wiki.utils.EquipIconUtils
+import org.iris.wiki.utils.ImageUtil
 import java.awt.Color
+import java.awt.Font
 import java.awt.image.BufferedImage
 import java.awt.image.RescaleOp
 import java.io.File
-import java.net.URL
 import javax.imageio.ImageIO
 import kotlin.io.path.Path
 
@@ -25,6 +27,8 @@ class EquipAttrComponent(
 
     val backgroundColor = Color(100, 100, 100,200)
     val attrBgColor = Color(0, 0, 0,127)
+    private val useBoxWidth = 52
+    private val useBoxHeight = 40
 
     override fun init() : Component {
         width = 576
@@ -58,16 +62,8 @@ class EquipAttrComponent(
         g2.drawImage(pic, (width-pic.width) / 2, y, null)
         y += pic.height + 5
 
-        val path = "${CommonConfig.equip_path}/${data.name.replace("/", "_")}.png"
-        if (File(path).exists()) {
-            data.pic = path
-        }
-        if (data.pic.startsWith("http")) {
-            pic = ImageIO.read(URL(data.pic))
-        }
-        else {
-            pic = ImageIO.read(Path(data.pic).toFile())
-        }
+        data.pic = EquipIconUtils.resolveEquipIcon(data.name, data.tno, data.pic)
+        pic = ImageUtil.getImage(data.pic)
         g2.drawImage(pic, (width-128) / 2, y - 180, 128, 128,null)
 
         // tno
@@ -143,33 +139,35 @@ class EquipAttrComponent(
         // use
         var count = 0
         for (i in 0 until PaintUtils.MAP_EQUIP_USE.size) {
+            val iconX = tab + 26 + count * 104
+            val iconY = y
+            val useIcon = readEquipUiImage("use_${i + 1}.png")
             if (data.use.contains(PaintUtils.MAP_EQUIP_USE[i])) {
-                g2.drawImage(
-                    ImageIO.read(Path("${PaintUtils.PATH_EQUIP_ICON}/use_${i + 1}.png").toFile()),
-                    tab + 26 + count * 104, y,null
-                )
+                if (useIcon != null) {
+                    g2.drawImage(useIcon, iconX, iconY, null)
+                } else {
+                    drawUseFallback(iconX, iconY, PaintUtils.MAP_EQUIP_USE[i], false)
+                }
                 if (data.use[PaintUtils.MAP_EQUIP_USE[i]] == 1) {
-                    g2.drawImage(
-                        ImageIO.read(Path("${PaintUtils.PATH_EQUIP_ICON}/main.png").toFile()),
-                        tab + 20 + count * 104, y - 6, 18, 14, null
-                    )
+                    drawSlotTag(iconX - 6, y - 6, "主", Color(214, 65, 65))
                 } else if (data.use[PaintUtils.MAP_EQUIP_USE[i]] == 2) {
-                    g2.drawImage(
-                        ImageIO.read(Path("${PaintUtils.PATH_EQUIP_ICON}/sub.png").toFile()),
-                        tab + 20 + count * 104, y - 6, 18, 14, null
-                    )
+                    drawSlotTag(iconX - 6, y - 6, "副", Color(68, 114, 196))
                 }
             } else {
-                g2.drawImage(
-                    ImageIO.read(Path("${PaintUtils.PATH_EQUIP_ICON}/use_${i + 1}.png").toFile()),
-                    RescaleOp(FloatArray(4).apply {
-                        this[0] = 1f
-                        this[1] = 1f
-                        this[2] = 1f
-                        this[3] = 0.5f
-                    }, FloatArray(4), null),
-                    tab + 26 + count * 104, y
-                )
+                if (useIcon != null) {
+                    g2.drawImage(
+                        useIcon,
+                        RescaleOp(FloatArray(4).apply {
+                            this[0] = 1f
+                            this[1] = 1f
+                            this[2] = 1f
+                            this[3] = 0.5f
+                        }, FloatArray(4), null),
+                        iconX, iconY
+                    )
+                } else {
+                    drawUseFallback(iconX, iconY, PaintUtils.MAP_EQUIP_USE[i], true)
+                }
             }
 
             count++
@@ -180,6 +178,63 @@ class EquipAttrComponent(
         }
 
         return super.draw()?.getSubimage(0, 0, width, y + tab)
+    }
+
+    private fun readEquipUiImage(name: String): BufferedImage? {
+        val file = Path("${PaintUtils.PATH_EQUIP_ICON}/$name").toFile()
+        if (!file.exists()) {
+            return null
+        }
+        return runCatching { ImageIO.read(file) }.getOrNull()
+    }
+
+    private fun drawSlotTag(x: Int, y: Int, text: String, color: Color) {
+        val image = readEquipUiImage(if (text == "主") "main.png" else "sub.png")
+        if (image != null) {
+            g2.drawImage(image, x, y, 18, 14, null)
+            return
+        }
+
+        val oldColor = g2.color
+        val oldFont = g2.font
+        g2.color = color
+        g2.fillRoundRect(x, y, 18, 14, 4, 4)
+        g2.color = Color.WHITE
+        g2.font = PaintUtils.font.deriveFont(Font.BOLD, 10f)
+        g2.drawString(text, x + 4, y + 11)
+        g2.color = oldColor
+        g2.font = oldFont
+    }
+
+    private fun drawUseFallback(x: Int, y: Int, text: String, disabled: Boolean) {
+        val oldColor = g2.color
+        val oldFont = g2.font
+        val bg = if (disabled) Color(220, 220, 220, 120) else Color(245, 245, 245)
+        val border = if (disabled) Color(180, 180, 180) else Color(120, 120, 120)
+        val fontColor = if (disabled) Color(140, 140, 140) else Color.BLACK
+
+        g2.color = bg
+        g2.fillRoundRect(x, y, useBoxWidth, useBoxHeight, 8, 8)
+        g2.color = border
+        g2.drawRoundRect(x, y, useBoxWidth, useBoxHeight, 8, 8)
+        g2.color = fontColor
+        g2.font = PaintUtils.font.deriveFont(14f)
+
+        val lines = when {
+            text.length <= 2 -> listOf(text)
+            text.length <= 4 -> listOf(text.substring(0, 2), text.substring(2))
+            else -> listOf(text.substring(0, 2), text.substring(2, 4))
+        }
+
+        lines.forEachIndexed { index, line ->
+            val bounds = g2.fontMetrics.getStringBounds(line, g2)
+            val tx = x + (useBoxWidth - bounds.width.toInt()) / 2
+            val ty = y + 15 + index * 14
+            g2.drawString(line, tx, ty)
+        }
+
+        g2.color = oldColor
+        g2.font = oldFont
     }
 
 

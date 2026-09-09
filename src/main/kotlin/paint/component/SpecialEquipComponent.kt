@@ -3,10 +3,10 @@ package org.iris.wiki.paint.component
 import org.iris.wiki.config.CommonConfig
 import org.iris.wiki.data.SpecialEquipData
 import org.iris.wiki.paint.PaintUtils
+import org.iris.wiki.utils.EquipIconUtils
+import org.iris.wiki.utils.ImageUtil
 import java.awt.Color
 import java.awt.image.BufferedImage
-import java.io.File
-import java.net.URL
 import javax.imageio.ImageIO
 import kotlin.io.path.Path
 
@@ -53,16 +53,8 @@ class SpecialEquipComponent(
         g2.drawImage(pic, (width-pic.width) / 2, y, null)
         y += pic.height + 5
 
-        val path = "${CommonConfig.equip_path}/${data.name.replace("/", "_")}.png"
-        if (File(path).exists()) {
-            data.pic = path
-        }
-        if (data.pic.startsWith("http")) {
-            pic = ImageIO.read(URL(data.pic))
-        }
-        else {
-            pic = ImageIO.read(Path(data.pic).toFile())
-        }
+        data.pic = EquipIconUtils.resolveEquipIcon(data.name, data.tno, data.pic)
+        pic = ImageUtil.getImage(data.pic)
         g2.drawImage(pic, (width-128) / 2, y - 180, 128, 128,null)
 
         // tno

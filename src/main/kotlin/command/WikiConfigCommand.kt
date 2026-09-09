@@ -8,6 +8,7 @@ import net.mamoe.mirai.contact.Group
 import org.iris.wiki.Wiki
 import org.iris.wiki.config.CommonConfig
 import org.iris.wiki.config.WikiConfig
+import org.iris.wiki.utils.HttpUtils
 import org.iris.wiki.utils.UpdateUtils
 import java.io.File
 
@@ -36,10 +37,11 @@ object WikiConfigCommand : CompositeCommand(
     }
 
     @SubCommand("clear")
-    @Description("清除图片缓存")
+    @Description("清除图片缓存和远程内容缓存")
     suspend fun CommandSender.clear() {
         deleteDirectoryFiles(File(CommonConfig.ship_output_path))
         deleteDirectoryFiles(File(CommonConfig.equip_output_path))
+        HttpUtils.clearRemoteCache()
         sendMessage("缓存清除成功喵")
     }
 
@@ -47,6 +49,7 @@ object WikiConfigCommand : CompositeCommand(
     @Description("开启/关闭舰娘wiki中的舰娘装备详情板块")
     suspend fun CommandSender.equip_detail(enabled: Boolean = true) {
         WikiConfig.ship_equip_efficiency_on = enabled
+        WikiConfig.save()
         sendMessage("设置成功喵")
     }
 
@@ -62,11 +65,13 @@ object WikiConfigCommand : CompositeCommand(
         if (subject is Group) {
             if (enabled) {
                 WikiConfig.draw_ship_ban_list.remove(subject.id.toString())
+                WikiConfig.save()
                 sendMessage("设置成功喵")
             } else {
                 if (!WikiConfig.draw_ship_ban_list.contains(subject.id.toString())) {
                     WikiConfig.draw_ship_ban_list.add(subject.id.toString())
                 }
+                WikiConfig.save()
                 sendMessage("设置成功喵")
             }
         }
@@ -78,11 +83,13 @@ object WikiConfigCommand : CompositeCommand(
         if (subject is Group) {
             if (enabled) {
                 WikiConfig.gauss_ship_ban_list.remove(subject.id.toString())
+                WikiConfig.save()
                 sendMessage("设置成功喵")
             } else {
                 if (!WikiConfig.gauss_ship_ban_list.contains(subject.id.toString())) {
                     WikiConfig.gauss_ship_ban_list.add(subject.id.toString())
                 }
+                WikiConfig.save()
                 sendMessage("设置成功喵")
             }
         }
@@ -93,11 +100,13 @@ object WikiConfigCommand : CompositeCommand(
         if (subject is Group) {
             if (!enabled) {
                 WikiConfig.setu_list.remove(subject.id.toString())
+                WikiConfig.save()
                 sendMessage("设置成功喵")
             } else {
                 if (!WikiConfig.setu_list.contains(subject.id.toString())) {
                     WikiConfig.setu_list.add(subject.id.toString())
                 }
+                WikiConfig.save()
                 sendMessage("设置成功喵")
             }
         }

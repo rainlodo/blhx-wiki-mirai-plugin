@@ -13,6 +13,7 @@ val MESSAGE_HELP = "指令格式如下：\n" +
     "wiki [装备] 出处\n" +
     "wiki 大建 轻池/特池/重池/[活动池]\n" +
     "wiki [榜单]\n" +
+    "添加别名 [别名] [正式名]\n" +
     "猜老婆/舰娘\n" +
     "装备名中的空格用_代替~\n\n" +
     "bug请在https://gitee.com/rainlodo/blhx-wiki-mirai-plugin/issues反馈"

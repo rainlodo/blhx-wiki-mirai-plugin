@@ -50,7 +50,7 @@ class ShipAttrComponent(
 
         // 修正阵营和稀有度信息
         var rarity = PaintUtils.MAP_SHIP_RARITY[data.level]!!
-        if (data.camp == "") {
+        if (data.camp == "" || data.camp == "META-???") {
             data.camp = "余烬"
         }
         if (data.camp == "余烬") {

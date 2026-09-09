@@ -1,19 +1,17 @@
 package org.iris.wiki.config
 
-import net.mamoe.mirai.console.data.AutoSavePluginConfig
-import net.mamoe.mirai.console.data.ValueDescription
-import net.mamoe.mirai.console.data.value
+import org.iris.wiki.Wiki
+import org.iris.wiki.utils.ConfigYamlUtils
 import java.util.HashMap
+import java.util.LinkedHashMap
 
+object AliasConfig {
 
-object AliasConfig : AutoSavePluginConfig("AliasConfig") {
+    private val fileName = "AliasConfig.yml"
 
-    @ValueDescription("别名，指令自动转小写，别名中的英文请使用小写字母")
-    val ALIAS_USER_MAP : Map<String, String> by value(mapOf<String, String>(
+    var ALIAS_USER_MAP: MutableMap<String, String> = linkedMapOf()
 
-    ))
-    @ValueDescription("驱逐别名")
-    val ALIAS_DD_MAP : Map<String, String> by value(mapOf(
+    val ALIAS_DD_MAP: Map<String, String> = mapOf(
         "彩布里" to "特装型布里MKIII",
         "金布里" to "试作型布里MKII",
         "布里" to "泛用型布里",
@@ -44,10 +42,9 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "庞贝" to "庞培·马格诺",
         "庞培" to "庞培·马格诺",
         "玛丽罗斯" to "玛莉萝丝"
-    ))
+    )
 
-    @ValueDescription("轻巡别名")
-    val ALIAS_CL_MAP : Map<String, String> by value(mapOf(
+    val ALIAS_CL_MAP: Map<String, String> = mapOf(
         "凤凰" to "菲尼克斯",
         "海妈" to "海伦娜",
         "檀香山" to "火奴鲁鲁",
@@ -96,10 +93,9 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "黑海妈" to "海伦娜·META",
         "海伦娜meta" to "海伦娜·META",
         "海妈meta" to "海伦娜·META"
-    ))
+    )
 
-    @ValueDescription("重巡别名")
-    val ALIAS_CA_MAP : Map<String, String> by value(mapOf(
+    val ALIAS_CA_MAP: Map<String, String> = mapOf(
         "波特彩" to "波特兰",
         "印第" to "印第安纳波利斯",
         "印地" to "印第安纳波利斯",
@@ -145,10 +141,9 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "爱鸡儿" to "埃吉尔",
         "喀琅" to "喀琅施塔得",
         "施塔得" to "喀琅施塔得"
-    ))
+    )
 
-    @ValueDescription("战列别名")
-    val ALIAS_BB_MAP : Map<String, String> by value(mapOf(
+    val ALIAS_BB_MAP: Map<String, String> = mapOf(
 
         "河马" to "俄克拉荷马",
         "崩姐" to "宾夕法尼亚",
@@ -228,10 +223,9 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
 
         "派翠夏" to "帕特莉夏·阿贝尔海姆",
         "帕特丽夏" to "帕特莉夏·阿贝尔海姆",
-    ))
+    )
 
-    @ValueDescription("航母别名")
-    val ALIAS_CV_MAP : Map<String, String> by value(mapOf(
+    val ALIAS_CV_MAP: Map<String, String> = mapOf(
         "列太太" to "列克星敦",
         "小加加" to "萨拉托加",
         "大E" to "企业",
@@ -270,10 +264,9 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "飞鹰meta" to "飞鹰·META",
         "黑隼鹰" to "隼鹰·META",
         "隼鹰meta" to "隼鹰·META"
-    ))
+    )
 
-    @ValueDescription("其他别名")
-    val ALIAS_OTHER_MAP : Map<String, String> by value(mapOf(
+    val ALIAS_OTHER_MAP: Map<String, String> = mapOf(
         "举炮炮" to "阿贝克隆比",
         "奸商" to "明石",
         "牛牛" to "樫野",
@@ -316,10 +309,9 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "改造榜" to "改造舰船推荐榜",
         "萌新榜" to "萌新入坑推荐榜",
         "跨队榜" to "跨队舰船推荐榜"
-    ))
+    )
 
-    @ValueDescription("和谐名")
-    val ALIAS_JP_MAP : Map<String, String> by value(mapOf(
+    val ALIAS_JP_MAP: Map<String, String> = mapOf(
         "樱" to "峰风",
         "榊" to "神风",
         "櫂" to "朝风",
@@ -499,11 +491,10 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "塞普拉斯" to "莫里森",
 
         "滨江" to "哈尔滨"
-    ))
+    )
 
 
-    @ValueDescription("驱逐炮")
-    val ALIAS_DD_GUN_MAP : Map<String, String> by value(mapOf(
+    val ALIAS_DD_GUN_MAP: Map<String, String> = mapOf(
         "金高平" to "双联装127mm高平两用炮Mk12T3",
         "127高平" to "双联装127mm高平两用炮Mk12T3",
         "76炮" to "76mm火炮T3",
@@ -530,10 +521,9 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "滨江炮" to "试作型双联装130mm主炮Model1936T0",
         "紫130" to "B-130mm单装炮T3",
         "社会主义130" to "B-130mm单装炮T3"
-    ))
+    )
 
-    @ValueDescription("巡洋炮")
-    val ALIAS_C_GUN_MAP : Map<String, String> by value(mapOf(
+    val ALIAS_C_GUN_MAP: Map<String, String> = mapOf(
         "西雅图炮" to "试作型三联装152mm高平两用炮Mk17T0",
         "巴尔的摩炮" to "三联装203mm主炮Mk15T0",
         "真克爹炮" to "三联装152mm主炮Mk16T0",
@@ -574,10 +564,9 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "施塔得炮" to "B-50_三联装305mm主炮MK-15T0",
         "B50" to "B-50_三联装305mm主炮MK-15T0",
         "b50" to "B-50_三联装305mm主炮MK-15T0"
-    ))
+    )
 
-    @ValueDescription("战列炮")
-    val ALIAS_BB_GUN_MAP : Map<String, String> by value(mapOf(
+    val ALIAS_BB_GUN_MAP: Map<String, String> = mapOf(
         "mk6" to "三联装406mm主炮Mk6T3",
         "妹控6" to "三联装406mm主炮Mk6T3",
         "mk7" to "三联装406mm主炮Mk7T0",
@@ -613,10 +602,9 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "黎塞留炮" to "四联装380mm主炮Mle1935T3",
         "香槟炮" to "试作型三联装406mm/50主炮T0",
         "武藏炮" to "460mm三连装炮T0",
-    ))
+    )
 
-    @ValueDescription("防空炮")
-    val ALIAS_AIR_GUN_MAP : Map<String, String> by value(mapOf(
+    val ALIAS_AIR_GUN_MAP: Map<String, String> = mapOf(
         "双76" to "双联装76mmRF火炮Mk27T0",
         "四联博福斯" to "四联40mm博福斯对空机炮T3",
         "八联砰砰" to "八联装40mm“砰砰”炮T3",
@@ -641,10 +629,9 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "105" to "双联105mmSKC高炮T3",
         "105改" to "双联105mmSKC高炮改进型T0",
         "彩防空炮" to "双联装57mmL/60博福斯对空机炮Mle1951"
-    ))
+    )
 
-    @ValueDescription("鱼雷")
-    val ALIAS_TORPEDO_MAP : Map<String, String> by value(mapOf(
+    val ALIAS_TORPEDO_MAP: Map<String, String> = mapOf(
         "三联磁" to "三联装533mm磁性鱼雷T3",
         "紫三磁" to "三联装533mm磁性鱼雷T3",
         "金四磁" to "四联装533mm磁性鱼雷T3",
@@ -668,10 +655,9 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "菲里雷" to "潜艇用Mark_12鱼雷-菲里T0",
 
         "上游1" to "上游-1"
-    ))
+    )
 
-    @ValueDescription("飞机")
-    val ALIAS_PLANE_MAP : Map<String, String> by value(mapOf(
+    val ALIAS_PLANE_MAP: Map<String, String> = mapOf(
         "地狱猫" to "F6F地狱猫T3",
         "虎猫" to "F7F虎猫T0",
         "熊猫" to "F8F熊猫T0",
@@ -711,10 +697,9 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "d790" to "D.790T0",
         "br810" to "BR.810T0",
         "br" to "BR.810T0"
-    ))
+    )
 
-    @ValueDescription("设备")
-    val ALIAS_DEVICE_MAP : Map<String, String> by value(mapOf(
+    val ALIAS_DEVICE_MAP: Map<String, String> = mapOf(
         "苍蝇拍" to "FuMO_25T0",
         "烧烤架" to "FuMO_25T0",
         "烤肉架" to "FuMO_25T0",
@@ -771,10 +756,9 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "彩火控" to "海军部火控台T0",
         "黄蛋" to "6CRH穿甲弹T0",
         "黄弹" to "6CRH穿甲弹T0"
-    ))
+    )
 
-    @ValueDescription("专武")
-    val ALIAS_AUGMENT_MAP : Map<String, String> by value(mapOf(
+    val ALIAS_AUGMENT_MAP: Map<String, String> = mapOf(
         "贝法专武" to "波涛与优雅的午后T0",
         "贝尔法斯特专武" to "波涛与优雅的午后T0",
         "伊58专武" to "探测平衡装置T0",
@@ -785,12 +769,35 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         "拉菲专武" to "勇敢的美梦之枕T0",
         "光荣专武" to "准时的怀表T0",
         "让巴尔专武" to "护教骑士战旗T0"
-    ))
+    )
 
 
     val ALIAS_MAP : HashMap<String, String> = hashMapOf()
 
-    init {
+    fun load() {
+        val configFile = Wiki.resolveConfigFile(fileName)
+        if (!configFile.exists()) {
+            save()
+            rebuildAliasMap()
+            return
+        }
+
+        val configMap = ConfigYamlUtils.loadMap(configFile)
+        ALIAS_USER_MAP = ConfigYamlUtils.readStringMap(configMap, "ALIAS_USER_MAP")
+        rebuildAliasMap()
+    }
+
+    fun save() {
+        ConfigYamlUtils.saveMap(
+            Wiki.resolveConfigFile(fileName),
+            linkedMapOf(
+                "ALIAS_USER_MAP" to LinkedHashMap(ALIAS_USER_MAP)
+            )
+        )
+    }
+
+    fun rebuildAliasMap() {
+        ALIAS_MAP.clear()
         val mapList = listOf(
             ALIAS_DD_MAP,
             ALIAS_CL_MAP,
@@ -811,6 +818,17 @@ object AliasConfig : AutoSavePluginConfig("AliasConfig") {
         mapList.forEach {
             ALIAS_MAP.putAll(it)
         }
+        ALIAS_MAP.putAll(ALIAS_USER_MAP)
+    }
+
+    init {
+        load()
+    }
+
+    fun addUserAlias(alias: String, target: String) {
+        ALIAS_USER_MAP[alias] = target
+        save()
+        rebuildAliasMap()
     }
 
 }

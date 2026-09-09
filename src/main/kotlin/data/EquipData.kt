@@ -37,7 +37,9 @@ data class EquipData(
         val liList = ul.children()
         name = liList[0].text()
         type = liList[1].text()
-        pic = liList[1].select("img")[0].attr("src")
+        pic = liList[1].select("img")[0].absUrl("src").ifBlank {
+            liList[1].select("img")[0].attr("src")
+        }
 
         val table = doc.select("table[class='table table-bordered']")[0]
         val tdList = table.select("td")

@@ -17,7 +17,7 @@ object UpdateUtils {
 
     // 更新舰娘名称列表
     suspend fun updateShipNameList() : Int {
-        val data = HttpUtils.get("https://wiki.biligame.com/blhx/%E8%88%B0%E5%A8%98%E5%9B%BE%E9%89%B4")
+        val data = HttpUtils.get("https://wiki.biligame.com/blhx/%E8%88%B0%E5%A8%98%E5%9B%BE%E9%89%B4", useCache = false)
 
         val doc = Jsoup.parse(data)
 
@@ -37,7 +37,7 @@ object UpdateUtils {
 
     // 更新装备名称列表
     suspend fun updateEquipList() : Int {
-        val data = HttpUtils.get("https://wiki.biligame.com/blhx/%E8%A3%85%E5%A4%87")
+        val data = HttpUtils.get("https://wiki.biligame.com/blhx/%E8%A3%85%E5%A4%87", useCache = false)
 
         val doc = Jsoup.parse(data)
         val equipList = arrayListOf<String>()
@@ -54,7 +54,7 @@ object UpdateUtils {
 
     // 更新常驻池
     suspend fun updateNormalPool() {
-        val data = HttpUtils.get("https://wiki.biligame.com/blhx/%E5%BB%BA%E9%80%A0%E6%A8%A1%E6%8B%9F%E5%99%A8")
+        val data = HttpUtils.get("https://wiki.biligame.com/blhx/%E5%BB%BA%E9%80%A0%E6%A8%A1%E6%8B%9F%E5%99%A8", useCache = false)
 
         val doc = Jsoup.parse(data)
         val shipContainMap = hashMapOf<Pair<DrawUtils.DrawType, DrawUtils.Rarity>, List<String>>()
@@ -77,7 +77,7 @@ object UpdateUtils {
      * 更新头像
      */
     suspend fun updateShipIcon() {
-        val data = HttpUtils.get("https://wiki.biligame.com/blhx/%E8%88%B0%E5%A8%98%E5%9B%BE%E9%89%B4")
+        val data = HttpUtils.get("https://wiki.biligame.com/blhx/%E8%88%B0%E5%A8%98%E5%9B%BE%E9%89%B4", useCache = false)
 
         val doc = Jsoup.parse(data)
 
@@ -97,7 +97,7 @@ object UpdateUtils {
 
     // 更新科技点数据
     suspend fun updateShipTechPoints(){
-        val data = HttpUtils.get("https://wiki.biligame.com/blhx/%E8%88%B0%E9%98%9F%E7%A7%91%E6%8A%80")
+        val data = HttpUtils.get("https://wiki.biligame.com/blhx/%E8%88%B0%E9%98%9F%E7%A7%91%E6%8A%80", useCache = false)
         val doc = Jsoup.parse(data)
         val filterTableRows = doc.select("table")[13].select("tr")
         val shipRows = doc.select("#CardSelectTr > tbody > tr")

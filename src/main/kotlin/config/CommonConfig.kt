@@ -13,6 +13,9 @@ object CommonConfig {
     val ship_output_path = "$root/out/ship"
     val stage_output_path = "$root/out/stage"
     val reply_image_path = "$root/out/reply" // 自动回复中图片的存储路径
+    val network_cache_path = "$root/cache/network"
+    val network_text_cache_path = "$network_cache_path/text"
+    val network_binary_cache_path = "$network_cache_path/binary"
     val emoji_path = "$root/image/emoji"
     val json_string = "$root/config"
     val head_path = "$root/image/icon/head"

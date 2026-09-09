@@ -18,9 +18,10 @@ data class SearchData(
     override fun parse(doc: Document, commandList: List<String>) : Data {
         super.parse(doc, commandList)
         val divList = doc.select("div[class='searchresults']")[0].select("div[class='mw-search-result-heading']")
+        val keyword = normalize(commandList[1])
         for (div in divList) {
             val title = div.child(0).attr("title")
-            if (title.contains(commandList[1])) {
+            if (keyword.isEmpty() || normalize(title).contains(keyword)) {
                 result.add(title)
             }
         }
@@ -41,6 +42,20 @@ data class SearchData(
         }
 
         return builder.build()
+    }
+
+    private fun normalize(value: String): String {
+        return buildString(value.length) {
+            value.lowercase().forEach { ch ->
+                if (ch in '\u4e00'..'\u9fa5' ||
+                    ch in '\u0030'..'\u0039' ||
+                    ch in '\u0041'..'\u005A' ||
+                    ch in '\u0061'..'\u007A'
+                ) {
+                    append(ch)
+                }
+            }
+        }
     }
 
 }

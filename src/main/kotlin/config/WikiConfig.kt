@@ -1,27 +1,46 @@
 package org.iris.wiki.config
 
-import net.mamoe.mirai.console.data.AutoSavePluginConfig
-import net.mamoe.mirai.console.data.ValueDescription
-import net.mamoe.mirai.console.data.value
+import org.iris.wiki.Wiki
+import org.iris.wiki.utils.ConfigYamlUtils
 
-object WikiConfig: AutoSavePluginConfig("WikiConfig") {
+object WikiConfig {
 
-    @ValueDescription("是否显示装备效率")
-    var ship_equip_efficiency_on :Boolean by value(false)
+    private val fileName = "WikiConfig.yml"
 
-    @ValueDescription("是否开启噪点添加（在图像上随机添加噪点，能够一定程度上减少图片被吞概率，但是会略微增加处理时间）")
-    var image_noise_on :Boolean by value(false)
+    var ship_equip_efficiency_on: Boolean = false
+    var image_noise_on: Boolean = false
+    var command_parse_on: Boolean = true
+    var gauss_ship_ban_list: MutableList<String> = mutableListOf()
+    var draw_ship_ban_list: MutableList<String> = mutableListOf()
+    var setu_list: MutableList<String> = mutableListOf()
 
-    @ValueDescription("自动分割指令")
-    var command_parse_on :Boolean by value(true)
+    fun load() {
+        val configFile = Wiki.resolveConfigFile(fileName)
+        if (!configFile.exists()) {
+            save()
+            return
+        }
 
-    @ValueDescription("禁止猜老婆的群列表")
-    var gauss_ship_ban_list :MutableList<String> by value(mutableListOf())
+        val configMap = ConfigYamlUtils.loadMap(configFile)
+        ship_equip_efficiency_on = ConfigYamlUtils.readBoolean(configMap, "ship_equip_efficiency_on", false)
+        image_noise_on = ConfigYamlUtils.readBoolean(configMap, "image_noise_on", false)
+        command_parse_on = ConfigYamlUtils.readBoolean(configMap, "command_parse_on", true)
+        gauss_ship_ban_list = ConfigYamlUtils.readStringList(configMap, "gauss_ship_ban_list", mutableListOf())
+        draw_ship_ban_list = ConfigYamlUtils.readStringList(configMap, "draw_ship_ban_list", mutableListOf())
+        setu_list = ConfigYamlUtils.readStringList(configMap, "setu_list", mutableListOf())
+    }
 
-    @ValueDescription("禁止大建的群列表")
-    var draw_ship_ban_list :MutableList<String> by value(mutableListOf())
-
-    @ValueDescription("允许涩涩的群列表")
-    var setu_list :MutableList<String> by value(mutableListOf())
-
+    fun save() {
+        ConfigYamlUtils.saveMap(
+            Wiki.resolveConfigFile(fileName),
+            linkedMapOf(
+                "ship_equip_efficiency_on" to ship_equip_efficiency_on,
+                "image_noise_on" to image_noise_on,
+                "command_parse_on" to command_parse_on,
+                "gauss_ship_ban_list" to gauss_ship_ban_list.toList(),
+                "draw_ship_ban_list" to draw_ship_ban_list.toList(),
+                "setu_list" to setu_list.toList()
+            )
+        )
+    }
 }

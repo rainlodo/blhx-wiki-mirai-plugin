@@ -6,6 +6,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import java.io.File
+import java.nio.charset.StandardCharsets
 import java.net.URLEncoder
 
 
@@ -15,13 +16,23 @@ object ParserUtils {
         if (data.isEmpty()) {
             return TextData("网络连接错误，请重试喵")
         }
-        val doc = Jsoup.parse(data)
+        val doc = Jsoup.parse(data, "https://wiki.biligame.com/")
         try {
             if (doc.select("h1[id='firstHeading']").text() == "搜索结果") {
+                val wikiSearchResult = SearchData().parse(doc, commandList) as SearchData
+                val directTitle = pickDirectSearchResult(wikiSearchResult.result, commandList[1])
+                if (directTitle != null) {
+                    val commands = arrayListOf<String>().apply {
+                        addAll(commandList)
+                        this[1] = directTitle
+                    }
+                    return parse(HttpUtils.get(buildWikiPageUrl(directTitle)), commands)
+                }
+
                 val list = search(commandList)
                 if (list.isNotEmpty()) return searchResult2Data(list, commandList)
 
-                return SearchData().parse(doc, commandList)
+                return wikiSearchResult
             }
 
             val linkTitle = doc.select("a[title='首页']")
@@ -358,37 +369,20 @@ object ParserUtils {
     // 根据keyword模糊查询
     fun search(commandList: List<String>): List<String> {
         val keyWord = commandList[1]
+        val normalizedKeyword = normalizeSearchKeyword(keyWord)
+        if (normalizedKeyword.isEmpty()) {
+            return emptyList()
+        }
 
-        // 查询整个keyword
-        var filter = "(.*)$keyWord(.*)"
+        // 优先做归一化后的包含匹配，避免复杂正则带来的高 CPU / 高内存占用
         var list = NAME_LIST.filter {
-            it.matches(Regex(filter))
+            normalizeSearchKeyword(it).contains(normalizedKeyword)
         }
         if (list.isNotEmpty()) return list
 
-        // 将中英文数字分开查询
-        var type = 0
-        filter = ""
-        keyWord.forEach {
-            if (codeType(it) != type) {
-                filter += "(.*)"
-                type = codeType(it)
-            }
-            filter += it
-        }
-        filter += "(.*)"
+        // 再退化为归一化后按顺序匹配字符
         list = NAME_LIST.filter {
-            it.matches(Regex(filter))
-        }
-        if (list.isNotEmpty()) return list
-
-        // 全部分解
-        filter = "(.*)"
-        keyWord.forEach {
-            filter += "$it(.*)"
-        }
-        list = NAME_LIST.filter {
-            it.matches(Regex(filter))
+            containsOrderedChars(normalizeSearchKeyword(it), normalizedKeyword)
         }
         return list
     }
@@ -401,7 +395,11 @@ object ParserUtils {
                 val commands = arrayListOf<String>()
                 commands.addAll(commandList)
                 commands[1] = list[0]
-                parse(HttpUtils.get(SEARCH_URL + list[0]), commands)
+                if (normalizeSearchKeyword(commands[1]) == normalizeSearchKeyword(commandList[1])) {
+                    SearchData(arrayListOf(list[0]))
+                } else {
+                    parse(HttpUtils.get(buildWikiPageUrl(list[0])), commands)
+                }
             }
 
             else -> {
@@ -416,7 +414,11 @@ object ParserUtils {
                 val commands = arrayListOf<String>()
                 commands.addAll(commandList)
                 commands[1] = list[0]
-                val data = parse(HttpUtils.get(SEARCH_URL + list[0]), commands)
+                val data = if (normalizeSearchKeyword(commands[1]) == normalizeSearchKeyword(commandList[1])) {
+                    SearchData(ArrayList(list.take(max)))
+                } else {
+                    parse(HttpUtils.get(buildWikiPageUrl(list[0])), commands)
+                }
                 data?.extra_msg?.add(msg)
                 data
             }
@@ -429,6 +431,44 @@ object ParserUtils {
         else if (ch in '\u0030'..'\u0039') 2//数字字符
         else if ((ch in '\u0041'..'\u005A') or (ch in '\u0061'..'\u007A')) 3//英文字符
         else 0
+    }
+
+    private fun normalizeSearchKeyword(value: String): String {
+        return buildString(value.length) {
+            value.lowercase().forEach { ch ->
+                if (codeType(ch) != 0) {
+                    append(ch)
+                }
+            }
+        }
+    }
+
+    private fun containsOrderedChars(source: String, target: String): Boolean {
+        if (target.isEmpty()) {
+            return true
+        }
+        var index = 0
+        source.forEach { ch ->
+            if (index < target.length && ch == target[index]) {
+                index++
+            }
+        }
+        return index == target.length
+    }
+
+    private fun pickDirectSearchResult(results: List<String>, keyword: String): String? {
+        val normalizedKeyword = normalizeSearchKeyword(keyword)
+        if (normalizedKeyword.isEmpty()) {
+            return null
+        }
+
+        return results.firstOrNull { normalizeSearchKeyword(it) == normalizedKeyword }
+            ?: results.firstOrNull { normalizeSearchKeyword(it).startsWith(normalizedKeyword) }
+    }
+
+    private fun buildWikiPageUrl(title: String): String {
+        return "https://wiki.biligame.com/blhx/" +
+            URLEncoder.encode(title, StandardCharsets.UTF_8).replace("+", "%20")
     }
 
     fun Element.isDisplayNone(): Boolean {

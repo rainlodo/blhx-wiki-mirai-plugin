@@ -9,9 +9,7 @@ import net.mamoe.mirai.message.data.PlainText
 import net.mamoe.mirai.utils.MiraiExperimentalApi
 import org.iris.wiki.config.*
 import org.iris.wiki.config.AliasConfig.ALIAS_MAP
-import org.iris.wiki.config.AliasConfig.ALIAS_USER_MAP
 import org.iris.wiki.config.CommandConfig.ALL_COMMAND
-import org.iris.wiki.config.CommandConfig.voice_map
 import org.iris.wiki.data.ImagesData
 import org.iris.wiki.data.SearchData
 import org.iris.wiki.utils.HttpUtils
@@ -21,33 +19,27 @@ import java.util.*
 
 internal object Listener {
 
-    // 添加用户专有词典
     init {
-        ALIAS_MAP.putAll(ALIAS_USER_MAP)
-        val COMMANDS_LIST = setOf(
-            CommandConfig.attribute,
-            CommandConfig.dress,
-            CommandConfig.dressLarge,
-            CommandConfig.picLarge,
-            CommandConfig.from,
-            CommandConfig.tech,
-            CommandConfig.evaluate,
-            CommandConfig.equip,
-            CommandConfig.wedding
-        )
-        for (list in COMMANDS_LIST) {
-            ALL_COMMAND.addAll(list)
-        }
-        ALL_COMMAND.addAll(voice_map.keys)
+        reloadRuntimeConfigCaches()
     }
 
     val channel = GlobalEventChannel.parentScope(Wiki)
+
+    @Synchronized
+    fun reloadRuntimeConfigCaches() {
+        AliasConfig.rebuildAliasMap()
+        CommandConfig.rebuildAllCommands()
+    }
 
     fun subscribe() {
         channel.subscribeAlways<GroupMessageEvent> {
 
             message.forEach {
                 if (it is PlainText) {
+                    if (tryAddAlias(it.contentToString(), sender)) {
+                        return@subscribeAlways
+                    }
+
                     val commandList = it.contentToString()
                         .lowercase(Locale.getDefault())
                         .split(Regex("[ ]+"))
@@ -87,6 +79,31 @@ internal object Listener {
             }
         }
 
+    }
+
+    private suspend fun tryAddAlias(msg: String, sender: Member): Boolean {
+        val match = Regex("^添加别名\\s+(.+?)\\s+(.+?)\\s*$").matchEntire(msg.trim()) ?: return false
+        val alias = match.groupValues[1].lowercase(Locale.getDefault())
+        val targetInput = match.groupValues[2]
+        val targetLookup = targetInput.lowercase(Locale.getDefault())
+        val target = if (targetLookup in ALIAS_MAP) {
+            ALIAS_MAP[targetLookup].toString()
+        } else {
+            targetInput
+        }
+
+        if (alias in CommandConfig.wiki) {
+            sender.group.sendMessage("这个别名和插件指令头冲突了喵，换一个吧")
+            return true
+        }
+        if (alias == target.lowercase(Locale.getDefault())) {
+            sender.group.sendMessage("别名和正式名一样，就不用单独添加啦")
+            return true
+        }
+
+        AliasConfig.addUserAlias(alias, target)
+        sender.group.sendMessage("添加别名成功喵\n$alias -> $target")
+        return true
     }
 
 

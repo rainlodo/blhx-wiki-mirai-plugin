@@ -74,6 +74,7 @@ object ReplyCommand  : CompositeCommand(
         try {
             val msg = getReplyContent(command, replies)
             AutoReplyConfig.REPLY_COMMAND_MAP[command] = msg
+            AutoReplyConfig.save()
             sendMessage("设置成功喵")
         }
         catch (e: Exception) {
@@ -89,6 +90,7 @@ object ReplyCommand  : CompositeCommand(
             deleteReplyImage(command)
             val msg = getReplyContent(command, replies)
             AutoReplyConfig.REPLY_COMMAND_MAP[command] = msg
+            AutoReplyConfig.save()
             sendMessage("设置成功喵")
         }
         catch (e: Exception) {
@@ -104,6 +106,7 @@ object ReplyCommand  : CompositeCommand(
 
             deleteReplyImage(command)
             AutoReplyConfig.REPLY_COMMAND_MAP.remove(command)
+            AutoReplyConfig.save()
             sendMessage("删除成功喵")
         }
         else {

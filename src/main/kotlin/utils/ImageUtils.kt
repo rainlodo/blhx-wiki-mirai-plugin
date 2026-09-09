@@ -55,9 +55,13 @@ class ImageUtil {
         private fun loadImageData(imageUri: String): Pair<BufferedImage, String> {
             // 读取图像和获取格式
             val imageInputStream = ImageIO.createImageInputStream(
-                    if (imageUri.startsWith("http")) URL(imageUri).openStream()  // 需要转化为 InputStream
-                    else File(imageUri)
-                )
+                if (imageUri.startsWith("http")) {
+                    HttpUtils.getBytes(imageUri)?.inputStream()
+                        ?: throw IOException("下载图片失败: $imageUri")
+                } else {
+                    File(imageUri)
+                }
+            )
 
             val imageReaders = ImageIO.getImageReaders(imageInputStream)
             if (!imageReaders.hasNext()) throw RuntimeException("Cannot detect image format.")
@@ -134,7 +138,9 @@ class ImageUtil {
 
         fun getImage(imageUri: String): BufferedImage {
             return if (imageUri.startsWith("http")) {
-                ImageIO.read(URL(imageUri))
+                HttpUtils.getBytes(imageUri)?.inputStream()?.use {
+                    ImageIO.read(it)
+                } ?: throw IOException("下载图片失败: $imageUri")
             } else {
                 ImageIO.read(Path(imageUri).toFile())
             }

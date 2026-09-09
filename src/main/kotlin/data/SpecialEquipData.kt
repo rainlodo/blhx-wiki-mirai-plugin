@@ -48,7 +48,9 @@ data class SpecialEquipData(
         name = liList[0].text()
         owner = doc.select("span[class='AF']")?.text()
         tno = liList[1].select("b").last().text()[1].digitToInt()
-        pic = liList[1].select("img")[0].attr("src")
+        pic = liList[1].select("img")[0].absUrl("src").ifBlank {
+            liList[1].select("img")[0].attr("src")
+        }
 
         level = levelMap.get(liList[0].attr("style"))!!
         for (i in 2 until liList.size-1) {

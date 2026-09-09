@@ -1,12 +1,33 @@
 package org.iris.wiki.config
 
-import net.mamoe.mirai.console.data.AutoSavePluginConfig
-import net.mamoe.mirai.console.data.ValueDescription
-import net.mamoe.mirai.console.data.value
+import org.iris.wiki.Wiki
+import org.iris.wiki.utils.ConfigYamlUtils
+import java.util.LinkedHashMap
 
-object AutoReplyConfig : AutoSavePluginConfig("AutoReplyConfig") {
+object AutoReplyConfig {
 
-    @ValueDescription("自动回复指令及其对应的回复内容")
-    var REPLY_COMMAND_MAP : MutableMap<String, String> by value(mutableMapOf<String, String>())
+    private val fileName = "AutoReplyConfig.yml"
+    private val defaultReplyCommandMap = linkedMapOf<String, String>()
 
+    var REPLY_COMMAND_MAP: MutableMap<String, String> = LinkedHashMap(defaultReplyCommandMap)
+
+    fun load() {
+        val configFile = Wiki.resolveConfigFile(fileName)
+        if (!configFile.exists()) {
+            save()
+            return
+        }
+
+        val configMap = ConfigYamlUtils.loadMap(configFile)
+        REPLY_COMMAND_MAP = ConfigYamlUtils.readStringMap(configMap, "REPLY_COMMAND_MAP", defaultReplyCommandMap)
+    }
+
+    fun save() {
+        ConfigYamlUtils.saveMap(
+            Wiki.resolveConfigFile(fileName),
+            linkedMapOf(
+                "REPLY_COMMAND_MAP" to LinkedHashMap(REPLY_COMMAND_MAP)
+            )
+        )
+    }
 }

@@ -9,10 +9,7 @@ import net.mamoe.mirai.console.plugin.version
 import org.iris.wiki.action.QuestionListener
 import org.iris.wiki.command.ReplyCommand
 import org.iris.wiki.command.WikiConfigCommand
-import org.iris.wiki.config.AliasConfig
-import org.iris.wiki.config.AutoReplyConfig
-import org.iris.wiki.config.CommandConfig
-import org.iris.wiki.config.WikiConfig
+import org.iris.wiki.utils.ConfigHotReloadManager
 import org.iris.wiki.utils.UpdateUtils
 
 /**
@@ -34,7 +31,7 @@ object Wiki : KotlinPlugin(
     JvmPluginDescription(
         id = "org.iris.wiki",
         name = "blhx-wiki",
-        version = "0.4.3"
+        version = "0.4.6"
     ) {
         author("iris")
         // author 和 info 可以删除.
@@ -44,16 +41,14 @@ object Wiki : KotlinPlugin(
 
         //配置文件目录 "${dataFolder.absolutePath}/"
 
-        AliasConfig.reload()
-        CommandConfig.reload()
-        WikiConfig.reload()
-        AutoReplyConfig.reload()
+        ConfigHotReloadManager.reloadAllConfigs("插件启动")
 
         Listener.subscribe()
         QuestionListener.subscribe()
 
         WikiConfigCommand.register()
         ReplyCommand.register()
+        ConfigHotReloadManager.start()
 
         launch {
             UpdateUtils.updateAll()  // 更新舰船、科技点等数据
@@ -62,6 +57,7 @@ object Wiki : KotlinPlugin(
 
     override fun onDisable() {
 
+        ConfigHotReloadManager.stop()
         WikiConfigCommand.unregister()
         ReplyCommand.unregister()
         super.onDisable()

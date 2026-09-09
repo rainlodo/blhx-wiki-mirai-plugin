@@ -1,8 +1,8 @@
 package org.iris.wiki.action
 
 import kotlinx.coroutines.*
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.withTimeoutOrNull
 import net.mamoe.mirai.console.command.CommandSender.Companion.toCommandSender
 import net.mamoe.mirai.contact.Group
 import net.mamoe.mirai.event.*
@@ -11,7 +11,6 @@ import net.mamoe.mirai.message.data.*
 import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
 import org.iris.wiki.Wiki
-import org.iris.wiki.action.QuestionListener.nextAnswerOrNull
 import org.iris.wiki.config.CommonConfig
 import org.iris.wiki.config.WikiConfig
 import org.iris.wiki.utils.ImageUtil
@@ -19,7 +18,6 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import javax.imageio.ImageIO
 import kotlin.collections.HashMap
-import kotlin.coroutines.intrinsics.suspendCoroutineUninterceptedOrReturn
 
 /**
  * 问题
@@ -83,12 +81,14 @@ class Question(
  */
 internal object QuestionListener {
 
-    private const val STATE_SLEEP = 0
-    private const val STATE_RUNNING = 1
-
-    var state = hashMapOf<Long, Int>()
-    val mutex = Mutex()
     val channel = GlobalEventChannel.parentScope(Wiki)
+
+    private data class QuestionSession(
+        val answerChannel: Channel<GroupMessageEvent> = Channel(Channel.UNLIMITED),
+        var validAnswers: Set<String> = emptySet()
+    )
+
+    private val sessions = hashMapOf<Long, QuestionSession>()
 
     private val WRONG_MESSAGE = listOf(
         " 回答错误哦~",
@@ -101,20 +101,14 @@ internal object QuestionListener {
         " 回答正确φ(>ω<*)"
     )
 
-    private suspend inline fun <reified P : MessageEvent> P.nextAnswerOrNull(
-        timeoutMillis: Long,
-        priority: EventPriority = EventPriority.MONITOR,
-        noinline filter: suspend P.(P) -> Boolean = { true }
-    ): P? {
-        return  withTimeoutOrNull(timeoutMillis) {
-            channel.syncFromEvent<P, P>(priority) {
-                it.takeIf { subject == this@nextAnswerOrNull.subject && filter(it, it) }
-            }
-        }
-    }
-
     fun subscribe() {
         channel.subscribeAlways<GroupMessageEvent> {
+            val content = message.contentToString().trim()
+            val session = sessions[group.id]
+
+            if (session != null && content.uppercase() in session.validAnswers) {
+                session.answerChannel.trySend(this)
+            }
 
             message.forEach {
                 // 猜舰娘
@@ -126,42 +120,44 @@ internal object QuestionListener {
                     }
 
 
-                    if (!state.keys.contains(group.id)) {
-                        state[group.id] = STATE_SLEEP
-                    }
-                    if (state[group.id] == STATE_RUNNING) {
+                    if (sessions.containsKey(group.id)) {
                         group.sendMessage("上一题还没回答正确哦~")
                         return@subscribeAlways
                     }
 
-                    state[group.id] = STATE_RUNNING
-                    val start = System.currentTimeMillis()
-
                     val question = Question(30_000, 6).questionShip()
-                    group.sendMessage(question.toMessage(group))
-                    while (state[group.id] == STATE_RUNNING) {
-                        val (reply, _) = mutex.withLock {
-                            nextAnswerOrNull(question.max_time) { next ->
-                                next.message.content.trim().uppercase() in question.choices.keys.toString()
-                            } to System.currentTimeMillis() - start
-                        }
-                        if (reply == null) {
-                            group.sendMessage("回答超时~，正确答案是${question.res}哒！")
-                            state[group.id] = STATE_SLEEP
-                            return@subscribeAlways
-                        }
-                        val answer = reply.message.content.trim().uppercase()
-                        reply.toCommandSender().sendMessage(
-                            buildMessageChain {
-                                append(At(reply.sender))
-                                if (answer == question.res.toString()) {
-                                    append(TRUE_MESSAGE.random())
-                                    state[reply.group.id] = STATE_SLEEP
-                                } else {
-                                    append(WRONG_MESSAGE.random())
-                                }
+                    val sessionState = QuestionSession(
+                        validAnswers = question.choices.keys.map { choice -> choice.uppercase() }.toSet()
+                    )
+                    sessions[group.id] = sessionState
+
+                    try {
+                        group.sendMessage(question.toMessage(group))
+                        while (true) {
+                            val reply = withTimeoutOrNull(question.max_time) {
+                                sessionState.answerChannel.receive()
                             }
-                        )
+                            if (reply == null) {
+                                group.sendMessage("回答超时~，正确答案是${question.res}哒！")
+                                return@subscribeAlways
+                            }
+                            val answer = reply.message.content.trim().uppercase()
+                            reply.toCommandSender().sendMessage(
+                                buildMessageChain {
+                                    append(At(reply.sender))
+                                    if (answer == question.res.toString()) {
+                                        append(TRUE_MESSAGE.random())
+                                    } else {
+                                        append(WRONG_MESSAGE.random())
+                                    }
+                                }
+                            )
+                            if (answer == question.res.toString()) {
+                                return@subscribeAlways
+                            }
+                        }
+                    } finally {
+                        sessions.remove(group.id)?.answerChannel?.close()
                     }
                 }
             }
